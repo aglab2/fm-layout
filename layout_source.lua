@@ -29,6 +29,8 @@ layout_3p_4x3_source_def.create = function(settings, source)
 end
 
 layout_3p_4x3_source_def.get_defaults = function(settings)
+    obs.obs_data_set_default_string(settings, "runner_1_text_source", util.source_names.runner_1)
+    obs.obs_data_set_default_string(settings, "runner_1_pronouns_source", util.source_names.runner_1_pronouns)
     obs.obs_data_set_default_string(settings, "runner_1_name", "Runner 1")
     obs.obs_data_set_default_string(settings, "runner_1_pronouns", "They/Them")
     obs.obs_data_set_default_string(settings, "runner_2_name", "Runner 2")

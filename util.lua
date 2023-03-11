@@ -23,6 +23,11 @@ util.create_scene = function(scene_name)
     return new_scene
 end
 
+util.source_names = {
+    runner_1 = "Runner 1",
+    runner_1_pronouns = "Runner 1 Pronouns"
+}
+
 -- For color OBS uses BGR so for blue use 0xFF0000 instead of 0x0000FF
 util.create_text = function(face, size, style, text, align, color, name, scene, x, y)
     local pos = obs.vec2()

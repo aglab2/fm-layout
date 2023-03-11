@@ -6,10 +6,14 @@ require("util")
 obs = obslua
 
 
+
 local description = [[
     <center><h2>Fangame Marathon 2023 Layout Program v1</h2></center>
     <p>
     <center><h3>Program created by Smartkin, Cosmoing, Oiivae</h3></center>
+    <p>
+    After creating the layouts DO NOT change the name of any elements in the scenes!
+    This WILL break the program!
 ]]
 
 function create_layouts()
@@ -29,14 +33,14 @@ end
 
 function create_3p_4x3_layout()
     local new_scene = util.create_scene("FM 3 person 4x3 layout")
-    local runner_1_text = util.create_text_eaves(new_scene, "Cosmoing", 32, "left", 0xFF5500, "Runner 1", 705, 20)
-    local runner_1_pronouns = util.create_text_eaves(new_scene, "He/Him", 18, "left", 0xFFFFFF, "Runner 1 Pronouns", 720,
-        53)
+    local runner_1_text = util.create_text_eaves(new_scene, "Cosmoing", 32, "left", 0xFF5500, util.source_names.runner_1,
+        705, 20)
+    local runner_1_pronouns = util.create_text_eaves(new_scene, "He/Him", 18, "left", 0xFFFFFF,
+        util.source_names.runner_1_pronouns, 720, 53)
     local layout_data = obs.obs_data_create()
     obs.obs_data_set_string(layout_data, "runner_1_text_source", runner_1_text)
     obs.obs_data_set_string(layout_data, "runner_1_pronouns_source", runner_1_pronouns)
     local layout_source = obs.obs_source_create(layout_3p_4x3_source_def.id, "Dashboard", layout_data, nil)
-    --layout_source.text_sources.runner_1_text = runner_1_text
     obs.obs_scene_add(new_scene, layout_source)
     local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
     obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
