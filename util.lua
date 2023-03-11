@@ -1,6 +1,21 @@
 obs = obslua
 util = {}
 
+util.image_source_load = function(image, file)
+    obs.obs_enter_graphics();
+    obs.gs_image_file_free(image);
+    obs.obs_leave_graphics();
+
+    obs.gs_image_file_init(image, file);
+
+    obs.obs_enter_graphics();
+    obs.gs_image_file_init_texture(image);
+    obs.obs_leave_graphics();
+
+    if not image.loaded then
+        print("failed to load texture " .. file);
+    end
+end
 
 util.create_scene = function(scene_name)
     local new_scene = obs.obs_scene_create(scene_name)
