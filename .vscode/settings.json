@@ -1,0 +1,7 @@
+{
+  "Lua.diagnostics.globals": ["obslua", "script_path"],
+  "Lua.workspace.library": [
+    "C:\\Program Files\\obs-studio\\data\\obs-scripting\\64bit"
+  ],
+  "Lua.diagnostics.disable": ["lowercase-global"]
+}
