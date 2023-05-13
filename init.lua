@@ -1,6 +1,6 @@
 -- OBS API: https://obsproject.com/docs/index.html
 --
--- To output to OBS script log window use Lua's `print` function
+-- To output to OBS script log window use `obs.script_log`
 require("layout_source")
 require("util")
 local obs = obslua
@@ -8,16 +8,19 @@ local obs = obslua
 local description = [[
     <center><h2>Fangame Marathon 2023 Layout Program v1</h2></center>
     <p>
-    <center><h3>Program created by Smartkin, Cosmoing, Oiivae</h3></center>
+    <center><h3>Program coded by Smartkin</h3></center>
+    <center><h3>Layouts designed by Oiivae</h3></center>
+    <center><h3>Producer Cosmoing</h3></center>
     <p>
-    After creating the layouts DO NOT change the name of any elements in the scenes!
-    This WILL break the program!
+    API token for Twitch can be provided if you wish to update the Twitch title from the Dashboard
     <p>
-    You can, after creating the layouts, add new elements if you need to but they won't be automated by the Dashboard provided for each scene
+    You can, after creating the layouts, add new elements if you need to, but they won't be automated by the Dashboard provided for each scene.
 ]]
 
-function create_layouts()
+function create_layouts(layout_props, btn_prop)
     obs.script_log(obs.LOG_INFO, "Creating layouts...")
+    local twitch_token_text = obs.obs_properties_get(layout_props, "twitch_token")
+    obs.script_log(obs.LOG_INFO, "Twitch token: " .. obs.obs_property_name(twitch_token_text))
     create_1p_no_cam_4x3_layout()
     create_3p_4x3_layout()
 end
@@ -25,6 +28,7 @@ end
 function script_properties()
     local props = obs.obs_properties_create()
     obs.obs_properties_add_button(props, "create_layouts", "Create layouts", create_layouts)
+    obs.obs_properties_add_text(props, "twitch_token", "Twitch API token", obs.OBS_TEXT_PASSWORD)
     return props
 end
 
@@ -34,9 +38,9 @@ end
 
 function create_1p_no_cam_4x3_layout()
     local new_scene = util.create_scene("FM 1 person no cam 4x3 layout")
-    local runner_1_text = util.create_text_eaves(new_scene, "Cosmoing", 32, "center", 0xFF5500,
+    local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 38, "center", 0xFF5500,
         util.source_names.runner_1, 222, 494)
-    local runner_1_pronouns = util.create_text_eaves(new_scene, "He/Him", 18, "left", 0xFFFFFF,
+    local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 15, "left", 0xFFFFFF,
         util.source_names.runner_1_pronouns, 422, 502)
     local layout_data = obs.obs_data_create()
     obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text)
@@ -53,9 +57,9 @@ end
 
 function create_3p_4x3_layout()
     local new_scene = util.create_scene("FM 3 person 4x3 layout")
-    local runner_1_text = util.create_text_eaves(new_scene, "Cosmoing", 32, "left", 0xFF5500,
+    local runner_1_text = util.create_text_eaves(new_scene, "Regular", "Cosmoing", 32, "left", 0xFF5500,
         util.source_names.runner_1, 705, 20)
-    local runner_1_pronouns = util.create_text_eaves(new_scene, "He/Him", 18, "left", 0xFFFFFF,
+    local runner_1_pronouns = util.create_text_eaves(new_scene, "Regular", "He/Him", 18, "left", 0xFFFFFF,
         util.source_names.runner_1_pronouns, 720, 53)
     local layout_data = obs.obs_data_create()
     obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text)

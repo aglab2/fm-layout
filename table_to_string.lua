@@ -28,8 +28,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ]]
-
-
 local tableToString = {}
 
 
@@ -56,7 +54,6 @@ tableToString.fmt_key = function() return; end
 
 -- Turns a sequence into a hash table.
 local function makeLUT(seq)
-
 	local lut = {}
 	for i, val in ipairs(seq) do
 		lut[val] = true
@@ -66,7 +63,6 @@ end
 
 -- Turns hash keys into a sequence. The order is undefined.
 local function makeSeq(lut)
-
 	local seq = {}
 	for k in pairs(lut) do
 		table.insert(seq, k)
@@ -81,24 +77,24 @@ local policyFunc = {
 }
 
 -- Accepted types for keys.
-local lut_good_key_types = makeLUT( {"boolean", "number", "string"} )
+local lut_good_key_types = makeLUT({ "boolean", "number", "string" })
 
 -- Accepted types for values.
-local lut_good_val_types = makeLUT( {"boolean", "number", "string", "table"} )
+local lut_good_val_types = makeLUT({ "boolean", "number", "string", "table" })
 
 -- Lua reserved keywords.
-local lut_names_reserved = makeLUT( {
+local lut_names_reserved = makeLUT({
 	"and", "break", "do", "else", "elseif", "end", "false", "for",
 	"function", "if", "in", "local", "nil", "not", "or", "repeat",
 	"return", "then", "true", "until", "while"
-	}
+}
 )
 
 -- Strings to represent special numbers.
 local lut_number_strings = {
-	[tostring(1/0)]		= '1/0', -- math.huge
-	[tostring(-1/0)]	='-1/0', -- -math.huge
-	[tostring(0/0)]		= '0/0', -- NaN
+	[tostring(1 / 0)] = '1/0', -- math.huge
+	[tostring(-1 / 0)] = '-1/0', -- -math.huge
+	[tostring(0 / 0)] = '0/0', -- NaN
 }
 
 --[[
@@ -125,14 +121,12 @@ local lut_bool_priority = {
 -- Assertions
 
 local function _assertArgType(arg_n, var, allowed_type)
-
 	if type(var) ~= allowed_type then
 		error("bad argument #" .. arg_n .. " (Expected " .. allowed_type .. ", got " .. type(var) .. ")", 2)
 	end
 end
 
 local function _assertNoCycles(tbl, _seen)
-
 	if _seen[tbl] then
 		error("Multiple appearances of table: " .. tostring(tbl))
 	end
@@ -147,12 +141,11 @@ local function indent(n)
 end
 
 local function isWritableKey(str)
-
 	-- Cannot be a reserved Lua keyword
 	if lut_names_reserved[str] then
 		return false
 
-	-- Must be comprised of a-z, A-Z, 0-9, or underscore. Cannot begin with 0-9.
+		-- Must be comprised of a-z, A-Z, 0-9, or underscore. Cannot begin with 0-9.
 	elseif string.match(str, "^[%l%u_][%w_]*$") then
 		return true
 	end
@@ -161,22 +154,21 @@ local function isWritableKey(str)
 end
 
 local function sort_boolNumStr(a, b)
-
 	local ta, tb = type(a), type(b)
 
 	-- Different types: go by lookup table
 	if ta ~= tb then
 		return lut_type_priority[ta] < lut_type_priority[tb]
 
-	-- Booleans: priority to false	
+		-- Booleans: priority to false	
 	elseif ta == "boolean" then
 		return lut_bool_priority[a] < lut_bool_priority[b]
 
-	-- Numbers and strings can be compared with the less-than operator.
+		-- Numbers and strings can be compared with the less-than operator.
 	elseif ta == "number" or ta == "string" then
 		return a < b
 
-	-- Anything else is not supported.
+		-- Anything else is not supported.
 	else
 		error("Unsupported sort type: " .. ta)
 	end
@@ -190,7 +182,6 @@ local _dotRadix, _radix_ptn
 local function _dotRadixA(str) return str end
 local function _dotRadixB(str) return str:gsub(_radix_ptn, ".") end
 local function _updateRadixMark()
-
 	_radix_ptn = "%" .. ("%.1f"):format(0.5):match("0([^5]+)5")
 	_dotRadix = (_radix_ptn == "%.") and _dotRadixA or _dotRadixB
 end
@@ -213,10 +204,8 @@ end
 
 
 local function routeKey(k, v, grp_table, grp_other)
-
 	if type(v) == "table" then
 		grp_table[k] = v
-
 	else
 		grp_other[k] = v
 	end
@@ -224,7 +213,6 @@ end
 
 
 local function appendArrayGuide(arr, hash, guide)
-
 	local i1 = #arr + 1
 
 	for i = 1, #guide do
@@ -240,7 +228,6 @@ end
 
 
 local function getSortedKeys(tbl, fmt_t)
-
 	local priority_list
 	local fmt_key = tableToString.fmt_key
 	priority_list = fmt_t.priority_keys or {}
@@ -261,10 +248,8 @@ local function getSortedKeys(tbl, fmt_t)
 			-- Allowed types?
 			if not lut_good_key_types[type(k)] then
 				error("Can't serialize key of type: " .. type(k))
-
 			elseif not lut_good_val_types[type(v)] then
 				error("Can't serialize value of type: " .. type(v))
-
 			else
 				tbl_c[k] = v
 
@@ -288,7 +273,6 @@ local function getSortedKeys(tbl, fmt_t)
 	if key_types == "array" then
 		if not int_highest then
 			key_types = "hash"
-
 		else
 			for i = 1, int_highest do
 				if tbl[i] == nil then
@@ -304,7 +288,7 @@ local function getSortedKeys(tbl, fmt_t)
 	if key_types == "array" and fmt_t.priority_keys and #fmt_t.priority_keys > 0 then
 		key_types = "hash"
 	end
-	
+
 	-- If this is an array, just return the current order.
 	if key_types == "array" then
 		local ordered = {}
@@ -325,7 +309,6 @@ local function getSortedKeys(tbl, fmt_t)
 			if policyExec then
 				policyExec("Missing priority key: " .. tostring(key))
 			end
-
 		else
 			routeKey(key, tbl_c[key], val_table_h, val_other_h)
 		end
@@ -338,7 +321,6 @@ local function getSortedKeys(tbl, fmt_t)
 	for i, v in ipairs(priority_list) do
 		if val_other_h[v] ~= nil then
 			guide_other_h[#guide_other_h + 1] = v
-
 		elseif val_table_h[v] ~= nil then
 			guide_table_h[#guide_table_h + 1] = v
 		end
@@ -369,17 +351,17 @@ local function getSortedKeys(tbl, fmt_t)
 	-- Collate into one array
 
 	-- * In this order:
-		-- High-priority non-tables
-		-- Normal-priority non-tables, ascending order
-		-- High-priority tables
-		-- Normal-priority tables, ascending order
+	-- High-priority non-tables
+	-- Normal-priority non-tables, ascending order
+	-- High-priority tables
+	-- Normal-priority tables, ascending order
 
 	-- * In this format:
-		-- 1 key 1
-		-- 2 val 1
-		-- 3 key 2
-		-- 4 val 2
-		-- ...
+	-- 1 key 1
+	-- 2 val 1
+	-- 3 key 2
+	-- 4 val 2
+	-- ...
 
 	local sorted_combined = {}
 
@@ -396,7 +378,6 @@ end
 
 
 local function formatNumber(number)
-
 	-- Attempt to keep precision of floating point values.
 	local num_s = _dotRadix(string.format("%.17g", number))
 
@@ -410,39 +391,34 @@ end
 
 
 local function formatStringSafe(str)
-
 	-- Format string for later safe reading
 	str = string.format("%q", str)
 	-- Escape newlines
-	str = string.gsub(str, "\010","n")
+	str = string.gsub(str, "\010", "n")
 	-- Escape EOF
-	str = string.gsub(str, "\026","\\026")
+	str = string.gsub(str, "\026", "\\026")
 
 	return str
 end
 
 
 local function write_hash_key(self, key)
-
 	if type(key) == "string" then
 		-- Key conforms to 'foo.bar123' syntax:
 		if isWritableKey(key) then
 			self:app(key)
 
-		-- Otherwise, use foo["bar123"]:
+			-- Otherwise, use foo["bar123"]:
 		else
 			-- Escape any sequences that could cause issues
 			key = formatStringSafe(key)
 
 			self:app("[" .. key .. "]")
 		end
-
 	elseif type(key) == "number" then
 		self:app("[" .. formatNumber(key) .. "]")
-
 	elseif type(key) == "boolean" then
 		self:app("[" .. tostring(key) .. "]")
-
 	else
 		error("Unsupported key type: " .. type(key))
 	end
@@ -450,24 +426,19 @@ end
 
 
 function tableToString._write_value(self, value)
-
 	if type(value) == "string" then
 		-- Escape any sequences that could cause issues
 		value = formatStringSafe(value)
 		self:app(value)
-
 	elseif type(value) == "number" then
 		-- Check some numerical special cases
 		local val_s = formatNumber(value)
 		self:app(val_s)
-
 	elseif type(value) == "boolean" then
 		self:app(tostring(value))
-
 	elseif type(value) == "table" then
 		if self.seen[value] then
 			error("Cycle in table structure: " .. tostring(value))
-
 		else
 			self.seen[value] = true
 		end
@@ -475,7 +446,6 @@ function tableToString._write_value(self, value)
 		-- Empty table?
 		if next(value) == nil then
 			self:app("{}")
-
 		else
 			self:app("{\n")
 			self.indent_level = self.indent_level + 1
@@ -488,9 +458,7 @@ function tableToString._write_value(self, value)
 	end
 end
 
-
 function tableToString._write_table(self, tbl)
-
 	-- Resolve format table, check type
 	local fmt_key = tableToString.fmt_key
 	local fmt_t = tbl[fmt_key] or tableToString.fmt_def
@@ -500,7 +468,7 @@ function tableToString._write_table(self, tbl)
 	end
 
 	-- Retrieve, verify array_columns
-	local array_columns = fmt_t.array_columns or 2^53
+	local array_columns = fmt_t.array_columns or (2 ^ 53)
 	if array_columns and (type(array_columns) ~= "number" or array_columns < 1) then
 		error("'array_columns' must be a number >= 1 (or false/nil for no column limit.)")
 	end
@@ -547,7 +515,6 @@ function tableToString._write_table(self, tbl)
 			end
 		end
 		self:app("\n")
-
 	elseif key_types == "hash" then
 		for i = 1, #list, 2 do
 			local key = list[i]
@@ -564,9 +531,7 @@ function tableToString._write_table(self, tbl)
 	end
 end
 
-
 local function newAppendObject()
-
 	local self = {}
 
 	self.arr = {} -- array-of-strings workspace
@@ -583,7 +548,6 @@ end
 
 
 function _scrubFormatTable(tbl, recursive, _seen)
-
 	-- Check for table cycles
 	_assertNoCycles(tbl, _seen)
 	_seen[tbl] = true
@@ -601,9 +565,7 @@ function _scrubFormatTable(tbl, recursive, _seen)
 	end
 end
 
-
 local function _setFormatTable(tbl, fmt, recursive, _seen)
-
 	-- Check for table cycles
 	_assertNoCycles(tbl, _seen)
 	_seen[tbl] = true
@@ -633,7 +595,6 @@ end
 -- @param tbl The table to convert.
 -- @return Serialized string version of 'tbl'.
 function tableToString.convert(tbl)
-
 	_assertArgType(1, tbl, "table")
 
 	_updateRadixMark()
@@ -649,7 +610,6 @@ function tableToString.convert(tbl)
 	return table.concat(obj.arr)
 end
 
-
 --- Assign a 'format key' to a table, and optionally all of its sub-tables. The
 --    'fmt' key allows you to customize the output on a per-table basis.
 -- @param tbl The source table to configure.
@@ -658,7 +618,6 @@ end
 --   this format table to all child tables as well.
 -- @return Nothing.
 function tableToString.setFormatTable(tbl, fmt, recursive)
-
 	-- Defaults
 	recursive = recursive or false
 
@@ -670,14 +629,12 @@ function tableToString.setFormatTable(tbl, fmt, recursive)
 	_setFormatTable(tbl, fmt, recursive, {})
 end
 
-
 --- Remove the 'format key' from a table, and optionally its subtables.
 -- @param tbl The table to clean up.
 -- @param recursive (Optional, boolean, default: false) When true, recursively
 --   clean the format key from all sub-tables.
 -- @return Nothing.
 function tableToString.scrubFormatTable(tbl, recursive)
-
 	-- Defaults
 	recursive = recursive or false
 
@@ -688,9 +645,7 @@ function tableToString.scrubFormatTable(tbl, recursive)
 	_scrubFormatTable(tbl, recursive, {})
 end
 
-
 -- / Public Interface
 
 
 return tableToString
-
