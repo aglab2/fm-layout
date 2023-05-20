@@ -79,6 +79,9 @@ end
 
 layout_1p_no_cam_4x3_source_def.get_defaults = function(settings)
     obs.obs_data_set_default_string(settings, util.setting_names.game_name, "i wanna be the guy")
+    obs.obs_data_set_default_string(settings, util.setting_names.created_by, "Kayin")
+    obs.obs_data_set_default_string(settings, util.setting_names.category, "full send%")
+    obs.obs_data_set_default_string(settings, util.setting_names.estimate, "1:30:00")
     obs.obs_data_set_default_string(settings, util.setting_names.r1_source, util.source_names.runner_1)
     obs.obs_data_set_default_string(settings, util.setting_names.r1_pr_source, util.source_names.runner_1_pronouns)
     obs.obs_data_set_default_string(settings, util.setting_names.r1_name, "Runner 1")
@@ -118,6 +121,12 @@ layout_1p_no_cam_4x3_source_def.get_properties = function(data)
     local ctx = util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
     ctx.props_def = obs.obs_properties_create()
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
+        obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.created_by, util.dashboard_names.created_by,
+        obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.category, util.dashboard_names.category,
+        obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.estimate, util.dashboard_names.estimate,
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.r1_name, util.dashboard_names.r1_name,
         obs.OBS_TEXT_DEFAULT)
@@ -175,6 +184,9 @@ layout_1p_no_cam_4x3_source_def.update = function(data, settings)
     end
 
     util.set_obs_text(ctx, util.setting_names.game_name_source, util.setting_names.game_name)
+    util.set_obs_text(ctx, util.setting_names.created_by_source, util.setting_names.created_by, "Created by ")
+    util.set_obs_text(ctx, util.setting_names.category_source, util.setting_names.category)
+    util.set_obs_text(ctx, util.setting_names.estimate_source, util.setting_names.estimate)
     util.set_obs_text(ctx, util.setting_names.r1_source, util.setting_names.r1_name)
     util.set_obs_text(ctx, util.setting_names.r1_pr_source, util.setting_names.r1_pr)
     util.set_obs_text(ctx, util.setting_names.c1_source, util.setting_names.c1_name)

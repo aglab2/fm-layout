@@ -36,6 +36,8 @@ util.source_names = {
     category = "Category",
     estimate = "Estimate",
     hashtag = "Hashtag",
+    category_static = "Category Static",
+    estimate_static = "Estimate Static",
     timer = "Timer",
     runner_1 = "Runner 1",
     runner_1_pronouns = "Runner 1 Pronouns",
@@ -271,9 +273,12 @@ util.set_text_position = function(text_sceneitem, text_object)
     obs.obs_sceneitem_set_pos(text_sceneitem, text_location)
 end
 
-util.set_obs_text = function(ctx, src_name, setting_name)
+util.set_obs_text = function(ctx, src_name, setting_name, add_text)
+    if add_text == nil then
+        add_text = ""
+    end
     util.set_obs_text_source_text(ctx, obs.obs_data_get_string(ctx.props_settings, src_name),
-        obs.obs_data_get_string(ctx.props_settings, setting_name))
+        add_text .. obs.obs_data_get_string(ctx.props_settings, setting_name))
 end
 
 util.create_layout_ctx = function(layout_id)

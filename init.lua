@@ -39,8 +39,6 @@ function create_1p_no_cam_4x3_layout()
         util.colors.blue, util.source_names.runner_1, 271, 488)
     local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
         util.colors.white, util.source_names.runner_1_pronouns, 455, 499)
-    util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, 0xFFFFFF, "COMMENTATORS",
-        276, 607)
     local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
         util.colors.blue, util.source_names.comm_1, 120, 652)
     local comm_2_text = util.create_text_eaves(new_scene, "Regular", "KrakkaCafe", 26, util.text_halign.center,
@@ -59,6 +57,22 @@ function create_1p_no_cam_4x3_layout()
         util.colors.white, util.source_names.comm_pr_4, 476, 702)
     local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
         util.colors.blue, util.source_names.game_name, 1502, 885, obs.S_TRANSFORM_STARTCASE)
+    local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
+        util.text_halign.center, util.colors.blue, util.source_names.created_by, 1502, 931)
+    local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
+        util.colors.white, util.source_names.category, 1365, 975)
+    local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
+        util.colors.white, util.source_names.category, 1638, 975)
+
+    -- Non-cached elements that will be static in the layout
+    util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, util.colors.white,
+        util.source_names.commentators, 276, 607)
+    util.create_text_eaves(new_scene, "Regular", "#FangameMarathon", 41, util.text_halign.center, util.colors.blue,
+        util.source_names.hashtag, 276, 1010)
+    util.create_text_eaves(new_scene, "Book", "category", 24, util.text_halign.center, util.colors.white,
+        util.source_names.category_static, 1365, 1016, obs.S_TRANSFORM_UPPERCASE)
+    util.create_text_eaves(new_scene, "Book", "estimate", 24, util.text_halign.center, util.colors.white,
+        util.source_names.estimate_static, 1638, 1016, obs.S_TRANSFORM_UPPERCASE)
 
     local layout_data = obs.obs_data_create()
     obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text.uuid)
@@ -72,6 +86,9 @@ function create_1p_no_cam_4x3_layout()
     obs.obs_data_set_string(layout_data, util.setting_names.c3_pr_source, comm_3_pr_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c4_pr_source, comm_4_pr_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.game_name_source, game_name_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.estimate_source, estimate_text.uuid)
 
     local layout_source = obs.obs_source_create(layout_1p_no_cam_4x3_source_def.id, "Dashboard", layout_data, nil)
     obs.obs_scene_add(new_scene, layout_source)
@@ -89,6 +106,9 @@ function create_1p_no_cam_4x3_layout()
     scene_ctx.layout_objects[comm_3_pr_text.uuid] = comm_3_pr_text
     scene_ctx.layout_objects[comm_4_pr_text.uuid] = comm_4_pr_text
     scene_ctx.layout_objects[game_name_text.uuid] = game_name_text
+    scene_ctx.layout_objects[created_by_text.uuid] = created_by_text
+    scene_ctx.layout_objects[category_text.uuid] = category_text
+    scene_ctx.layout_objects[estimate_text.uuid] = estimate_text
 
     local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
     obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
@@ -100,10 +120,10 @@ end
 
 function create_3p_4x3_layout()
     local new_scene = util.create_scene(layout_3p_4x3_source_def.scene_name)
-    local runner_1_text = util.create_text_eaves(new_scene, "Regular", "Cosmoing", 32, util.text_halign.left, 0x0055FF,
-        util.source_names.runner_1, 705, 20)
-    local runner_1_pronouns = util.create_text_eaves(new_scene, "Regular", "He/Him", 18, util.text_halign.left, 0xFFFFFF,
-        util.source_names.runner_1_pronouns, 720, 53)
+    local runner_1_text = util.create_text_eaves(new_scene, "Regular", "Cosmoing", 32, util.text_halign.left,
+        util.colors.blue, util.source_names.runner_1, 705, 20)
+    local runner_1_pronouns = util.create_text_eaves(new_scene, "Regular", "He/Him", 18, util.text_halign.left,
+        util.colors.white, util.source_names.runner_1_pronouns, 720, 53)
     local layout_data = obs.obs_data_create()
     obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.r1_pr_source, runner_1_pronouns.uuid)
