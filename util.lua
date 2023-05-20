@@ -1,5 +1,17 @@
 local table_to_string = require("table_to_string")
 local obs = obslua
+local bit = require("bit")
+
+obs.OBS_ALIGN_CENTER = 0
+obs.OBS_ALIGN_LEFT = bit.lshift(1, 0)
+obs.OBS_ALIGN_RIGHT = bit.lshift(1, 1)
+obs.OBS_ALIGN_TOP = bit.lshift(1, 2)
+obs.OBS_ALIGN_BOTTOM = bit.lshift(1, 3)
+
+obs.S_TRANSFORM_NONE = 0
+obs.S_TRANSFORM_UPPERCASE = 1
+obs.S_TRANSFORM_LOWERCASE = 2
+obs.S_TRANSFORM_STARTCASE = 3
 
 util = {}
 
@@ -7,11 +19,23 @@ util.layout_builder_path = "layout-builder-pictures/"
 
 util.layout_ctx = {}
 
+util.text_halign = {
+    left = "left",
+    center = "center",
+    right = "right"
+}
+
+util.colors = {
+    blue = 0x01CAB8,
+    white = 0xFFFFFF
+}
+
 util.source_names = {
     game_name = "Game Name",
     created_by = "Created By",
     category = "Category",
     estimate = "Estimate",
+    hashtag = "Hashtag",
     timer = "Timer",
     runner_1 = "Runner 1",
     runner_1_pronouns = "Runner 1 Pronouns",
@@ -57,6 +81,15 @@ util.dashboard_names = {
 }
 
 util.setting_names = {
+    game_name_source = "game_name_source",
+    game_name = "game_name",
+    created_by_source = "created_by_source",
+    created_by = "created_by",
+    category_source = "category_source",
+    category = "category",
+    estimate_source = "estimate_source",
+    estimate = "estimate",
+    timer_source = "timer_source",
     r1_source = "runner_1_text_source",
     r1_pr_source = "runner_1_pronouns_source",
     r1_name = "runner_1_name",
@@ -69,7 +102,27 @@ util.setting_names = {
     r3_pr_source = "runner_3_pronouns_source",
     r3_name = "runner_3_name",
     r3_pr = "runner_3_pronouns",
+    r4_source = "runner_4_text_source",
+    r4_pr_source = "runner_4_pronouns_source",
+    r4_name = "runner_4_name",
+    r4_pr = "runner_4_pronouns",
     comm_amt = "comm_amount",
+    c1_source = "commentator_1_text_source",
+    c1_pr_source = "commentator_1_pronouns_source",
+    c1_name = "Commentator 1 name",
+    c1_pr = "Commentator 1 pronouns",
+    c2_source = "commentator_2_text_source",
+    c2_pr_source = "commentator_2_pronouns_source",
+    c2_name = "Commentator 2 name",
+    c2_pr = "Commentator 2 pronouns",
+    c3_source = "commentator_3_text_source",
+    c3_pr_source = "commentator_3_pronouns_source",
+    c3_name = "Commentator 3 name",
+    c3_pr = "Commentator 3 pronouns",
+    c4_source = "commentator_4_text_source",
+    c4_pr_source = "commentator_4_pronouns_source",
+    c4_name = "Commentator 4 name",
+    c4_pr = "Commentator 4 pronouns",
 }
 
 util.image_source_load = function(image, file)
@@ -96,11 +149,19 @@ util.create_scene = function(scene_name)
     return new_scene
 end
 
--- For color OBS uses BGR so for blue use 0xFF0000 instead of 0x0000FF
-util.create_text = function(face, size, style, text, align, color, name, scene, x, y)
+-- Creates a text source on the scene. Returns its unique `UUID` if failes returns `nil`
+util.create_text = function(face, size, style, text, align, color, name, scene, x, y, transform)
+    if transform == nil then
+        transform = obs.S_TRANSFORM_NONE
+    end
+
     local uuid = nil
 
-    local pos = obs.vec2()
+    -- Equates to `((color & 0xFF0000) >> 16) | (color & 0x00FF00) | ((color & 0xFF) << 16)`
+    --
+    -- Swizzles color from RGB to BGR
+    local bgr_col = bit.bor(bit.bor(bit.rshift(bit.band(color, 0xFF0000), 16), bit.band(color, 0x00FF00)),
+        bit.lshift(bit.band(color, 0xFF), 16))
 
     local text_settings = obs.obs_data_create()
     local text_font_object = obs.obs_data_create_from_json('{}')
@@ -109,21 +170,33 @@ util.create_text = function(face, size, style, text, align, color, name, scene, 
     obs.obs_data_set_int(text_font_object, "size", size)
     obs.obs_data_set_string(text_font_object, "style", style)
     obs.obs_data_set_obj(text_settings, "font", text_font_object)
-    obs.obs_data_set_int(text_settings, "color", color)
+    obs.obs_data_set_int(text_settings, "color", bgr_col)
     obs.obs_data_set_string(text_settings, "text", text)
     obs.obs_data_set_string(text_settings, "align", align)
+    obs.obs_data_set_int(text_settings, "transform", transform)
+
     local text_source = obs.obs_source_create("text_gdiplus", name, text_settings, nil)
     obs.obs_scene_add(scene, text_source)
 
-    local text_sceneitem = obs.obs_scene_sceneitem_from_source(scene, text_source)
-    local text_location = pos
-    if text_sceneitem then
-        text_location.x = x
-        text_location.y = y
-        obs.obs_sceneitem_set_pos(text_sceneitem, text_location)
-    end
-
     uuid = obs.obs_source_get_uuid(text_source)
+
+    local text_object = {
+        uuid = uuid,
+        x = x,
+        y = y
+    }
+
+    local text_sceneitem = obs.obs_scene_sceneitem_from_source(scene, text_source)
+    local halign = bit.bor(obs.OBS_ALIGN_LEFT, obs.OBS_ALIGN_TOP)
+    if align == util.text_halign.center then
+        halign = bit.bor(obs.OBS_ALIGN_CENTER, obs.OBS_ALIGN_TOP)
+    elseif align == util.text_halign.right then
+        halign = bit.bor(obs.OBS_ALIGN_RIGHT, obs.OBS_ALIGN_TOP)
+    end
+    if text_sceneitem then
+        obs.obs_sceneitem_set_alignment(text_sceneitem, halign)
+        util.set_text_position(text_sceneitem, text_object)
+    end
 
     obs.obs_source_update(text_source, text_settings)
     obs.obs_data_release(text_settings)
@@ -131,7 +204,7 @@ util.create_text = function(face, size, style, text, align, color, name, scene, 
     obs.obs_source_release(text_source)
     obs.obs_sceneitem_release(text_sceneitem)
 
-    return uuid
+    return text_object
 end
 
 local style_to_name_map = {
@@ -150,33 +223,68 @@ local style_to_name_map = {
     ["UltraItalic"] = "UltraItalic"
 }
 
--- For color OBS uses BGR so for blue use 0xFF0000 instead of 0x0000FF
-util.create_text_eaves = function(scene, style, text, size, align, color, name, x, y)
+-- Creates a text source on the scene using `MrEavesXLModOT` font. Returns its unique `UUID` if failes returns `nil`
+util.create_text_eaves = function(scene, style, text, size, align, color, name, x, y, transform)
     return util.create_text("MrEavesXLModOT-" .. style_to_name_map[style], size, "Regular", text, align, color, name,
-        scene, x, y)
+        scene, x, y, transform)
 end
 
-util.set_obs_text_source_text = function(uuid, text)
+util.set_obs_text_source_text = function(ctx, uuid, text)
     local source = obs.obs_get_source_by_uuid(uuid)
     local settings = obs.obs_data_create()
+    -- local text_object = ctx.layout_objects[uuid]
     obs.obs_data_set_string(settings, "text", text)
+
     obs.obs_source_update(source, settings)
     obs.obs_data_release(settings)
     obs.obs_source_release(source)
 end
 
-util.set_obs_text = function(prop_settings, src_name, setting_name)
-    util.set_obs_text_source_text(obs.obs_data_get_string(prop_settings, src_name),
-        obs.obs_data_get_string(prop_settings, setting_name))
+local set_sceneitem_visible = function(ctx, uuid, visible)
+    local source = obs.obs_get_source_by_uuid(uuid)
+    local scene = obs.obs_get_scene_by_name(ctx.scene)
+    local sceneitem = obs.obs_scene_sceneitem_from_source(scene, source)
+    obs.obs_sceneitem_set_visible(sceneitem, visible)
+
+    obs.obs_source_release(source)
+    obs.obs_sceneitem_release(sceneitem)
+    obs.obs_scene_release(scene)
+end
+
+util.set_item_visible = function(ctx, src_name, visible)
+    obs.script_log(obs.LOG_INFO,
+        "Set visibility for " .. src_name .. " to " .. tostring(visible))
+    set_sceneitem_visible(ctx, obs.obs_data_get_string(ctx.props_settings, src_name), visible)
+end
+
+util.set_prop_visible = function(ctx, prop_name, visible)
+    local prop = obs.obs_properties_get(ctx.props_def, prop_name)
+    obs.script_log(obs.LOG_INFO,
+        "Set visibility for " .. tostring(prop) .. " " .. prop_name .. " to " .. tostring(visible))
+    obs.obs_property_set_visible(prop, visible)
+end
+
+util.set_text_position = function(text_sceneitem, text_object)
+    local text_location = obs.vec2()
+    text_location.x = text_object.x
+    text_location.y = text_object.y
+    obs.obs_sceneitem_set_pos(text_sceneitem, text_location)
+end
+
+util.set_obs_text = function(ctx, src_name, setting_name)
+    util.set_obs_text_source_text(ctx, obs.obs_data_get_string(ctx.props_settings, src_name),
+        obs.obs_data_get_string(ctx.props_settings, setting_name))
 end
 
 util.create_layout_ctx = function(layout_id)
     util.layout_ctx[layout_id] = {
         props_def = nil,
         props_settings = nil,
-        source_uuids = {}
+        scene = "",
+        layout_objects = {}
     }
     obs.script_log(obs.LOG_INFO, "Created layout context " .. table_to_string.convert(util.layout_ctx[layout_id]))
+    return util.layout_ctx[layout_id]
 end
 
 util.get_layout_ctx = function(layout_id)

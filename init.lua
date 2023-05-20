@@ -1,6 +1,6 @@
 -- OBS API: https://obsproject.com/docs/index.html
 --
--- To output to OBS script log window use `obs.script_log`
+-- To output to OBS script log window use `obs.script_log(obs.LOG_INFO, "Message")`
 require("layout_source")
 require("util")
 local obs = obslua
@@ -12,15 +12,13 @@ local description = [[
     <center><h3>Layouts designed by Oiivae</h3></center>
     <center><h3>Producer Cosmoing</h3></center>
     <p>
-    API token for Twitch can be provided if you wish to update the Twitch title from the Dashboard
+    DO NOT delete any of the layout elements. This WILL break the Dashboard. Other than the scenes you are free to rename them.
     <p>
-    You can, after creating the layouts, add new elements if you need to, but they won't be automated by the Dashboard provided for each scene.
+    After creating the layouts you can add new elements if you need to, but they won't be automated by the Dashboard provided for each scene.
 ]]
 
 function create_layouts(layout_props, btn_prop)
     obs.script_log(obs.LOG_INFO, "Creating layouts...")
-    local twitch_token_text = obs.obs_properties_get(layout_props, "twitch_token")
-    obs.script_log(obs.LOG_INFO, "Twitch token: " .. obs.obs_property_name(twitch_token_text))
     create_1p_no_cam_4x3_layout()
     create_3p_4x3_layout()
 end
@@ -28,7 +26,6 @@ end
 function script_properties()
     local props = obs.obs_properties_create()
     obs.obs_properties_add_button(props, "create_layouts", "Create layouts", create_layouts)
-    obs.obs_properties_add_text(props, "twitch_token", "Twitch API token", obs.OBS_TEXT_PASSWORD)
     return props
 end
 
@@ -37,16 +34,62 @@ function script_description()
 end
 
 function create_1p_no_cam_4x3_layout()
-    local new_scene = util.create_scene("FM 1 person no cam 4x3 layout")
-    local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 38, "center", 0xFF5500,
-        util.source_names.runner_1, 222, 494)
-    local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 15, "left", 0xFFFFFF,
-        util.source_names.runner_1_pronouns, 422, 502)
+    local new_scene = util.create_scene(layout_1p_no_cam_4x3_source_def.scene_name)
+    local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
+        util.colors.blue, util.source_names.runner_1, 271, 488)
+    local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
+        util.colors.white, util.source_names.runner_1_pronouns, 455, 499)
+    util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, 0xFFFFFF, "COMMENTATORS",
+        276, 607)
+    local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_1, 120, 652)
+    local comm_2_text = util.create_text_eaves(new_scene, "Regular", "KrakkaCafe", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_2, 368, 652)
+    local comm_3_text = util.create_text_eaves(new_scene, "Regular", "Myrral", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_3, 120, 697)
+    local comm_4_text = util.create_text_eaves(new_scene, "Regular", "Smartkin", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_4, 368, 697)
+    local comm_1_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_1, 224, 657)
+    local comm_2_pr_text = util.create_text_eaves(new_scene, "Heavy", "They/Them", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_2, 476, 657)
+    local comm_3_pr_text = util.create_text_eaves(new_scene, "Heavy", "She/Her", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_3, 224, 702)
+    local comm_4_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_4, 476, 702)
+    local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
+        util.colors.blue, util.source_names.game_name, 1502, 885, obs.S_TRANSFORM_STARTCASE)
+
     local layout_data = obs.obs_data_create()
-    obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text)
-    obs.obs_data_set_string(layout_data, util.setting_names.r1_pr_source, runner_1_pronouns)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_pr_source, runner_1_pronouns.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_source, comm_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_source, comm_2_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c3_source, comm_3_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c4_source, comm_4_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_pr_source, comm_1_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c3_pr_source, comm_3_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c4_pr_source, comm_4_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.game_name_source, game_name_text.uuid)
+
     local layout_source = obs.obs_source_create(layout_1p_no_cam_4x3_source_def.id, "Dashboard", layout_data, nil)
     obs.obs_scene_add(new_scene, layout_source)
+
+    local scene_ctx = util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
+    scene_ctx.scene = layout_1p_no_cam_4x3_source_def.scene_name
+    scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
+    scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
+    scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
+    scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
+    scene_ctx.layout_objects[comm_3_text.uuid] = comm_3_text
+    scene_ctx.layout_objects[comm_4_text.uuid] = comm_4_text
+    scene_ctx.layout_objects[comm_1_pr_text.uuid] = comm_1_pr_text
+    scene_ctx.layout_objects[comm_2_pr_text.uuid] = comm_2_pr_text
+    scene_ctx.layout_objects[comm_3_pr_text.uuid] = comm_3_pr_text
+    scene_ctx.layout_objects[comm_4_pr_text.uuid] = comm_4_pr_text
+    scene_ctx.layout_objects[game_name_text.uuid] = game_name_text
+
     local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
     obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
     obs.obs_sceneitem_release(layout_item)
@@ -56,16 +99,23 @@ function create_1p_no_cam_4x3_layout()
 end
 
 function create_3p_4x3_layout()
-    local new_scene = util.create_scene("FM 3 person 4x3 layout")
-    local runner_1_text = util.create_text_eaves(new_scene, "Regular", "Cosmoing", 32, "left", 0xFF5500,
+    local new_scene = util.create_scene(layout_3p_4x3_source_def.scene_name)
+    local runner_1_text = util.create_text_eaves(new_scene, "Regular", "Cosmoing", 32, util.text_halign.left, 0x0055FF,
         util.source_names.runner_1, 705, 20)
-    local runner_1_pronouns = util.create_text_eaves(new_scene, "Regular", "He/Him", 18, "left", 0xFFFFFF,
+    local runner_1_pronouns = util.create_text_eaves(new_scene, "Regular", "He/Him", 18, util.text_halign.left, 0xFFFFFF,
         util.source_names.runner_1_pronouns, 720, 53)
     local layout_data = obs.obs_data_create()
-    obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text)
-    obs.obs_data_set_string(layout_data, util.setting_names.r1_pr_source, runner_1_pronouns)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_pr_source, runner_1_pronouns.uuid)
+
     local layout_source = obs.obs_source_create(layout_3p_4x3_source_def.id, "Dashboard", layout_data, nil)
     obs.obs_scene_add(new_scene, layout_source)
+
+    local scene_ctx = util.get_layout_ctx(layout_3p_4x3_source_def.id)
+    scene_ctx.scene = layout_3p_4x3_source_def.scene_name
+    scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
+    scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
+
     local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
     obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
     obs.obs_sceneitem_release(layout_item)

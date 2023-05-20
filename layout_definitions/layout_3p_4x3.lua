@@ -4,6 +4,7 @@ local obs = obslua
 local bit = require("bit")
 
 layout_3p_4x3_source_def = {}
+layout_3p_4x3_source_def.scene_name = "FM 3 person 4x3 layout"
 layout_3p_4x3_source_def.id = "fm_2023_3_person_4x3"
 layout_3p_4x3_source_def.output_flags = bit.bor(bit.bor(obs.OBS_SOURCE_VIDEO, obs.OBS_SOURCE_CUSTOM_DRAW),
     obs.OBS_SOURCE_CAP_DISABLED)
@@ -18,7 +19,7 @@ layout_3p_4x3_source_def.create = function(settings, source)
     util.create_layout_ctx(layout_3p_4x3_source_def.id)
     obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
     local img_path = script_path() .. util.layout_builder_path
-    util.image_source_load(data.layout_template, img_path .. "/3_person_4x3.png")
+    util.image_source_load(data.layout_template, img_path .. "/background.png")
 
     return data
 end
@@ -59,10 +60,8 @@ layout_3p_4x3_source_def.update = function(data, settings)
     local ctx = util.get_layout_ctx(layout_3p_4x3_source_def.id)
     ctx.props_settings = settings
 
-    util.set_obs_text_source_text(obs.obs_data_get_string(ctx.props_settings, util.setting_names.r1_source),
-        obs.obs_data_get_string(ctx.props_settings, util.setting_names.r1_name))
-    util.set_obs_text_source_text(obs.obs_data_get_string(ctx.props_settings, util.setting_names.r1_pr_source),
-        obs.obs_data_get_string(ctx.props_settings, util.setting_names.r1_pr))
+    util.set_obs_text(ctx, util.setting_names.r1_source, util.setting_names.r1_name)
+    util.set_obs_text(ctx, util.setting_names.r1_pr_source, util.setting_names.r1_pr)
 end
 
 layout_3p_4x3_source_def.destroy = function(data)

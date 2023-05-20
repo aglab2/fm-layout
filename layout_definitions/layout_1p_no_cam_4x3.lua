@@ -3,7 +3,32 @@ require("util")
 local obs = obslua
 local bit = require("bit")
 
+local show_commentators = function(ctx)
+    util.set_prop_visible(ctx, util.setting_names.c2_name, true)
+    util.set_prop_visible(ctx, util.setting_names.c2_pr, true)
+    util.set_prop_visible(ctx, util.setting_names.c3_name, true)
+    util.set_prop_visible(ctx, util.setting_names.c3_pr, true)
+    util.set_prop_visible(ctx, util.setting_names.c4_name, true)
+    util.set_prop_visible(ctx, util.setting_names.c4_pr, true)
+end
+
+local hide_commentators = function(ctx)
+    util.set_item_visible(ctx, util.setting_names.c4_source, false)
+    util.set_item_visible(ctx, util.setting_names.c4_pr_source, false)
+    util.set_prop_visible(ctx, util.setting_names.c4_name, false)
+    util.set_prop_visible(ctx, util.setting_names.c4_pr, false)
+    util.set_item_visible(ctx, util.setting_names.c3_source, false)
+    util.set_item_visible(ctx, util.setting_names.c3_pr_source, false)
+    util.set_prop_visible(ctx, util.setting_names.c3_name, false)
+    util.set_prop_visible(ctx, util.setting_names.c3_pr, false)
+    util.set_item_visible(ctx, util.setting_names.c2_source, false)
+    util.set_item_visible(ctx, util.setting_names.c2_pr_source, false)
+    util.set_prop_visible(ctx, util.setting_names.c2_name, false)
+    util.set_prop_visible(ctx, util.setting_names.c2_pr, false)
+end
+
 layout_1p_no_cam_4x3_source_def = {}
+layout_1p_no_cam_4x3_source_def.scene_name = "FM 1 person no cam 4x3 layout"
 layout_1p_no_cam_4x3_source_def.id = "fm_2023_1_person_no_cam_4x3"
 layout_1p_no_cam_4x3_source_def.output_flags = bit.bor(bit.bor(obs.OBS_SOURCE_VIDEO, obs.OBS_SOURCE_CUSTOM_DRAW),
     obs.OBS_SOURCE_CAP_DISABLED)
@@ -14,7 +39,11 @@ end
 
 layout_1p_no_cam_4x3_source_def.create = function(settings, source)
     local data = {}
-    util.create_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
+    local ctx = util.create_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
+
+    obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
+
+    ctx.props_settings = settings
 
     data.background = obs.gs_image_file()
     data.comm_name_box = obs.gs_image_file()
@@ -29,8 +58,6 @@ layout_1p_no_cam_4x3_source_def.create = function(settings, source)
     data.twitch_logo = obs.gs_image_file()
     data.timer_frame = obs.gs_image_file()
     data.fade_box = obs.gs_image_file()
-
-    obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
 
     local img_path = script_path() .. util.layout_builder_path
     util.image_source_load(data.background, img_path .. "background.png")
@@ -51,21 +78,72 @@ layout_1p_no_cam_4x3_source_def.create = function(settings, source)
 end
 
 layout_1p_no_cam_4x3_source_def.get_defaults = function(settings)
+    obs.obs_data_set_default_string(settings, util.setting_names.game_name, "i wanna be the guy")
     obs.obs_data_set_default_string(settings, util.setting_names.r1_source, util.source_names.runner_1)
     obs.obs_data_set_default_string(settings, util.setting_names.r1_pr_source, util.source_names.runner_1_pronouns)
     obs.obs_data_set_default_string(settings, util.setting_names.r1_name, "Runner 1")
     obs.obs_data_set_default_string(settings, util.setting_names.r1_pr, "They/Them")
-    obs.obs_data_set_default_string(settings, util.setting_names.comm_amt, 1)
+    obs.obs_data_set_default_int(settings, util.setting_names.comm_amt, 1)
+    obs.obs_data_set_default_string(settings, util.setting_names.c1_name, "Comm 1")
+    obs.obs_data_set_default_string(settings, util.setting_names.c1_pr, "They/Them")
+    obs.obs_data_set_default_string(settings, util.setting_names.c2_name, "Comm 2")
+    obs.obs_data_set_default_string(settings, util.setting_names.c2_pr, "They/Them")
+    obs.obs_data_set_default_string(settings, util.setting_names.c3_name, "Comm 3")
+    obs.obs_data_set_default_string(settings, util.setting_names.c3_pr, "They/Them")
+    obs.obs_data_set_default_string(settings, util.setting_names.c4_name, "Comm 4")
+    obs.obs_data_set_default_string(settings, util.setting_names.c4_pr, "They/Them")
+end
+
+local slider_modified = function(props, p, settings)
+    local ctx = util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
+    local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
+    show_commentators(ctx)
+    if comm_amt <= 3 then
+        util.set_prop_visible(ctx, util.setting_names.c4_name, false)
+        util.set_prop_visible(ctx, util.setting_names.c4_pr, false)
+    end
+    if comm_amt <= 2 then
+        util.set_prop_visible(ctx, util.setting_names.c3_name, false)
+        util.set_prop_visible(ctx, util.setting_names.c3_pr, false)
+    end
+    if comm_amt <= 1 then
+        util.set_prop_visible(ctx, util.setting_names.c2_name, false)
+        util.set_prop_visible(ctx, util.setting_names.c2_pr, false)
+    end
+
+    return true
 end
 
 layout_1p_no_cam_4x3_source_def.get_properties = function(data)
     local ctx = util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
     ctx.props_def = obs.obs_properties_create()
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
+        obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.r1_name, util.dashboard_names.r1_name,
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.r1_pr, util.dashboard_names.r1_pr,
         obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt, util.dashboard_names.comm_amt, 1, 4, 1)
+
+    local slider = obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt,
+        util.dashboard_names.comm_amt, 1, 4, 1)
+    obs.obs_property_set_modified_callback(slider, slider_modified)
+
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_name, util.dashboard_names.c1_name,
+        obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_pr, util.dashboard_names.c1_pr,
+        obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c2_name, util.dashboard_names.c2_name,
+        obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c2_pr, util.dashboard_names.c2_pr,
+        obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c3_name, util.dashboard_names.c3_name,
+        obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c3_pr, util.dashboard_names.c3_pr,
+        obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c4_name, util.dashboard_names.c4_name,
+        obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c4_pr, util.dashboard_names.c4_pr,
+        obs.OBS_TEXT_DEFAULT)
 
     obs.obs_properties_apply_settings(ctx.props_def, ctx.props_settings)
 
@@ -76,8 +154,37 @@ layout_1p_no_cam_4x3_source_def.update = function(data, settings)
     local ctx = util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
     ctx.props_settings = settings
 
-    util.set_obs_text(ctx.props_settings, util.setting_names.r1_source, util.setting_names.r1_name)
-    util.set_obs_text(ctx.props_settings, util.setting_names.r1_pr_source, util.setting_names.r1_pr)
+    local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
+    util.set_item_visible(ctx, util.setting_names.c2_source, true)
+    util.set_item_visible(ctx, util.setting_names.c2_pr_source, true)
+    util.set_item_visible(ctx, util.setting_names.c3_source, true)
+    util.set_item_visible(ctx, util.setting_names.c3_pr_source, true)
+    util.set_item_visible(ctx, util.setting_names.c4_source, true)
+    util.set_item_visible(ctx, util.setting_names.c4_pr_source, true)
+    if comm_amt <= 3 then
+        util.set_item_visible(ctx, util.setting_names.c4_source, false)
+        util.set_item_visible(ctx, util.setting_names.c4_pr_source, false)
+    end
+    if comm_amt <= 2 then
+        util.set_item_visible(ctx, util.setting_names.c3_source, false)
+        util.set_item_visible(ctx, util.setting_names.c3_pr_source, false)
+    end
+    if comm_amt <= 1 then
+        util.set_item_visible(ctx, util.setting_names.c2_source, false)
+        util.set_item_visible(ctx, util.setting_names.c2_pr_source, false)
+    end
+
+    util.set_obs_text(ctx, util.setting_names.game_name_source, util.setting_names.game_name)
+    util.set_obs_text(ctx, util.setting_names.r1_source, util.setting_names.r1_name)
+    util.set_obs_text(ctx, util.setting_names.r1_pr_source, util.setting_names.r1_pr)
+    util.set_obs_text(ctx, util.setting_names.c1_source, util.setting_names.c1_name)
+    util.set_obs_text(ctx, util.setting_names.c2_source, util.setting_names.c2_name)
+    util.set_obs_text(ctx, util.setting_names.c3_source, util.setting_names.c3_name)
+    util.set_obs_text(ctx, util.setting_names.c4_source, util.setting_names.c4_name)
+    util.set_obs_text(ctx, util.setting_names.c1_pr_source, util.setting_names.c1_pr)
+    util.set_obs_text(ctx, util.setting_names.c2_pr_source, util.setting_names.c2_pr)
+    util.set_obs_text(ctx, util.setting_names.c3_pr_source, util.setting_names.c3_pr)
+    util.set_obs_text(ctx, util.setting_names.c4_pr_source, util.setting_names.c4_pr)
 end
 
 layout_1p_no_cam_4x3_source_def.destroy = function(data)
@@ -129,6 +236,7 @@ layout_1p_no_cam_4x3_source_def.video_render = function(data, effect)
         local row_indx = 0
         local x_off = 287 - 35
         local y_off = 697 - 652
+        -- Draw commentator boxes
         for i = 1, comm_amt do
             obs.obs_source_draw(data.comm_name_box.texture, 35 + x_off * (i - 1 - row_indx * 2), 648 + y_off * row_indx,
                 235, 35, false)
