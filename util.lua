@@ -225,7 +225,7 @@ local style_to_name_map = {
     ["UltraItalic"] = "UltraItalic"
 }
 
--- Creates a text source on the scene using `MrEavesXLModOT` font. Returns its unique `UUID` if failes returns `nil`
+-- Creates a text source on the scene using `MrEavesXLModOT` font. Returns text object in format `{ uuid = uuid, x = x, y = y }`
 util.create_text_eaves = function(scene, style, text, size, align, color, name, x, y, transform)
     return util.create_text("MrEavesXLModOT-" .. style_to_name_map[style], size, "Regular", text, align, color, name,
         scene, x, y, transform)
@@ -254,15 +254,11 @@ local set_sceneitem_visible = function(ctx, uuid, visible)
 end
 
 util.set_item_visible = function(ctx, src_name, visible)
-    obs.script_log(obs.LOG_INFO,
-        "Set visibility for " .. src_name .. " to " .. tostring(visible))
     set_sceneitem_visible(ctx, obs.obs_data_get_string(ctx.props_settings, src_name), visible)
 end
 
 util.set_prop_visible = function(ctx, prop_name, visible)
     local prop = obs.obs_properties_get(ctx.props_def, prop_name)
-    obs.script_log(obs.LOG_INFO,
-        "Set visibility for " .. tostring(prop) .. " " .. prop_name .. " to " .. tostring(visible))
     obs.obs_property_set_visible(prop, visible)
 end
 
