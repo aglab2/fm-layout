@@ -197,7 +197,7 @@ util.create_text = function(face, size, style, text, align, color, name, scene, 
     end
     if text_sceneitem then
         obs.obs_sceneitem_set_alignment(text_sceneitem, halign)
-        util.set_text_position(text_sceneitem, text_object)
+        util.set_item_position(text_sceneitem, text_object)
     end
 
     obs.obs_source_update(text_source, text_settings)
@@ -266,19 +266,52 @@ util.set_prop_visible = function(ctx, prop_name, visible)
     obs.obs_property_set_visible(prop, visible)
 end
 
-util.set_text_position = function(text_sceneitem, text_object)
+util.set_item_position = function(sceneitem, item_object)
     local text_location = obs.vec2()
-    text_location.x = text_object.x
-    text_location.y = text_object.y
-    obs.obs_sceneitem_set_pos(text_sceneitem, text_location)
+    text_location.x = item_object.x
+    text_location.y = item_object.y
+    obs.obs_sceneitem_set_pos(sceneitem, text_location)
 end
 
 util.set_obs_text = function(ctx, src_name, setting_name, add_text)
     if add_text == nil then
         add_text = ""
     end
+
     util.set_obs_text_source_text(ctx, obs.obs_data_get_string(ctx.props_settings, src_name),
         add_text .. obs.obs_data_get_string(ctx.props_settings, setting_name))
+end
+
+util.create_timer = function(scene, name, x, y, w, h)
+    local uuid = nil
+
+    local timer_settings = obs.obs_data_create()
+    obs.obs_data_set_int(timer_settings, "width", w)
+    obs.obs_data_set_int(timer_settings, "height", h)
+    obs.obs_data_set_string(timer_settings, "layout_path", script_path() .. "livesplit-layouts/default.lsl")
+
+    local timer = obs.obs_source_create("livesplit-one", name, timer_settings, nil)
+    obs.obs_scene_add(scene, timer)
+
+    uuid = obs.obs_source_get_uuid(timer)
+
+    local timer_object = {
+        uuid = uuid,
+        x = x,
+        y = y
+    }
+
+    local timer_sceneitem = obs.obs_scene_sceneitem_from_source(scene, timer)
+    if timer_sceneitem then
+        util.set_item_position(timer_sceneitem, timer_object)
+    end
+
+    obs.obs_source_update(timer, timer_settings)
+    obs.obs_data_release(timer_settings)
+    obs.obs_source_release(timer)
+    obs.obs_sceneitem_release(timer_sceneitem)
+
+    return timer_object
 end
 
 util.create_layout_ctx = function(layout_id)

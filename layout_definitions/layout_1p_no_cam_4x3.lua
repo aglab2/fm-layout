@@ -12,26 +12,20 @@ local show_commentators = function(ctx)
     util.set_prop_visible(ctx, util.setting_names.c4_pr, true)
 end
 
-local hide_commentators = function(ctx)
-    util.set_item_visible(ctx, util.setting_names.c4_source, false)
-    util.set_item_visible(ctx, util.setting_names.c4_pr_source, false)
-    util.set_prop_visible(ctx, util.setting_names.c4_name, false)
-    util.set_prop_visible(ctx, util.setting_names.c4_pr, false)
-    util.set_item_visible(ctx, util.setting_names.c3_source, false)
-    util.set_item_visible(ctx, util.setting_names.c3_pr_source, false)
-    util.set_prop_visible(ctx, util.setting_names.c3_name, false)
-    util.set_prop_visible(ctx, util.setting_names.c3_pr, false)
-    util.set_item_visible(ctx, util.setting_names.c2_source, false)
-    util.set_item_visible(ctx, util.setting_names.c2_pr_source, false)
-    util.set_prop_visible(ctx, util.setting_names.c2_name, false)
-    util.set_prop_visible(ctx, util.setting_names.c2_pr, false)
-end
-
 layout_1p_no_cam_4x3_source_def = {}
 layout_1p_no_cam_4x3_source_def.scene_name = "FM 1 person no cam 4x3 layout"
 layout_1p_no_cam_4x3_source_def.id = "fm_2023_1_person_no_cam_4x3"
 layout_1p_no_cam_4x3_source_def.output_flags = bit.bor(bit.bor(obs.OBS_SOURCE_VIDEO, obs.OBS_SOURCE_CUSTOM_DRAW),
     obs.OBS_SOURCE_CAP_DISABLED)
+
+layout_1p_no_cam_4x3_source_def.hide_commentators = function(ctx)
+    util.set_item_visible(ctx, util.setting_names.c4_source, false)
+    util.set_item_visible(ctx, util.setting_names.c4_pr_source, false)
+    util.set_item_visible(ctx, util.setting_names.c3_source, false)
+    util.set_item_visible(ctx, util.setting_names.c3_pr_source, false)
+    util.set_item_visible(ctx, util.setting_names.c2_source, false)
+    util.set_item_visible(ctx, util.setting_names.c2_pr_source, false)
+end
 
 layout_1p_no_cam_4x3_source_def.get_name = function()
     return "FM 4x3 1 person no cam layout"

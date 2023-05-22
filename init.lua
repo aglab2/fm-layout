@@ -12,7 +12,11 @@ local description = [[
     <center><h3>Layouts designed by Oiivae</h3></center>
     <center><h3>Producer Cosmoing</h3></center>
     <p>
+    OBS LiveSplit One plugin is required for the layouts. Install it from <a href="https://github.com/LiveSplit/obs-livesplit-one">here</a>
+    <p>
     DO NOT delete any of the layout elements. This WILL break the Dashboard. Other than the scenes you are free to rename them.
+    <p>
+    In the Dashboard itself DO NOT and I say DO NOT click the Defaults button under ANY circumstances. This WILL break the entire program and will force you to recreate the layouts.
     <p>
     After creating the layouts you can add new elements if you need to, but they won't be automated by the Dashboard provided for each scene.
 ]]
@@ -63,6 +67,7 @@ function create_1p_no_cam_4x3_layout()
         util.colors.white, util.source_names.category, 1365, 975)
     local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
         util.colors.white, util.source_names.category, 1638, 975)
+    local timer = util.create_timer(new_scene, util.source_names.timer, 705, 900, 250, 70)
 
     -- Non-cached elements that will be static in the layout
     util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, util.colors.white,
@@ -89,6 +94,7 @@ function create_1p_no_cam_4x3_layout()
     obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.estimate_source, estimate_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
 
     local layout_source = obs.obs_source_create(layout_1p_no_cam_4x3_source_def.id, "Dashboard", layout_data, nil)
     obs.obs_scene_add(new_scene, layout_source)
@@ -109,10 +115,12 @@ function create_1p_no_cam_4x3_layout()
     scene_ctx.layout_objects[created_by_text.uuid] = created_by_text
     scene_ctx.layout_objects[category_text.uuid] = category_text
     scene_ctx.layout_objects[estimate_text.uuid] = estimate_text
+    scene_ctx.layout_objects[timer.uuid] = timer
 
     local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
     obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
     obs.obs_sceneitem_release(layout_item)
+    layout_1p_no_cam_4x3_source_def.hide_commentators(util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id))
     obs.obs_data_release(layout_data)
     obs.obs_source_release(layout_source)
     obs.obs_scene_release(new_scene)
