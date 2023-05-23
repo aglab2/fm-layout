@@ -33,7 +33,8 @@ end
 
 layout_1p_no_cam_4x3_source_def.create = function(settings, source)
     local data = {}
-    local ctx = util.create_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
+    local ctx = util.create_item_ctx(layout_1p_no_cam_4x3_source_def.id)
+    ctx.scene = layout_1p_no_cam_4x3_source_def.scene_name
 
     obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
 
@@ -92,7 +93,7 @@ layout_1p_no_cam_4x3_source_def.get_defaults = function(settings)
 end
 
 local slider_modified = function(props, p, settings)
-    local ctx = util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
+    local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
     show_commentators(ctx)
     if comm_amt <= 3 then
@@ -112,7 +113,7 @@ local slider_modified = function(props, p, settings)
 end
 
 layout_1p_no_cam_4x3_source_def.get_properties = function(data)
-    local ctx = util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
+    local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
     ctx.props_def = obs.obs_properties_create()
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_DEFAULT)
@@ -154,7 +155,7 @@ layout_1p_no_cam_4x3_source_def.get_properties = function(data)
 end
 
 layout_1p_no_cam_4x3_source_def.update = function(data, settings)
-    local ctx = util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
+    local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
     ctx.props_settings = settings
 
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
@@ -216,7 +217,7 @@ layout_1p_no_cam_4x3_source_def.video_render = function(data, effect)
         return;
     end
 
-    local ctx = util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
+    local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
 
     effect = obs.obs_get_base_effect(obs.OBS_EFFECT_DEFAULT)

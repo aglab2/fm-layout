@@ -16,7 +16,7 @@ end
 layout_3p_4x3_source_def.create = function(settings, source)
     local data = {}
     data.layout_template = obs.gs_image_file()
-    util.create_layout_ctx(layout_3p_4x3_source_def.id)
+    util.create_item_ctx(layout_3p_4x3_source_def.id)
     obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
     local img_path = script_path() .. util.layout_builder_path
     util.image_source_load(data.layout_template, img_path .. "/background.png")
@@ -36,7 +36,8 @@ layout_3p_4x3_source_def.get_defaults = function(settings)
 end
 
 layout_3p_4x3_source_def.get_properties = function(data)
-    local ctx = util.get_layout_ctx(layout_3p_4x3_source_def.id)
+    local ctx = util.get_item_ctx(layout_3p_4x3_source_def.id)
+    ctx.scene = layout_3p_4x3_source_def.scene_name
     ctx.props_def = obs.obs_properties_create()
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.r1_name, util.dashboard_names.r1_name,
         obs.OBS_TEXT_DEFAULT)
@@ -57,7 +58,7 @@ layout_3p_4x3_source_def.get_properties = function(data)
 end
 
 layout_3p_4x3_source_def.update = function(data, settings)
-    local ctx = util.get_layout_ctx(layout_3p_4x3_source_def.id)
+    local ctx = util.get_item_ctx(layout_3p_4x3_source_def.id)
     ctx.props_settings = settings
 
     util.set_obs_text(ctx, util.setting_names.r1_source, util.setting_names.r1_name)

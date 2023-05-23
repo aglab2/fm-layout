@@ -2,6 +2,8 @@ local table_to_string = require("table_to_string")
 local obs = obslua
 local bit = require("bit")
 
+--- Additional imports into obslua that aren't provided by OBS API due to them being macro in OBS's source code
+
 obs.OBS_ALIGN_CENTER = 0
 obs.OBS_ALIGN_LEFT = bit.lshift(1, 0)
 obs.OBS_ALIGN_RIGHT = bit.lshift(1, 1)
@@ -13,11 +15,13 @@ obs.S_TRANSFORM_UPPERCASE = 1
 obs.S_TRANSFORM_LOWERCASE = 2
 obs.S_TRANSFORM_STARTCASE = 3
 
+--- End OBS export
+
 util = {}
 
 util.layout_builder_path = "layout-builder-pictures/"
 
-util.layout_ctx = {}
+util.items_ctx = {}
 
 util.text_halign = {
     left = "left",
@@ -82,6 +86,28 @@ util.dashboard_names = {
     c4_pr = "Commentator 4 pronouns",
 }
 
+util.timer_controller_names = {
+    runner = "Runner",
+    left_runner = "Set time for left runner",
+    right_runner = "Set time for right runner",
+    top_left_runner = "Set time for top left runner",
+    top_right_runner = "Set time for top right runner",
+    bottom_left_runner = "Set time for bottom left runner",
+    bottom_right_runner = "Set time for bottom right runner",
+    timer_start = "Start",
+    timer_finish = "Finish",
+    timer_reset = "Reset",
+    timer_pause = "Pause",
+    timer_continue = "Continue"
+}
+
+util.timer_states = {
+    stopped = 0,
+    running = 1,
+    paused = 2,
+    finished = 3,
+}
+
 util.setting_names = {
     game_name_source = "game_name_source",
     game_name = "game_name",
@@ -125,6 +151,7 @@ util.setting_names = {
     c4_pr_source = "commentator_4_pronouns_source",
     c4_name = "Commentator 4 name",
     c4_pr = "Commentator 4 pronouns",
+    runner_amt = "runner_amount"
 }
 
 util.image_source_load = function(image, file)
@@ -310,17 +337,18 @@ util.create_timer = function(scene, name, x, y, w, h)
     return timer_object
 end
 
-util.create_layout_ctx = function(layout_id)
-    util.layout_ctx[layout_id] = {
+util.create_item_ctx = function(item_id)
+    util.items_ctx[item_id] = {
         props_def = nil,
         props_settings = nil,
         scene = "",
-        layout_objects = {}
+        layout_objects = {},
+        state = nil
     }
-    obs.script_log(obs.LOG_INFO, "Created layout context " .. table_to_string.convert(util.layout_ctx[layout_id]))
-    return util.layout_ctx[layout_id]
+    obs.script_log(obs.LOG_INFO, "Created item context " .. table_to_string.convert(util.items_ctx[item_id]))
+    return util.items_ctx[item_id]
 end
 
-util.get_layout_ctx = function(layout_id)
-    return util.layout_ctx[layout_id]
+util.get_item_ctx = function(item_id)
+    return util.items_ctx[item_id]
 end

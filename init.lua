@@ -1,8 +1,10 @@
 -- OBS API: https://obsproject.com/docs/index.html
 --
 -- To output to OBS script log window use `obs.script_log(obs.LOG_INFO, "Message")`
+
 require("layout_source")
 require("util")
+require("timer_controller")
 local obs = obslua
 
 local description = [[
@@ -14,7 +16,7 @@ local description = [[
     <p>
     OBS LiveSplit One plugin is required for the layouts. Install it from <a href="https://github.com/LiveSplit/obs-livesplit-one">here</a>
     <p>
-    DO NOT delete any of the layout elements. This WILL break the Dashboard. Other than the scenes you are free to rename them.
+    DO NOT delete any of the layout elements. This WILL break the Dashboard. Especially the Dashboard itself, it WILL force you to recreate ALL the layouts. Other than the scenes you are free to rename them.
     <p>
     In the Dashboard itself DO NOT and I say DO NOT click the Defaults button under ANY circumstances. This WILL break the entire program and will force you to recreate the layouts.
     <p>
@@ -99,7 +101,21 @@ function create_1p_no_cam_4x3_layout()
     local layout_source = obs.obs_source_create(layout_1p_no_cam_4x3_source_def.id, "Dashboard", layout_data, nil)
     obs.obs_scene_add(new_scene, layout_source)
 
-    local scene_ctx = util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id)
+    -- Create timer controller
+
+    local timer_data = obs.obs_data_create()
+    obs.obs_data_set_int(timer_data, util.setting_names.runner_amt, 1)
+    obs.obs_data_set_string(timer_data, util.setting_names.timer_source, timer.uuid)
+    local timer_controller = obs.obs_source_create(timer_controller.id, "Timer Controller", timer_data, nil)
+    obs.obs_scene_add(new_scene, timer_controller)
+    obs.obs_data_release(timer_data)
+    obs.obs_source_release(timer_controller)
+
+    local timer_controller_item = obs.obs_scene_sceneitem_from_source(new_scene, timer_controller)
+    obs.obs_sceneitem_set_order(timer_controller_item, obs.OBS_ORDER_MOVE_BOTTOM)
+    obs.obs_sceneitem_release(timer_controller_item)
+
+    local scene_ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
     scene_ctx.scene = layout_1p_no_cam_4x3_source_def.scene_name
     scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
     scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
@@ -120,7 +136,7 @@ function create_1p_no_cam_4x3_layout()
     local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
     obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
     obs.obs_sceneitem_release(layout_item)
-    layout_1p_no_cam_4x3_source_def.hide_commentators(util.get_layout_ctx(layout_1p_no_cam_4x3_source_def.id))
+    layout_1p_no_cam_4x3_source_def.hide_commentators(util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id))
     obs.obs_data_release(layout_data)
     obs.obs_source_release(layout_source)
     obs.obs_scene_release(new_scene)
@@ -139,7 +155,7 @@ function create_3p_4x3_layout()
     local layout_source = obs.obs_source_create(layout_3p_4x3_source_def.id, "Dashboard", layout_data, nil)
     obs.obs_scene_add(new_scene, layout_source)
 
-    local scene_ctx = util.get_layout_ctx(layout_3p_4x3_source_def.id)
+    local scene_ctx = util.get_item_ctx(layout_3p_4x3_source_def.id)
     scene_ctx.scene = layout_3p_4x3_source_def.scene_name
     scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
     scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
