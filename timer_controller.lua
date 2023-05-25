@@ -45,7 +45,7 @@ timer_controller.timer_start_finish = function(self, data, props, prop)
     if state == nil then
         state = util.timer_states.stopped
     end
-    local timer = obs.obs_get_source_by_uuid(obs.obs_data_get_string(ctx.props_settings, "timer_source"))
+    local timer = obs.obs_get_source_by_uuid(obs.obs_data_get_string(ctx.props_settings, util.setting_names.timer_source))
     if state == util.timer_states.stopped then
         ctx.state = util.timer_states.running
         obs.obs_source_media_play_pause(timer, false)
@@ -63,11 +63,39 @@ timer_controller.timer_start_finish = function(self, data, props, prop)
 end
 
 timer_controller.timer_pause_continue = function(self, data, props, prop)
+    local ctx = util.get_item_ctx(timer_controller.get_id(data))
+    local state = ctx.state
+    if state == nil or (not state == util.timer_states.running) or (not state == util.timer_states.paused) then
+        return false
+    end
+    local timer = obs.obs_get_source_by_uuid(obs.obs_data_get_string(ctx.props_settings, util.setting_names.timer_source))
+    if state == util.timer_states.running then
+        ctx.state = util.timer_states.paused
+        obs.obs_source_media_play_pause(timer, true)
+        obs.obs_property_set_description(prop, util.timer_controller_names.timer_continue)
+    elseif state == util.timer_states.paused then
+        ctx.state = util.timer_states.running
+        obs.obs_source_media_play_pause(timer, false)
+        obs.obs_property_set_description(prop, util.timer_controller_names.timer_pause)
+    end
     return true
 end
 
 timer_controller.get_properties = function(data)
     local ctx = util.get_item_ctx(timer_controller.get_id(data))
+
+    local btn_names = {
+        timer_start = util.timer_controller_names.timer_start,
+        timer_pause = util.timer_controller_names.timer_pause
+    }
+
+    if ctx.state == util.timer_states.finished then
+        btn_names.timer_start = util.timer_controller_names.timer_reset
+    elseif ctx.state == util.timer_states.running then
+        btn_names.timer_start = util.timer_controller_names.timer_finish
+    elseif ctx.state == util.timer_states.paused then
+        btn_names.timer_pause = util.timer_controller_names.timer_continue
+    end
 
     ctx.props_def = obs.obs_properties_create()
 
@@ -89,9 +117,9 @@ timer_controller.get_properties = function(data)
             util.timer_controller_names.bottom_right_runner)
     end
 
-    obs.obs_properties_add_button(ctx.props_def, "start_finish_timer", util.timer_controller_names.timer_start,
+    obs.obs_properties_add_button(ctx.props_def, "start_finish_timer", btn_names.timer_start,
         bind(timer_controller, "timer_start_finish", data))
-    obs.obs_properties_add_button(ctx.props_def, "pause_continue_timer", util.timer_controller_names.timer_pause,
+    obs.obs_properties_add_button(ctx.props_def, "pause_continue_timer", btn_names.timer_pause,
         bind(timer_controller, "timer_pause_continue", data))
 
     return ctx.props_def
