@@ -127,6 +127,8 @@ layout_1p_no_cam_4x3_source_def.get_properties = function(data)
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.r1_pr, util.dashboard_names.r1_pr,
         obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_path(ctx.props_def, util.setting_names.r1_avatar, util.dashboard_names.r1_avatar,
+        obs.OBS_PATH_FILE, "Image files (*.bmp *.tga *.png *.jpeg *.jpg *.jxr *.gif *.psd *.webp)", nil)
 
     local slider = obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt,
         util.dashboard_names.comm_amt, 1, 4, 1)
@@ -177,6 +179,8 @@ layout_1p_no_cam_4x3_source_def.update = function(data, settings)
         util.set_item_visible(ctx, util.setting_names.c2_source, false)
         util.set_item_visible(ctx, util.setting_names.c2_pr_source, false)
     end
+
+    util.set_obs_image_path(ctx, util.setting_names.r1_avatar_source, util.setting_names.r1_avatar)
 
     util.set_obs_text(ctx, util.setting_names.game_name_source, util.setting_names.game_name)
     util.set_obs_text(ctx, util.setting_names.created_by_source, util.setting_names.created_by, "Created by ")

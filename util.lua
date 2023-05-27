@@ -19,6 +19,14 @@ obs.S_TRANSFORM_STARTCASE = 3
 
 util = {}
 
+util.delayed_update = {} -- Array of delayed updates
+
+-- Binds the function call to an update callback that will be called later
+util.bind_update = function(f, ...)
+    local args = { ... }
+    table.insert(util.delayed_update, function() return f(unpack(args)) end)
+end
+
 util.layout_builder_path = "layout-builder-pictures/"
 
 util.items_ctx = {}
@@ -43,8 +51,10 @@ util.source_names = {
     category_static = "Category Static",
     estimate_static = "Estimate Static",
     timer = "Timer",
+    runner_1_avatar = "Runner 1 Avatar",
     runner_1 = "Runner 1",
     runner_1_pronouns = "Runner 1 Pronouns",
+    runner_2_avatar = "Runner 2 Avatar",
     runner_2 = "Runner 2",
     runner_2_pronouns = "Runner 2 Pronouns",
     runner_3 = "Runner 3",
@@ -67,8 +77,10 @@ util.dashboard_names = {
     created_by = "Created By",
     category = "Category",
     estimate = "Estimate",
+    r1_avatar = "Runner 1 avatar",
     r1_name = "Runner 1 name",
     r1_pr = "Runner 1 pronouns",
+    r2_avatar = "Runner 2 avatar",
     r2_name = "Runner 2 name",
     r2_pr = "Runner 2 pronouns",
     r3_name = "Runner 3 name",
@@ -118,10 +130,14 @@ util.setting_names = {
     estimate_source = "estimate_source",
     estimate = "estimate",
     timer_source = "timer_source",
+    r1_avatar = "runner_1_avatar",
+    r1_avatar_source = "runner_1_avatar_source",
     r1_source = "runner_1_text_source",
     r1_pr_source = "runner_1_pronouns_source",
     r1_name = "runner_1_name",
     r1_pr = "runner_1_pronouns",
+    r2_avatar = "runner_2_avatar",
+    r2_avatar_source = "runner_2_avatar_source",
     r2_source = "runner_2_text_source",
     r2_pr_source = "runner_2_pronouns_source",
     r2_name = "runner_2_name",
@@ -137,20 +153,20 @@ util.setting_names = {
     comm_amt = "comm_amount",
     c1_source = "commentator_1_text_source",
     c1_pr_source = "commentator_1_pronouns_source",
-    c1_name = "Commentator 1 name",
-    c1_pr = "Commentator 1 pronouns",
+    c1_name = "commentator_1_name",
+    c1_pr = "commentator_1_pronouns",
     c2_source = "commentator_2_text_source",
     c2_pr_source = "commentator_2_pronouns_source",
-    c2_name = "Commentator 2 name",
-    c2_pr = "Commentator 2 pronouns",
+    c2_name = "commentator_2_name",
+    c2_pr = "commentator_2_pronouns",
     c3_source = "commentator_3_text_source",
     c3_pr_source = "commentator_3_pronouns_source",
-    c3_name = "Commentator 3 name",
-    c3_pr = "Commentator 3 pronouns",
+    c3_name = "commentator_3_name",
+    c3_pr = "commentator_3_pronouns",
     c4_source = "commentator_4_text_source",
     c4_pr_source = "commentator_4_pronouns_source",
-    c4_name = "Commentator 4 name",
-    c4_pr = "Commentator 4 pronouns",
+    c4_name = "commentator_4_name",
+    c4_pr = "commentator_4_pronouns",
     runner_amt = "runner_amount"
 }
 
@@ -178,7 +194,35 @@ util.create_scene = function(scene_name)
     return new_scene
 end
 
--- Creates a text source on the scene. Returns its unique `UUID` if failes returns `nil`
+-- Creates an image source on the scene. Returns table in format `{ uuid = uuid, x = x, y = y }`
+util.create_image = function(scene, name, x, y, w, h)
+    local uuid = nil
+
+    local image_settings = obs.obs_data_create()
+    local image_source = obs.obs_source_create("image_source", name, image_settings, nil)
+    obs.obs_scene_add(scene, image_source)
+
+    uuid = obs.obs_source_get_uuid(image_source)
+
+    local image_object = util.create_object(uuid, x, y)
+    image_object.width = w
+    image_object.height = h
+
+    local image_sceneitem = obs.obs_scene_sceneitem_from_source(scene, image_source)
+    if image_sceneitem then
+        util.set_item_position(image_sceneitem, image_object)
+        util.set_item_scale(image_sceneitem, 1, 1)
+    end
+
+    obs.obs_source_update(image_source, image_settings)
+    obs.obs_data_release(image_settings)
+    obs.obs_source_release(image_source)
+    obs.obs_sceneitem_release(image_sceneitem)
+
+    return image_object
+end
+
+-- Creates a text source on the scene. Returns table in format `{ uuid = uuid, x = x, y = y }`
 util.create_text = function(face, size, style, text, align, color, name, scene, x, y, transform)
     if transform == nil then
         transform = obs.S_TRANSFORM_NONE
@@ -209,11 +253,7 @@ util.create_text = function(face, size, style, text, align, color, name, scene, 
 
     uuid = obs.obs_source_get_uuid(text_source)
 
-    local text_object = {
-        uuid = uuid,
-        x = x,
-        y = y
-    }
+    local text_object = util.create_object(uuid, x, y)
 
     local text_sceneitem = obs.obs_scene_sceneitem_from_source(scene, text_source)
     local halign = bit.bor(obs.OBS_ALIGN_LEFT, obs.OBS_ALIGN_TOP)
@@ -252,7 +292,7 @@ local style_to_name_map = {
     ["UltraItalic"] = "UltraItalic"
 }
 
--- Creates a text source on the scene using `MrEavesXLModOT` font. Returns text object in format `{ uuid = uuid, x = x, y = y }`
+-- Creates a text source on the scene using `MrEavesXLModOT` font. Returns table in format `{ uuid = uuid, x = x, y = y }`
 util.create_text_eaves = function(scene, style, text, size, align, color, name, x, y, transform)
     return util.create_text("MrEavesXLModOT-" .. style_to_name_map[style], size, "Regular", text, align, color, name,
         scene, x, y, transform)
@@ -265,6 +305,56 @@ util.set_obs_text_source_text = function(ctx, uuid, text)
     obs.obs_data_set_string(settings, "text", text)
 
     obs.obs_source_update(source, settings)
+    obs.obs_data_release(settings)
+    obs.obs_source_release(source)
+end
+
+util.set_obs_text = function(ctx, src_name, setting_name, add_text)
+    if add_text == nil then
+        add_text = ""
+    end
+
+    util.set_obs_text_source_text(ctx, obs.obs_data_get_string(ctx.props_settings, src_name),
+        add_text .. obs.obs_data_get_string(ctx.props_settings, setting_name))
+end
+
+util.update_image_scale = function(ctx, src_name)
+    local uuid = obs.obs_data_get_string(ctx.props_settings, src_name)
+    local source = obs.obs_get_source_by_uuid(uuid)
+    local scene = obs.obs_get_scene_by_name(ctx.scene)
+    local sceneitem = obs.obs_scene_sceneitem_from_source(scene, source)
+
+    if sceneitem then
+        local frame_width = ctx.layout_objects[uuid].width
+        local frame_height = ctx.layout_objects[uuid].height
+        local image_width = obs.obs_source_get_width(source)
+        local image_height = obs.obs_source_get_height(source)
+        obs.script_log(obs.LOG_INFO, "Image width " .. tostring(image_width) .. " height " .. tostring(image_height))
+        local scale_x = 1
+        local scale_y = 1
+        if (image_width ~= 0) and (image_height ~= 0) then
+            obs.script_log(obs.LOG_INFO, "Scaled image")
+            obs.script_log(obs.LOG_INFO, "Frame width " .. tostring(frame_width) .. " height " .. tostring(frame_height))
+            scale_x = frame_width / image_width
+            scale_y = frame_height / image_height
+        end
+        util.set_item_scale(sceneitem, scale_x, scale_y)
+    end
+
+    obs.obs_source_release(source)
+    obs.obs_sceneitem_release(sceneitem)
+    obs.obs_scene_release(scene)
+end
+
+util.set_obs_image_path = function(ctx, src_name, setting_name)
+    local uuid = obs.obs_data_get_string(ctx.props_settings, src_name)
+    local source = obs.obs_get_source_by_uuid(uuid)
+    local settings = obs.obs_data_create()
+    obs.obs_data_set_string(settings, "file", obs.obs_data_get_string(ctx.props_settings, setting_name))
+    obs.obs_source_update(source, settings)
+
+    util.bind_update(util.update_image_scale, ctx, src_name)
+
     obs.obs_data_release(settings)
     obs.obs_source_release(source)
 end
@@ -290,19 +380,17 @@ util.set_prop_visible = function(ctx, prop_name, visible)
 end
 
 util.set_item_position = function(sceneitem, item_object)
-    local text_location = obs.vec2()
-    text_location.x = item_object.x
-    text_location.y = item_object.y
-    obs.obs_sceneitem_set_pos(sceneitem, text_location)
+    local item_location = obs.vec2()
+    item_location.x = item_object.x
+    item_location.y = item_object.y
+    obs.obs_sceneitem_set_pos(sceneitem, item_location)
 end
 
-util.set_obs_text = function(ctx, src_name, setting_name, add_text)
-    if add_text == nil then
-        add_text = ""
-    end
-
-    util.set_obs_text_source_text(ctx, obs.obs_data_get_string(ctx.props_settings, src_name),
-        add_text .. obs.obs_data_get_string(ctx.props_settings, setting_name))
+util.set_item_scale = function(sceneitem, x, y)
+    local scale = obs.vec2()
+    scale.x = x
+    scale.y = y
+    obs.obs_sceneitem_set_scale(sceneitem, scale)
 end
 
 util.create_timer = function(scene, name, x, y, w, h)
@@ -318,11 +406,7 @@ util.create_timer = function(scene, name, x, y, w, h)
 
     uuid = obs.obs_source_get_uuid(timer)
 
-    local timer_object = {
-        uuid = uuid,
-        x = x,
-        y = y
-    }
+    local timer_object = util.create_object(uuid, x, y)
 
     local timer_sceneitem = obs.obs_scene_sceneitem_from_source(scene, timer)
     if timer_sceneitem then
@@ -335,6 +419,14 @@ util.create_timer = function(scene, name, x, y, w, h)
     obs.obs_sceneitem_release(timer_sceneitem)
 
     return timer_object
+end
+
+util.create_object = function(uuid, x, y)
+    return {
+        uuid = uuid,
+        x = x,
+        y = y,
+    }
 end
 
 util.create_item_ctx = function(item_id)

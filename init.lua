@@ -29,6 +29,20 @@ function create_layouts(layout_props, btn_prop)
     create_3p_4x3_layout()
 end
 
+function do_updates()
+    local updates_size = #(util.delayed_update)
+    if updates_size > 0 then
+        for i = 1, updates_size do
+            util.delayed_update[i]()
+        end
+        util.delayed_update = {}
+    end
+end
+
+function script_load(settings)
+    obs.timer_add(do_updates, 500)
+end
+
 function script_properties()
     local props = obs.obs_properties_create()
     obs.obs_properties_add_button(props, "create_layouts", "Create layouts", create_layouts)
@@ -68,8 +82,9 @@ function create_1p_no_cam_4x3_layout()
     local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
         util.colors.white, util.source_names.category, 1365, 975)
     local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
-        util.colors.white, util.source_names.category, 1638, 975)
+        util.colors.white, util.source_names.estimate, 1638, 975)
     local timer = util.create_timer(new_scene, util.source_names.timer, 705, 900, 250, 70)
+    local runner_avatar = util.create_image(new_scene, util.source_names.runner_1_avatar, 115, 147, 316, 289)
 
     -- Non-cached elements that will be static in the layout
     util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, util.colors.white,
@@ -97,6 +112,7 @@ function create_1p_no_cam_4x3_layout()
     obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.estimate_source, estimate_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_avatar_source, runner_avatar.uuid)
 
     local layout_source = obs.obs_source_create(layout_1p_no_cam_4x3_source_def.id, "Dashboard", layout_data, nil)
     obs.obs_scene_add(new_scene, layout_source)
@@ -132,6 +148,7 @@ function create_1p_no_cam_4x3_layout()
     scene_ctx.layout_objects[category_text.uuid] = category_text
     scene_ctx.layout_objects[estimate_text.uuid] = estimate_text
     scene_ctx.layout_objects[timer.uuid] = timer
+    scene_ctx.layout_objects[runner_avatar.uuid] = runner_avatar
 
     local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
     obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
