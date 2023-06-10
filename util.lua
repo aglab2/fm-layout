@@ -182,7 +182,7 @@ util.image_source_load = function(image, file)
     obs.obs_leave_graphics();
 
     if not image.loaded then
-        print("failed to load texture " .. file);
+        obs.script_log(obs.LOG_INFO, "Failed to load texture " .. file);
     end
 end
 

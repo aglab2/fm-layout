@@ -65,7 +65,7 @@ end
 timer_controller.timer_pause_continue = function(self, data, props, prop)
     local ctx = util.get_item_ctx(timer_controller.get_id(data))
     local state = ctx.state
-    if state == nil or (not state == util.timer_states.running) or (not state == util.timer_states.paused) then
+    if state == nil then
         return false
     end
     local timer = obs.obs_get_source_by_uuid(obs.obs_data_get_string(ctx.props_settings, util.setting_names.timer_source))

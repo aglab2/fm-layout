@@ -12,13 +12,13 @@ local show_commentators = function(ctx)
     util.set_prop_visible(ctx, util.setting_names.c4_pr, true)
 end
 
-layout_1p_no_cam_4x3_source_def = {}
-layout_1p_no_cam_4x3_source_def.scene_name = "FM 1 person no cam 4x3 layout"
-layout_1p_no_cam_4x3_source_def.id = "fm_2023_1_person_no_cam_4x3"
-layout_1p_no_cam_4x3_source_def.output_flags = bit.bor(bit.bor(obs.OBS_SOURCE_VIDEO, obs.OBS_SOURCE_CUSTOM_DRAW),
+layout_1p_w_cam_4x3_source_def = {}
+layout_1p_w_cam_4x3_source_def.scene_name = "FM 1 person w/ cam 4x3 layout"
+layout_1p_w_cam_4x3_source_def.id = "fm_2023_1_person_w_cam_4x3"
+layout_1p_w_cam_4x3_source_def.output_flags = bit.bor(bit.bor(obs.OBS_SOURCE_VIDEO, obs.OBS_SOURCE_CUSTOM_DRAW),
     obs.OBS_SOURCE_CAP_DISABLED)
 
-layout_1p_no_cam_4x3_source_def.hide_commentators = function(ctx)
+layout_1p_w_cam_4x3_source_def.hide_commentators = function(ctx)
     util.set_item_visible(ctx, util.setting_names.c4_source, false)
     util.set_item_visible(ctx, util.setting_names.c4_pr_source, false)
     util.set_item_visible(ctx, util.setting_names.c3_source, false)
@@ -27,14 +27,14 @@ layout_1p_no_cam_4x3_source_def.hide_commentators = function(ctx)
     util.set_item_visible(ctx, util.setting_names.c2_pr_source, false)
 end
 
-layout_1p_no_cam_4x3_source_def.get_name = function()
-    return "FM 4x3 1 person no cam layout"
+layout_1p_w_cam_4x3_source_def.get_name = function()
+    return "FM 4x3 1 person with cam layout"
 end
 
-layout_1p_no_cam_4x3_source_def.create = function(settings, source)
+layout_1p_w_cam_4x3_source_def.create = function(settings, source)
     local data = {}
-    local ctx = util.create_item_ctx(layout_1p_no_cam_4x3_source_def.id)
-    ctx.scene = layout_1p_no_cam_4x3_source_def.scene_name
+    local ctx = util.create_item_ctx(layout_1p_w_cam_4x3_source_def.id)
+    ctx.scene = layout_1p_w_cam_4x3_source_def.scene_name
 
     obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
 
@@ -58,7 +58,7 @@ layout_1p_no_cam_4x3_source_def.create = function(settings, source)
     util.image_source_load(data.background, img_path .. "background.png")
     util.image_source_load(data.comm_name_box, img_path .. "comm_name_box.png")
     util.image_source_load(data.logo, img_path .. "logo.png")
-    util.image_source_load(data.player_frame, img_path .. "player_frame_no_cam.png")
+    util.image_source_load(data.player_frame, img_path .. "player_frame_w_cam.png")
     util.image_source_load(data.runner_box, img_path .. "runner_box.png")
     util.image_source_load(data.game_frame, img_path .. "game_frame_4_3.png")
     util.image_source_load(data.estimate_frame, img_path .. "estimate_frame.png")
@@ -72,7 +72,7 @@ layout_1p_no_cam_4x3_source_def.create = function(settings, source)
     return data
 end
 
-layout_1p_no_cam_4x3_source_def.get_defaults = function(settings)
+layout_1p_w_cam_4x3_source_def.get_defaults = function(settings)
     obs.obs_data_set_default_string(settings, util.setting_names.game_name, "i wanna be the guy")
     obs.obs_data_set_default_string(settings, util.setting_names.created_by, "Kayin")
     obs.obs_data_set_default_string(settings, util.setting_names.category, "full send%")
@@ -93,7 +93,7 @@ layout_1p_no_cam_4x3_source_def.get_defaults = function(settings)
 end
 
 local slider_modified = function(props, p, settings)
-    local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
+    local ctx = util.get_item_ctx(layout_1p_w_cam_4x3_source_def.id)
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
     show_commentators(ctx)
     if comm_amt <= 3 then
@@ -112,8 +112,8 @@ local slider_modified = function(props, p, settings)
     return true
 end
 
-layout_1p_no_cam_4x3_source_def.get_properties = function(data)
-    local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
+layout_1p_w_cam_4x3_source_def.get_properties = function(data)
+    local ctx = util.get_item_ctx(layout_1p_w_cam_4x3_source_def.id)
     ctx.props_def = obs.obs_properties_create()
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_DEFAULT)
@@ -127,8 +127,6 @@ layout_1p_no_cam_4x3_source_def.get_properties = function(data)
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.r1_pr, util.dashboard_names.r1_pr,
         obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_path(ctx.props_def, util.setting_names.r1_avatar, util.dashboard_names.r1_avatar,
-        obs.OBS_PATH_FILE, "Image files (*.bmp *.tga *.png *.jpeg *.jpg *.jxr *.gif *.psd *.webp)", nil)
 
     local slider = obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt,
         util.dashboard_names.comm_amt, 1, 4, 1)
@@ -156,8 +154,8 @@ layout_1p_no_cam_4x3_source_def.get_properties = function(data)
     return ctx.props_def
 end
 
-layout_1p_no_cam_4x3_source_def.update = function(data, settings)
-    local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
+layout_1p_w_cam_4x3_source_def.update = function(data, settings)
+    local ctx = util.get_item_ctx(layout_1p_w_cam_4x3_source_def.id)
     ctx.props_settings = settings
 
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
@@ -180,8 +178,6 @@ layout_1p_no_cam_4x3_source_def.update = function(data, settings)
         util.set_item_visible(ctx, util.setting_names.c2_pr_source, false)
     end
 
-    util.set_obs_image_path(ctx, util.setting_names.r1_avatar_source, util.setting_names.r1_avatar)
-
     util.set_obs_text(ctx, util.setting_names.game_name_source, util.setting_names.game_name)
     util.set_obs_text(ctx, util.setting_names.created_by_source, util.setting_names.created_by, "Created by ")
     util.set_obs_text(ctx, util.setting_names.category_source, util.setting_names.category)
@@ -198,7 +194,7 @@ layout_1p_no_cam_4x3_source_def.update = function(data, settings)
     util.set_obs_text(ctx, util.setting_names.c4_pr_source, util.setting_names.c4_pr)
 end
 
-layout_1p_no_cam_4x3_source_def.destroy = function(data)
+layout_1p_w_cam_4x3_source_def.destroy = function(data)
     obs.obs_enter_graphics()
     obs.gs_image_file_free(data.background)
     obs.gs_image_file_free(data.comm_name_box)
@@ -216,12 +212,12 @@ layout_1p_no_cam_4x3_source_def.destroy = function(data)
     obs.obs_leave_graphics()
 end
 
-layout_1p_no_cam_4x3_source_def.video_render = function(data, effect)
+layout_1p_w_cam_4x3_source_def.video_render = function(data, effect)
     if not data.background.texture then
         return;
     end
 
-    local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
+    local ctx = util.get_item_ctx(layout_1p_w_cam_4x3_source_def.id)
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
 
     effect = obs.obs_get_base_effect(obs.OBS_EFFECT_DEFAULT)
@@ -232,7 +228,7 @@ layout_1p_no_cam_4x3_source_def.video_render = function(data, effect)
     while obs.gs_effect_loop(effect, "Draw") do
         obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
         obs.obs_source_draw(data.fade_box.texture, 0, 81, 546, 995, false)
-        obs.obs_source_draw(data.player_frame.texture, 107, 139, 333, 305, false)
+        obs.obs_source_draw(data.player_frame.texture, 30, 90, 494, 349, false)
         obs.obs_source_draw(data.runner_box.texture, 34, 479, 490, 59, false)
         obs.obs_source_draw(data.comm_box.texture, 39, 603, 478, 33, false)
         obs.obs_source_draw(data.twitch_logo.texture, 75, 492, 30, 30, false)
@@ -264,12 +260,12 @@ layout_1p_no_cam_4x3_source_def.video_render = function(data, effect)
     obs.gs_blend_state_pop()
 end
 
-layout_1p_no_cam_4x3_source_def.get_width = function(data)
+layout_1p_w_cam_4x3_source_def.get_width = function(data)
     return 1920
 end
 
-layout_1p_no_cam_4x3_source_def.get_height = function(data)
+layout_1p_w_cam_4x3_source_def.get_height = function(data)
     return 1080
 end
 
-obs.obs_register_source(layout_1p_no_cam_4x3_source_def)
+obs.obs_register_source(layout_1p_w_cam_4x3_source_def)
