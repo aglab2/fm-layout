@@ -6,7 +6,7 @@ require("layout_source")
 require("util")
 require("timer_controller")
 local obs = obslua
-local json = require("json")
+local json = require "cjson"
 local tableToString = require("table_to_string")
 
 local description = [[
@@ -91,16 +91,22 @@ function script_load(settings)
     obs.script_log(obs.LOG_INFO, "Loaded items ctx state " .. tableToString.convert(util.items_ctx))
 end
 
+function script_defaults(settings)
+    settings = obs.obs_data_create()
+end
+
 function script_save(settings)
+    local start_time = os.clock()
     local util_ctx_copy = util.copy_exclude(util.items_ctx, nil, {
         props_def = "props_def",
         props_settings = "props_settings"
     })
-    obs.script_log(obs.LOG_INFO, "Current items contexts: " .. tableToString.convert(util_ctx_copy))
     local json_string = json.encode(util_ctx_copy)
-    obs.script_log(obs.LOG_INFO, "Json data to save " .. tostring(json_string))
+    obs.script_log(obs.LOG_INFO, "Json data to save " .. json_string)
     local json_data = obs.obs_data_create_from_json(json_string)
     obs.obs_data_apply(settings, json_data)
+    local end_time = os.clock() - start_time
+    obs.script_log(obs.LOG_INFO, "It took " .. end_time .. " seconds to save the script settings")
     obs.obs_data_release(json_data)
 end
 
@@ -303,19 +309,100 @@ end
 
 function create_2p_4x3_layout()
     local new_scene = util.create_scene(layout_2p_4x3_source_def.scene_name)
+    local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
+        util.colors.blue, util.source_names.runner_1, 293, 1004)
+    local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
+        util.colors.white, util.source_names.runner_1_pronouns, 471, 1013)
+    local runner_2_text = util.create_text_eaves(new_scene, "Bold", "Siglemic", 40, util.text_halign.center,
+        util.colors.blue, util.source_names.runner_2, 1616, 1004)
+    local runner_2_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
+        util.colors.white, util.source_names.runner_2_pronouns, 1794, 1013)
+    local runner_1_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.left,
+        util.colors.blue, util.source_names.runner_1_finish_time, 537, 667)
+    local runner_2_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.right,
+        util.colors.blue, util.source_names.runner_2_finish_time, 1395, 667)
+    local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_1, 783, 1020)
+    local comm_2_text = util.create_text_eaves(new_scene, "Regular", "KrakkaCafe", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_2, 1065, 1020)
+    local comm_1_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_1, 908, 1025)
+    local comm_2_pr_text = util.create_text_eaves(new_scene, "Heavy", "They/Them", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_2, 1191, 1025)
+    local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
+        util.colors.blue, util.source_names.game_name, 968, 780, obs.S_TRANSFORM_STARTCASE)
+    local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
+        util.text_halign.center, util.colors.blue, util.source_names.created_by, 968, 836)
+    local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
+        util.colors.white, util.source_names.category, 826, 898)
+    local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
+        util.colors.white, util.source_names.estimate, 1102, 898)
+    local timer = util.create_timer(new_scene, util.source_names.timer, 831, 676, 250, 70)
+    local border_size = 16
+    local runner_1_avatar = util.create_image(new_scene, util.source_names.runner_1_avatar,
+        302, 826, 324 - border_size, 324 - border_size)
+    local runner_2_avatar = util.create_image(new_scene, util.source_names.runner_2_avatar,
+        1645, 826, 324 - border_size, 324 - border_size)
+
+    -- Non-cached elements that will be static in the layout
+    util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, util.colors.white,
+        util.source_names.commentators, 968, 974)
+    util.create_text_eaves(new_scene, "Book", "category", 24, util.text_halign.center, util.colors.white,
+        util.source_names.category_static, 831, 935, obs.S_TRANSFORM_UPPERCASE)
+    util.create_text_eaves(new_scene, "Book", "estimate", 24, util.text_halign.center, util.colors.white,
+        util.source_names.estimate_static, 1102, 935, obs.S_TRANSFORM_UPPERCASE)
 
     local layout_data = obs.obs_data_create()
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_pr_source, runner_1_pronouns.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_source, runner_2_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_pr_source, runner_2_pronouns.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_time, runner_1_time.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_time_source, runner_1_time.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_time, runner_2_time.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_time_source, runner_2_time.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_source, comm_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_source, comm_2_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_pr_source, comm_1_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.game_name_source, game_name_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.estimate_source, estimate_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_avatar_source, runner_1_avatar.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_avatar_source, runner_2_avatar.uuid)
 
     local layout_source = obs.obs_source_create(layout_2p_4x3_source_def.id, "Dashboard", layout_data, nil)
     obs.obs_scene_add(new_scene, layout_source)
 
+    create_timer_controller(new_scene, layout_2p_4x3_source_def.scene_name, timer, 2, { runner_1_time, runner_2_time })
+
     local scene_ctx = util.get_item_ctx(layout_2p_4x3_source_def.id)
     scene_ctx.scene = layout_2p_4x3_source_def.scene_name
+    scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
+    scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
+    scene_ctx.layout_objects[runner_2_text.uuid] = runner_2_text
+    scene_ctx.layout_objects[runner_2_pronouns.uuid] = runner_2_pronouns
+    scene_ctx.layout_objects[runner_1_time.uuid] = runner_1_time
+    scene_ctx.layout_objects[runner_2_time.uuid] = runner_2_time
+    scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
+    scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
+    scene_ctx.layout_objects[comm_1_pr_text.uuid] = comm_1_pr_text
+    scene_ctx.layout_objects[comm_2_pr_text.uuid] = comm_2_pr_text
+    scene_ctx.layout_objects[game_name_text.uuid] = game_name_text
+    scene_ctx.layout_objects[created_by_text.uuid] = created_by_text
+    scene_ctx.layout_objects[category_text.uuid] = category_text
+    scene_ctx.layout_objects[estimate_text.uuid] = estimate_text
+    scene_ctx.layout_objects[timer.uuid] = timer
+    scene_ctx.layout_objects[runner_1_avatar.uuid] = runner_1_avatar
+    scene_ctx.layout_objects[runner_2_avatar.uuid] = runner_2_avatar
 
     local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
     obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
 
     obs.obs_sceneitem_release(layout_item)
+    layout_2p_4x3_source_def.hide_commentators(util.get_item_ctx(layout_2p_4x3_source_def.id))
     obs.obs_data_release(layout_data)
     obs.obs_source_release(layout_source)
     obs.obs_scene_release(new_scene)

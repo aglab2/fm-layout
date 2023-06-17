@@ -380,11 +380,14 @@ util.set_obs_image_path = function(ctx, src_name, setting_name)
     local uuid = obs.obs_data_get_string(ctx.props_settings, src_name)
     local source = obs.obs_get_source_by_uuid(uuid)
     local settings = obs.obs_data_create()
-    obs.obs_data_set_string(settings, "file", obs.obs_data_get_string(ctx.props_settings, setting_name))
+    local image_path = obs.obs_data_get_string(ctx.props_settings, setting_name)
+    obs.obs_data_set_string(settings, "file", image_path)
     obs.obs_source_update(source, settings)
 
-    -- After updating the source OBS doesn't update image's height and width instantly so we have to update the scale on OBS's next render frame
-    util.bind_update(util.update_image_scale, ctx, src_name)
+    if image_path ~= "" then
+        -- After updating the source OBS doesn't update image's height and width instantly so we have to update the scale on OBS's next render frame
+        util.bind_update(util.update_image_scale, ctx, src_name)
+    end
 
     obs.obs_data_release(settings)
     obs.obs_source_release(source)
@@ -468,7 +471,6 @@ util.create_item_ctx = function(item_id)
         layout_objects = {},
         state = nil
     }, util.items_ctx[item_id] or {})
-    obs.script_log(obs.LOG_INFO, "Created item context " .. table_to_string.convert(util.items_ctx[item_id]))
     return util.items_ctx[item_id]
 end
 
