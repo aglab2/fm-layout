@@ -1,3 +1,6 @@
+-- The classic lazy util module that does a lot of heavy lifting and should have been split into actual
+-- proper modules that do their proper stuff but it is what it is and it's too late to go back
+
 local table_to_string = require("table_to_string")
 local obs = obslua
 local bit = require("bit")
@@ -28,13 +31,15 @@ util.bind_update = function(f, ...)
 end
 
 util.layout_builder_path = "layout-builder-pictures/"
+util.layout_templates_path = "layout-templates/"
 
 util.items_ctx = {}
 
 util.text_halign = {
     left = "left",
     center = "center",
-    right = "right"
+    right = "right",
+    bottom_center = "bottom_center"
 }
 
 util.colors = {
@@ -61,6 +66,10 @@ util.source_names = {
     runner_3_pronouns = "Runner 3 Pronouns",
     runner_4 = "Runner 4",
     runner_4_pronouns = "Runner 4 Pronouns",
+    runner_1_finish_time = "Runner 1 Finish Time",
+    runner_2_finish_time = "Runner 2 Finish Time",
+    runner_3_finish_time = "Runner 3 Finish Time",
+    runner_4_finish_time = "Runner 4 Finish Time",
     commentators = "Commentators",
     comm_1 = "Commentator 1",
     comm_pr_1 = "Commentator 1 pronouns",
@@ -100,6 +109,7 @@ util.dashboard_names = {
 
 util.timer_controller_names = {
     runner = "Runner",
+    reset_runner_times = "Reset runner times",
     left_runner = "Set time for left runner",
     right_runner = "Set time for right runner",
     top_left_runner = "Set time for top left runner",
@@ -121,6 +131,7 @@ util.timer_states = {
 }
 
 util.setting_names = {
+    scene = "scene",
     game_name_source = "game_name_source",
     game_name = "game_name",
     created_by_source = "created_by_source",
@@ -150,6 +161,14 @@ util.setting_names = {
     r4_pr_source = "runner_4_pronouns_source",
     r4_name = "runner_4_name",
     r4_pr = "runner_4_pronouns",
+    r1_time = "runner_1_time",
+    r1_time_source = "runner_1_time_source",
+    r2_time = "runner_2_time",
+    r2_time_source = "runner_2_time_source",
+    r3_time = "runner_3_time",
+    r3_time_source = "runner_3_time_source",
+    r4_time = "runner_4_time",
+    r4_time_source = "runner_4_time_source",
     comm_amt = "comm_amount",
     c1_source = "commentator_1_text_source",
     c1_pr_source = "commentator_1_pronouns_source",
@@ -167,7 +186,13 @@ util.setting_names = {
     c4_pr_source = "commentator_4_pronouns_source",
     c4_name = "commentator_4_name",
     c4_pr = "commentator_4_pronouns",
-    runner_amt = "runner_amount"
+    runner_amt = "runner_amount",
+    left_runner = "left_runner",
+    right_runner = "right_runner",
+    top_left_runner = "top_left_runner",
+    top_right_runner = "top_right_runner",
+    bottom_left_runner = "bottom_left_runner",
+    bottom_right_runner = "bottom_right_runner"
 }
 
 util.image_source_load = function(image, file)
@@ -210,6 +235,7 @@ util.create_image = function(scene, name, x, y, w, h)
 
     local image_sceneitem = obs.obs_scene_sceneitem_from_source(scene, image_source)
     if image_sceneitem then
+        obs.obs_sceneitem_set_alignment(image_sceneitem, obs.OBS_ALIGN_CENTER)
         util.set_item_position(image_sceneitem, image_object)
         util.set_item_scale(image_sceneitem, 1, 1)
     end
@@ -245,7 +271,11 @@ util.create_text = function(face, size, style, text, align, color, name, scene, 
     obs.obs_data_set_obj(text_settings, "font", text_font_object)
     obs.obs_data_set_int(text_settings, "color", bgr_col)
     obs.obs_data_set_string(text_settings, "text", text)
-    obs.obs_data_set_string(text_settings, "align", align)
+    local text_align = align
+    if text_align == util.text_halign.bottom_center then
+        text_align = util.text_halign.center
+    end
+    obs.obs_data_set_string(text_settings, "align", text_align)
     obs.obs_data_set_int(text_settings, "transform", transform)
 
     local text_source = obs.obs_source_create("text_gdiplus", name, text_settings, nil)
@@ -261,6 +291,8 @@ util.create_text = function(face, size, style, text, align, color, name, scene, 
         halign = bit.bor(obs.OBS_ALIGN_CENTER, obs.OBS_ALIGN_TOP)
     elseif align == util.text_halign.right then
         halign = bit.bor(obs.OBS_ALIGN_RIGHT, obs.OBS_ALIGN_TOP)
+    elseif align == util.text_halign.bottom_center then
+        halign = bit.bor(obs.OBS_ALIGN_BOTTOM, obs.OBS_ALIGN_CENTER)
     end
     if text_sceneitem then
         obs.obs_sceneitem_set_alignment(text_sceneitem, halign)
@@ -324,19 +356,17 @@ util.update_image_scale = function(ctx, src_name)
     local scene = obs.obs_get_scene_by_name(ctx.scene)
     local sceneitem = obs.obs_scene_sceneitem_from_source(scene, source)
 
-    if sceneitem then
+    if sceneitem and ctx then
         local frame_width = ctx.layout_objects[uuid].width
         local frame_height = ctx.layout_objects[uuid].height
         local image_width = obs.obs_source_get_width(source)
         local image_height = obs.obs_source_get_height(source)
-        obs.script_log(obs.LOG_INFO, "Image width " .. tostring(image_width) .. " height " .. tostring(image_height))
+        local image_fit_value = math.max(image_width, image_height)
         local scale_x = 1
         local scale_y = 1
         if (image_width ~= 0) and (image_height ~= 0) then
-            obs.script_log(obs.LOG_INFO, "Scaled image")
-            obs.script_log(obs.LOG_INFO, "Frame width " .. tostring(frame_width) .. " height " .. tostring(frame_height))
-            scale_x = frame_width / image_width
-            scale_y = frame_height / image_height
+            scale_x = frame_width / image_fit_value
+            scale_y = frame_height / image_fit_value
         end
         util.set_item_scale(sceneitem, scale_x, scale_y)
     end
@@ -353,6 +383,7 @@ util.set_obs_image_path = function(ctx, src_name, setting_name)
     obs.obs_data_set_string(settings, "file", obs.obs_data_get_string(ctx.props_settings, setting_name))
     obs.obs_source_update(source, settings)
 
+    -- After updating the source OBS doesn't update image's height and width instantly so we have to update the scale on OBS's next render frame
     util.bind_update(util.update_image_scale, ctx, src_name)
 
     obs.obs_data_release(settings)
@@ -430,17 +461,53 @@ util.create_object = function(uuid, x, y)
 end
 
 util.create_item_ctx = function(item_id)
-    util.items_ctx[item_id] = {
+    util.items_ctx[item_id] = mergeTables({
         props_def = nil,
         props_settings = nil,
         scene = "",
         layout_objects = {},
         state = nil
-    }
+    }, util.items_ctx[item_id] or {})
     obs.script_log(obs.LOG_INFO, "Created item context " .. table_to_string.convert(util.items_ctx[item_id]))
     return util.items_ctx[item_id]
 end
 
 util.get_item_ctx = function(item_id)
     return util.items_ctx[item_id]
+end
+
+util.copy_exclude = function(obj, seen, excluded_keys)
+    if type(obj) ~= 'table' then return obj end
+    if seen and seen[obj] then return seen[obj] end
+    local s = seen or {}
+    local res = setmetatable({}, getmetatable(obj))
+    s[obj] = res
+    for k, v in pairs(obj) do
+        if excluded_keys[k] == nil then
+            res[util.copy_exclude(k, s, excluded_keys)] = util.copy_exclude(v, s, excluded_keys)
+        end
+    end
+    return res
+end
+
+function mergeTables(table1, table2)
+    local mergedTable = {}
+
+    for k, v in pairs(table1) do
+        if type(v) == 'table' and type(table2[k]) == 'table' then
+            mergedTable[k] = mergeTables(v, table2[k])
+        else
+            mergedTable[k] = v
+        end
+    end
+
+    for k, v in pairs(table2) do
+        if type(v) == 'table' and type(table1[k]) == 'table' then
+            mergedTable[k] = mergeTables(table1[k], v)
+        else
+            mergedTable[k] = v
+        end
+    end
+
+    return mergedTable
 end
