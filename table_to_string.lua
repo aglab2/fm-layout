@@ -80,7 +80,7 @@ local policyFunc = {
 local lut_good_key_types = makeLUT({ "boolean", "number", "string" })
 
 -- Accepted types for values.
-local lut_good_val_types = makeLUT({ "boolean", "number", "string", "table" })
+local lut_good_val_types = makeLUT({ "boolean", "number", "string", "table", "nil", "userdata" })
 
 -- Lua reserved keywords.
 local lut_names_reserved = makeLUT({
@@ -455,6 +455,10 @@ function tableToString._write_value(self, value)
 			self:indent()
 			self:app("}")
 		end
+	elseif type(value) == "nil" then
+		self:app("nil")
+	elseif type(value) == "userdata" then
+		self:app("user type data/unknown")
 	end
 end
 

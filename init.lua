@@ -8,6 +8,7 @@ require("timer_controller")
 local obs = obslua
 local json = require("cjson")
 local tableToString = require("table_to_string")
+local oengus = require("oengus_api.oengus")
 
 local description = [[
     <center><h2>Fangame Marathon 2023 Layout Program v1</h2></center>
@@ -87,15 +88,19 @@ end
 
 function script_load(settings)
     obs.timer_add(do_updates, 500)
+
+    local test_schedule = oengus.get_schedule()
+    obs.script_log(obs.LOG_INFO, "Obtained marathon schedule " .. tableToString.convert(test_schedule))
+
     local settings_json = obs.obs_data_get_json(settings)
     obs.script_log(obs.LOG_INFO, "Settings JSON " .. settings_json)
     local ctx_items = json.decode(settings_json)
     util.items_ctx = mergeTables(util.items_ctx, ctx_items)
+
     obs.script_log(obs.LOG_INFO, "Loaded items ctx state " .. tableToString.convert(util.items_ctx))
 end
 
 function script_defaults(settings)
-    settings = obs.obs_data_create()
 end
 
 function script_save(settings)

@@ -9,7 +9,7 @@ local show_commentators = function(ctx)
 end
 
 layout_2p_4x3_source_def = {}
-layout_2p_4x3_source_def.scene_name = "FM 2 person 4x3 layout"
+layout_2p_4x3_source_def.scene_name = "FM 2 person 4x3/16x9 layout"
 layout_2p_4x3_source_def.id = "fm_2023_2_person_4x3"
 layout_2p_4x3_source_def.output_flags = bit.bor(bit.bor(obs.OBS_SOURCE_VIDEO, obs.OBS_SOURCE_CUSTOM_DRAW),
     obs.OBS_SOURCE_CAP_DISABLED)
