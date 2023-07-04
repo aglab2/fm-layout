@@ -2118,17 +2118,55 @@
         "customDataDTO": null
       },
       {
+        "id": 27796,
+        "gameName": "Celeste - Strawberry Jam Collab",
+        "console": "PC",
+        "emulated": false,
+        "ratio": "1920x1080",
+        "categoryName": "Expert Lobby (TAS)",
+        "estimate": "PT1H",
+        "setupTime": "PT10M",
+        "setupBlock": false,
+        "customRun": false,
+        "position": 46,
+        "categoryId": 54193,
+        "type": "SINGLE",
+        "runners": [
+          {
+            "id": 10268,
+            "username": "mikachelya",
+            "usernameJapanese": null,
+            "enabled": true,
+            "roles": ["ROLE_USER"],
+            "connections": [
+              {
+                "id": 16992,
+                "platform": "DISCORD",
+                "username": "mikachelya#9840"
+              }
+            ],
+            "emailVerified": false,
+            "pronouns": null,
+            "country": null,
+            "languagesSpoken": null
+          }
+        ],
+        "setupBlockText": null,
+        "date": "2023-07-15T14:30:00Z",
+        "customDataDTO": null
+      },
+      {
         "id": 27770,
         "gameName": "RNG Dungeon",
         "console": "PC",
         "emulated": false,
         "ratio": "16:9",
         "categoryName": "Any%",
-        "estimate": "PT2H",
+        "estimate": "PT1H30M",
         "setupTime": "PT15M",
         "setupBlock": false,
         "customRun": false,
-        "position": 46,
+        "position": 47,
         "categoryId": 54407,
         "type": "RACE",
         "runners": [
@@ -2187,63 +2225,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-15T14:30:00Z",
-        "customDataDTO": null
-      },
-      {
-        "id": 27773,
-        "gameName": "Celeste - Strawberry Jam Collab",
-        "console": "PC",
-        "emulated": false,
-        "ratio": "1920x1080",
-        "categoryName": "Expert Lobby",
-        "estimate": "PT2H20M",
-        "setupTime": "PT15M",
-        "setupBlock": false,
-        "customRun": false,
-        "position": 47,
-        "categoryId": 54134,
-        "type": "RACE",
-        "runners": [
-          {
-            "id": 13146,
-            "username": "Revi64",
-            "usernameJapanese": null,
-            "enabled": true,
-            "roles": ["ROLE_USER"],
-            "connections": [
-              {
-                "id": 22728,
-                "platform": "DISCORD",
-                "username": "Revi64#2672"
-              }
-            ],
-            "emailVerified": false,
-            "pronouns": null,
-            "country": null,
-            "languagesSpoken": null
-          },
-          {
-            "id": 13333,
-            "username": "Asgord",
-            "usernameJapanese": null,
-            "enabled": true,
-            "roles": ["ROLE_USER"],
-            "connections": [
-              {
-                "id": 23083,
-                "platform": "DISCORD",
-                "username": "Asgord#5009"
-              }
-            ],
-            "emailVerified": false,
-            "pronouns": null,
-            "country": null,
-            "languagesSpoken": null
-          }
-        ],
-        "setupBlockText": null,
-        "date": "2023-07-15T16:45:00Z",
+        "date": "2023-07-15T15:40:00Z",
         "customDataDTO": null
       },
       {
@@ -2324,7 +2306,60 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-15T19:20:00Z",
+        "date": "2023-07-15T17:25:00Z",
+        "customDataDTO": null
+      },
+      {
+        "id": 27960,
+        "gameName": "Ztar Attack 2",
+        "console": "N64",
+        "emulated": false,
+        "ratio": null,
+        "categoryName": "90 Star",
+        "estimate": "PT1H30M",
+        "setupTime": "PT10M",
+        "setupBlock": false,
+        "customRun": true,
+        "position": 49,
+        "categoryId": null,
+        "type": "SINGLE",
+        "runners": [
+          {
+            "id": 1951,
+            "username": "AndrewSM64",
+            "usernameJapanese": null,
+            "enabled": true,
+            "roles": ["ROLE_USER"],
+            "connections": [
+              {
+                "id": 7390,
+                "platform": "DISCORD",
+                "username": "AndrewSM64#8101"
+              },
+              {
+                "id": 9407,
+                "platform": "SPEEDRUNCOM",
+                "username": "AndrewSM64"
+              },
+              {
+                "id": 3747,
+                "platform": "TWITCH",
+                "username": "AndrewSM64"
+              },
+              {
+                "id": 693,
+                "platform": "TWITTER",
+                "username": "AndrewSM64"
+              }
+            ],
+            "emailVerified": false,
+            "pronouns": null,
+            "country": null,
+            "languagesSpoken": null
+          }
+        ],
+        "setupBlockText": null,
+        "date": "2023-07-15T17:47:00Z",
         "customDataDTO": null
       },
       {
@@ -2338,7 +2373,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 49,
+        "position": 50,
         "categoryId": 54194,
         "type": "SINGLE",
         "runners": [
@@ -2362,7 +2397,78 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-15T19:42:00Z",
+        "date": "2023-07-15T19:27:00Z",
+        "customDataDTO": null
+      },
+      {
+        "id": 27961,
+        "gameName": "I Wanna Be The Blizzard",
+        "console": "PC",
+        "emulated": false,
+        "ratio": "800x608",
+        "categoryName": "Any%",
+        "estimate": "PT21M",
+        "setupTime": "PT10M",
+        "setupBlock": false,
+        "customRun": false,
+        "position": 51,
+        "categoryId": 54269,
+        "type": "RACE",
+        "runners": [
+          {
+            "id": 2003,
+            "username": "letcreate",
+            "usernameJapanese": null,
+            "enabled": true,
+            "roles": ["ROLE_USER"],
+            "connections": [
+              {
+                "id": 21786,
+                "platform": "MASTODON",
+                "username": "letcreate@masto.nu"
+              },
+              {
+                "id": 9404,
+                "platform": "SPEEDRUNCOM",
+                "username": "letcreate123"
+              },
+              {
+                "id": 3737,
+                "platform": "TWITCH",
+                "username": "letcreate123"
+              },
+              {
+                "id": 688,
+                "platform": "TWITTER",
+                "username": "letcreate123"
+              }
+            ],
+            "emailVerified": false,
+            "pronouns": null,
+            "country": "CL",
+            "languagesSpoken": ""
+          },
+          {
+            "id": 13411,
+            "username": "rndguy",
+            "usernameJapanese": null,
+            "enabled": true,
+            "roles": ["ROLE_USER"],
+            "connections": [
+              {
+                "id": 23256,
+                "platform": "TWITCH",
+                "username": "rndguy"
+              }
+            ],
+            "emailVerified": false,
+            "pronouns": null,
+            "country": null,
+            "languagesSpoken": null
+          }
+        ],
+        "setupBlockText": null,
+        "date": "2023-07-15T20:47:00Z",
         "customDataDTO": null
       },
       {
@@ -2376,7 +2482,7 @@
         "setupTime": "PT20M",
         "setupBlock": false,
         "customRun": true,
-        "position": 50,
+        "position": 52,
         "categoryId": null,
         "type": "RACE",
         "runners": [
@@ -2469,7 +2575,98 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-15T21:02:00Z",
+        "date": "2023-07-15T21:18:00Z",
+        "customDataDTO": null
+      },
+      {
+        "id": 27962,
+        "gameName": "Worms Armageddon",
+        "console": "PC",
+        "emulated": false,
+        "ratio": "any",
+        "categoryName": "Rope Race Showcase",
+        "estimate": "PT30M",
+        "setupTime": "PT10M",
+        "setupBlock": false,
+        "customRun": false,
+        "position": 53,
+        "categoryId": 52622,
+        "type": "SINGLE",
+        "runners": [
+          {
+            "id": 12246,
+            "username": "h3oCharles",
+            "usernameJapanese": "シャルル・ハイドロニウム",
+            "enabled": true,
+            "roles": ["ROLE_USER"],
+            "connections": [
+              {
+                "id": 20972,
+                "platform": "DISCORD",
+                "username": "h3oCharles#5397"
+              },
+              {
+                "id": 20981,
+                "platform": "SPEEDRUNCOM",
+                "username": "h3oCharles"
+              },
+              {
+                "id": 20973,
+                "platform": "TWITCH",
+                "username": "h3ocharles"
+              },
+              {
+                "id": 20974,
+                "platform": "TWITTER",
+                "username": "ch4ruzu"
+              }
+            ],
+            "emailVerified": false,
+            "pronouns": "he/him,they/them",
+            "country": "PL",
+            "languagesSpoken": "en,pl"
+          }
+        ],
+        "setupBlockText": null,
+        "date": "2023-07-15T23:38:00Z",
+        "customDataDTO": null
+      },
+      {
+        "id": 27778,
+        "gameName": "Mega Serval",
+        "console": "PC",
+        "emulated": false,
+        "ratio": "832x480",
+        "categoryName": "Any%",
+        "estimate": "PT32M",
+        "setupTime": "PT10M",
+        "setupBlock": false,
+        "customRun": false,
+        "position": 54,
+        "categoryId": 53826,
+        "type": "SINGLE",
+        "runners": [
+          {
+            "id": 10109,
+            "username": "ProtoCloud",
+            "usernameJapanese": null,
+            "enabled": true,
+            "roles": ["ROLE_USER"],
+            "connections": [
+              {
+                "id": 16712,
+                "platform": "DISCORD",
+                "username": "ProtoCloud#1060"
+              }
+            ],
+            "emailVerified": false,
+            "pronouns": null,
+            "country": null,
+            "languagesSpoken": null
+          }
+        ],
+        "setupBlockText": null,
+        "date": "2023-07-16T00:18:00Z",
         "customDataDTO": null
       },
       {
@@ -2483,7 +2680,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 51,
+        "position": 55,
         "categoryId": 54477,
         "type": "SINGLE",
         "runners": [
@@ -2522,93 +2719,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-15T23:22:00Z",
-        "customDataDTO": null
-      },
-      {
-        "id": 27778,
-        "gameName": "Mega Serval",
-        "console": "PC",
-        "emulated": false,
-        "ratio": "832x480",
-        "categoryName": "Any%",
-        "estimate": "PT32M",
-        "setupTime": "PT10M",
-        "setupBlock": false,
-        "customRun": false,
-        "position": 52,
-        "categoryId": 53826,
-        "type": "SINGLE",
-        "runners": [
-          {
-            "id": 10109,
-            "username": "ProtoCloud",
-            "usernameJapanese": null,
-            "enabled": true,
-            "roles": ["ROLE_USER"],
-            "connections": [
-              {
-                "id": 16712,
-                "platform": "DISCORD",
-                "username": "ProtoCloud#1060"
-              }
-            ],
-            "emailVerified": false,
-            "pronouns": null,
-            "country": null,
-            "languagesSpoken": null
-          }
-        ],
-        "setupBlockText": null,
-        "date": "2023-07-16T00:02:00Z",
-        "customDataDTO": null
-      },
-      {
-        "id": 27779,
-        "gameName": "MAGICORE ANOMALA",
-        "console": "Amiga",
-        "emulated": false,
-        "ratio": "4:3",
-        "categoryName": "Showcase",
-        "estimate": "PT30M",
-        "setupTime": "PT10M",
-        "setupBlock": false,
-        "customRun": false,
-        "position": 53,
-        "categoryId": 52562,
-        "type": "SINGLE",
-        "runners": [
-          {
-            "id": 9980,
-            "username": "dansalvato",
-            "usernameJapanese": null,
-            "enabled": true,
-            "roles": ["ROLE_USER"],
-            "connections": [
-              {
-                "id": 16436,
-                "platform": "SPEEDRUNCOM",
-                "username": "dansalvato"
-              },
-              {
-                "id": 16435,
-                "platform": "TWITCH",
-                "username": "dansalvato"
-              },
-              {
-                "id": 16437,
-                "platform": "TWITTER",
-                "username": "dansalvato"
-              }
-            ],
-            "emailVerified": false,
-            "pronouns": "he/him",
-            "country": "US",
-            "languagesSpoken": "en"
-          }
-        ],
-        "setupBlockText": null,
-        "date": "2023-07-16T00:44:00Z",
+        "date": "2023-07-16T01:00:00Z",
         "customDataDTO": null
       },
       {
@@ -2622,7 +2733,7 @@
         "setupTime": "PT20M",
         "setupBlock": false,
         "customRun": true,
-        "position": 54,
+        "position": 56,
         "categoryId": null,
         "type": "OTHER",
         "runners": [
@@ -2700,7 +2811,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-16T01:24:00Z",
+        "date": "2023-07-16T01:40:00Z",
         "customDataDTO": null
       },
       {
@@ -2714,7 +2825,7 @@
         "setupTime": "PT15M",
         "setupBlock": false,
         "customRun": true,
-        "position": 55,
+        "position": 57,
         "categoryId": null,
         "type": "OTHER",
         "runners": [
@@ -2784,7 +2895,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-16T03:44:00Z",
+        "date": "2023-07-16T04:00:00Z",
         "customDataDTO": null
       },
       {
@@ -2798,7 +2909,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 56,
+        "position": 58,
         "categoryId": 53738,
         "type": "SINGLE",
         "runners": [
@@ -2832,7 +2943,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-16T05:29:00Z",
+        "date": "2023-07-16T05:45:00Z",
         "customDataDTO": null
       },
       {
@@ -2846,7 +2957,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 57,
+        "position": 59,
         "categoryId": 54348,
         "type": "SINGLE",
         "runners": [
@@ -2870,7 +2981,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-16T08:19:00Z",
+        "date": "2023-07-16T08:35:00Z",
         "customDataDTO": null
       },
       {
@@ -2884,7 +2995,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 58,
+        "position": 60,
         "categoryId": 54429,
         "type": "SINGLE",
         "runners": [
@@ -2918,7 +3029,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-16T08:49:00Z",
+        "date": "2023-07-16T09:05:00Z",
         "customDataDTO": null
       },
       {
@@ -2932,12 +3043,12 @@
         "setupTime": "PT15M",
         "setupBlock": false,
         "customRun": true,
-        "position": 59,
+        "position": 61,
         "categoryId": null,
         "type": "OTHER",
         "runners": [],
         "setupBlockText": null,
-        "date": "2023-07-16T09:49:00Z",
+        "date": "2023-07-16T10:05:00Z",
         "customDataDTO": null
       },
       {
@@ -2951,7 +3062,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 60,
+        "position": 62,
         "categoryId": 54495,
         "type": "SINGLE",
         "runners": [
@@ -2975,7 +3086,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-16T11:34:00Z",
+        "date": "2023-07-16T11:50:00Z",
         "customDataDTO": null
       },
       {
@@ -2989,7 +3100,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 61,
+        "position": 63,
         "categoryId": 54613,
         "type": "SINGLE",
         "runners": [
@@ -3013,7 +3124,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-16T12:09:00Z",
+        "date": "2023-07-16T12:25:00Z",
         "customDataDTO": null
       },
       {
@@ -3027,12 +3138,12 @@
         "setupTime": "PT25M",
         "setupBlock": false,
         "customRun": true,
-        "position": 62,
+        "position": 64,
         "categoryId": null,
         "type": "RELAY_RACE",
         "runners": [],
         "setupBlockText": null,
-        "date": "2023-07-16T13:34:00Z",
+        "date": "2023-07-16T13:50:00Z",
         "customDataDTO": null
       },
       {
@@ -3046,7 +3157,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 63,
+        "position": 65,
         "categoryId": 53433,
         "type": "SINGLE",
         "runners": [
@@ -3070,7 +3181,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-16T16:44:00Z",
+        "date": "2023-07-16T17:00:00Z",
         "customDataDTO": null
       },
       {
@@ -3084,7 +3195,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": true,
-        "position": 64,
+        "position": 66,
         "categoryId": null,
         "type": "SINGLE",
         "runners": [
@@ -3123,7 +3234,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-16T19:24:00Z",
+        "date": "2023-07-16T19:40:00Z",
         "customDataDTO": null
       },
       {
@@ -3134,15 +3245,15 @@
         "ratio": null,
         "categoryName": null,
         "estimate": "PT0S",
-        "setupTime": "PT2H11M",
+        "setupTime": "PT1H55M",
         "setupBlock": true,
         "customRun": false,
-        "position": 65,
+        "position": 67,
         "categoryId": null,
         "type": "OTHER",
         "runners": [],
         "setupBlockText": "- THE TECH CREW RESTS -",
-        "date": "2023-07-16T19:49:00Z",
+        "date": "2023-07-16T20:05:00Z",
         "customDataDTO": null
       },
       {
@@ -3156,7 +3267,7 @@
         "setupTime": "PT0S",
         "setupBlock": true,
         "customRun": false,
-        "position": 66,
+        "position": 68,
         "categoryId": null,
         "type": "OTHER",
         "runners": [],
@@ -3175,7 +3286,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": true,
-        "position": 67,
+        "position": 69,
         "categoryId": null,
         "type": "OTHER",
         "runners": [
@@ -3208,12 +3319,12 @@
         "console": "PC",
         "emulated": false,
         "ratio": "800x600",
-        "categoryName": "Any% (Seeded)",
+        "categoryName": "Any% (Unseeded)",
         "estimate": "PT1H20M",
         "setupTime": "PT0S",
         "setupBlock": false,
         "customRun": false,
-        "position": 68,
+        "position": 70,
         "categoryId": 53957,
         "type": "RACE",
         "runners": [
@@ -3327,7 +3438,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 69,
+        "position": 71,
         "categoryId": 53881,
         "type": "SINGLE",
         "runners": [
@@ -3365,7 +3476,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 70,
+        "position": 72,
         "categoryId": 54349,
         "type": "SINGLE",
         "runners": [
@@ -3403,7 +3514,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": false,
-        "position": 71,
+        "position": 73,
         "categoryId": 54481,
         "type": "SINGLE",
         "runners": [
@@ -3446,44 +3557,6 @@
         "customDataDTO": null
       },
       {
-        "id": 27796,
-        "gameName": "Celeste - Strawberry Jam Collab",
-        "console": "PC",
-        "emulated": false,
-        "ratio": "1920x1080",
-        "categoryName": "Expert Lobby (TAS)",
-        "estimate": "PT1H",
-        "setupTime": "PT10M",
-        "setupBlock": false,
-        "customRun": false,
-        "position": 72,
-        "categoryId": 54193,
-        "type": "SINGLE",
-        "runners": [
-          {
-            "id": 10268,
-            "username": "mikachelya",
-            "usernameJapanese": null,
-            "enabled": true,
-            "roles": ["ROLE_USER"],
-            "connections": [
-              {
-                "id": 16992,
-                "platform": "DISCORD",
-                "username": "mikachelya#9840"
-              }
-            ],
-            "emailVerified": false,
-            "pronouns": null,
-            "country": null,
-            "languagesSpoken": null
-          }
-        ],
-        "setupBlockText": null,
-        "date": "2023-07-17T03:45:00Z",
-        "customDataDTO": null
-      },
-      {
         "id": 27797,
         "gameName": "New Draw My Guy Game",
         "console": "PC",
@@ -3494,7 +3567,7 @@
         "setupTime": "PT10M",
         "setupBlock": false,
         "customRun": true,
-        "position": 73,
+        "position": 74,
         "categoryId": null,
         "type": "SINGLE",
         "runners": [
@@ -3533,7 +3606,7 @@
           }
         ],
         "setupBlockText": null,
-        "date": "2023-07-17T04:55:00Z",
+        "date": "2023-07-17T03:45:00Z",
         "customDataDTO": null
       },
       {
@@ -3547,12 +3620,12 @@
         "setupTime": "PT0S",
         "setupBlock": true,
         "customRun": false,
-        "position": 74,
+        "position": 75,
         "categoryId": null,
         "type": "OTHER",
         "runners": [],
         "setupBlockText": "MARATHON ENDS",
-        "date": "2023-07-17T07:05:00Z",
+        "date": "2023-07-17T05:55:00Z",
         "customDataDTO": null
       }
     ]

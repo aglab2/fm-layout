@@ -23,6 +23,7 @@ local function parse_estimate(estimate)
     local encountered_hours = false
     local encountered_minutes = false
 
+    -- This is awful but I honestly can't be bothered with pattern matching
     for char in string.gmatch(estimate, ".") do
         if char == "H" then
             result = result .. ":"
@@ -59,7 +60,7 @@ oengus.get_schedule = function(pull_from_oengus)
 
     if not pull_from_oengus then
         if not oengus._has_schedule then
-            local marathon_info = assert(io.open("fm_2023_schedule.json", "r"))
+            local marathon_info = assert(io.open(script_path() .. "/fm_2023_schedule.json", "r"))
             local json_data = marathon_info:read("*a")
             local decoded_info = json.decode(json_data)
             oengus._schedule_cache = decoded_info.schedule

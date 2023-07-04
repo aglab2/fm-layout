@@ -16,10 +16,7 @@ local description = [[
     <center><h3>Programmer Smartkin</h3></center>
     <center><h3>Layouts designer Oiivae</h3></center>
     <center><h3>Producers Cosmoing, Wolsk</h3></center>
-    <p>
-    OBS LiveSplit One plugin is required for the layouts. Install it from <a href="https://github.com/LiveSplit/obs-livesplit-one">here</a>
-    <p>
-    DO NOT delete any of the layout elements. This WILL break the Dashboard. Especially the Dashboard itself, it WILL force you to recreate ALL the layouts. Other than the scenes you are free to rename them.
+    DO NOT delete any of the layout elements. This WILL break the Dashboard. Especially the Dashboard itself, it WILL force you to recreate ALL the layouts. Other than the scenes you are free to rename the elements inside them.
     <p>
     In the Dashboard itself DO NOT and I say DO NOT click the Defaults button under ANY circumstances. This WILL break the entire program and will force you to recreate the layouts.
     <p>
@@ -89,7 +86,7 @@ end
 function script_load(settings)
     obs.timer_add(do_updates, 500)
 
-    local test_schedule = oengus.get_schedule()
+    local test_schedule = oengus.get_schedule(false)
     obs.script_log(obs.LOG_INFO, "Obtained marathon schedule " .. tableToString.convert(test_schedule))
 
     local settings_json = obs.obs_data_get_json(settings)

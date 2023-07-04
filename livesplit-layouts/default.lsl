@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Layout version="1.6.1">
   <Mode>Vertical</Mode>
-  <X>874</X>
-  <Y>408</Y>
+  <X>783</X>
+  <Y>446</Y>
   <VerticalWidth>746</VerticalWidth>
   <VerticalHeight>210</VerticalHeight>
   <HorizontalWidth>-1</HorizontalWidth>
@@ -15,10 +15,10 @@
     <SeparatorsColor>FFFFFFFF</SeparatorsColor>
     <PersonalBestColor>FFFFFFFF</PersonalBestColor>
     <AheadGainingTimeColor>FFBA1108</AheadGainingTimeColor>
-    <AheadLosingTimeColor>FFFFFFFF</AheadLosingTimeColor>
-    <BehindGainingTimeColor>FFFFFFFF</BehindGainingTimeColor>
-    <BehindLosingTimeColor>FFFFFFFF</BehindLosingTimeColor>
-    <BestSegmentColor>FFFFFFFF</BestSegmentColor>
+    <AheadLosingTimeColor>FFBA1108</AheadLosingTimeColor>
+    <BehindGainingTimeColor>FFBA1108</BehindGainingTimeColor>
+    <BehindLosingTimeColor>FFBA1108</BehindLosingTimeColor>
+    <BestSegmentColor>FFBA1108</BestSegmentColor>
     <UseRainbowColor>False</UseRainbowColor>
     <NotRunningColor>FFBA1108</NotRunningColor>
     <PausedColor>FF353535</PausedColor>
