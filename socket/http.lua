@@ -30,16 +30,24 @@ _M.USERAGENT = socket._VERSION
 local SCHEMES = {
     http = {
         port = 80
-        , create = function(t)
-            return socket.tcp end }
-    , https = {
+        ,
+        create = function(t)
+            return socket.tcp
+        end
+    }
+    ,
+    https = {
         port = 443
-        , create = function(t)
-          local https = assert(
-            require("ssl.https"), 'LuaSocket: LuaSec not found')
-          local tcp = assert(
-            https.tcp, 'LuaSocket: Function tcp() not available from LuaSec')
-          return tcp(t) end }}
+        ,
+        create = function(t)
+            local https = assert(
+                require("ssl.https"), 'LuaSocket: LuaSec not found')
+            local tcp = assert(
+                https.tcp, 'LuaSocket: Function tcp() not available from LuaSec')
+            return tcp(t)
+        end
+    }
+}
 
 -----------------------------------------------------------------------------
 -- Reads MIME headers from a connection, unfolding where needed
@@ -55,9 +63,9 @@ local function receiveheaders(sock, headers)
         -- get field-name and value
         name, value = socket.skip(2, string.find(line, "^(.-):%s*(.*)"))
         if not (name and value) then return nil, "malformed reponse headers" end
-        name = string.lower(name)
+        name      = string.lower(name)
         -- get next line (value might be folded)
-        line, err  = sock:receive()
+        line, err = sock:receive()
         if err then return nil, err end
         -- unfold any folded values
         while string.find(line, "^%s") do
@@ -66,8 +74,11 @@ local function receiveheaders(sock, headers)
             if err then return nil, err end
         end
         -- save pair in table
-        if headers[name] then headers[name] = headers[name] .. ", " .. value
-        else headers[name] = value end
+        if headers[name] then
+            headers[name] = headers[name] .. ", " .. value
+        else
+            headers[name] = value
+        end
     end
     return headers
 end
@@ -109,7 +120,7 @@ socket.sinkt["http-chunked"] = function(sock)
         __call = function(self, chunk, err)
             if not chunk then return sock:send("0\r\n\r\n") end
             local size = string.format("%X\r\n", string.len(chunk))
-            return sock:send(size ..  chunk .. "\r\n")
+            return sock:send(size .. chunk .. "\r\n")
         end
     })
 end
@@ -157,7 +168,7 @@ function metat.__index:sendbody(headers, source, step)
 end
 
 function metat.__index:receivestatusline()
-    local status,ec = self.try(self.c:receive(5))
+    local status, ec = self.try(self.c:receive(5))
     -- identify HTTP/0.9 responses, which do not contain a status line
     -- this is just a heuristic, but is what the RFC recommends
     if status ~= "HTTP/" then
@@ -181,9 +192,12 @@ function metat.__index:receivebody(headers, sink, step)
     step = step or ltn12.pump.step
     local length = base.tonumber(headers["content-length"])
     local t = headers["transfer-encoding"] -- shortcut
-    local mode = "default" -- connection close
-    if t and t ~= "identity" then mode = "http-chunked"
-    elseif base.tonumber(headers["content-length"]) then mode = "by-length" end
+    local mode = "default"                 -- connection close
+    if t and t ~= "identity" then
+        mode = "http-chunked"
+    elseif base.tonumber(headers["content-length"]) then
+        mode = "by-length"
+    end
     return self.try(ltn12.pump.all(socket.source(mode, self.c, length),
         sink, step))
 end
@@ -206,10 +220,10 @@ local function adjusturi(reqt)
     -- if there is a proxy, we need the full url. otherwise, just a part.
     if not reqt.proxy and not _M.PROXY then
         u = {
-           path = socket.try(reqt.path, "invalid path 'nil'"),
-           params = reqt.params,
-           query = reqt.query,
-           fragment = reqt.fragment
+            path = socket.try(reqt.path, "invalid path 'nil'"),
+            params = reqt.params,
+            query = reqt.query,
+            fragment = reqt.fragment
         }
     end
     return url.build(u)
@@ -230,7 +244,8 @@ local function adjustheaders(reqt)
     local host = reqt.host
     local port = tostring(reqt.port)
     if port ~= tostring(SCHEMES[reqt.scheme].port) then
-        host = host .. ':' .. port end
+        host = host .. ':' .. port
+    end
     local lower = {
         ["user-agent"] = _M.USERAGENT,
         ["host"] = host,
@@ -240,8 +255,8 @@ local function adjustheaders(reqt)
     -- if we have authentication information, pass it along
     if reqt.user and reqt.password then
         lower["authorization"] =
-            "Basic " ..  (mime.b64(reqt.user .. ":" ..
-		url.unescape(reqt.password)))
+            "Basic " .. (mime.b64(reqt.user .. ":" ..
+                url.unescape(reqt.password)))
     end
     -- if we have proxy authentication information, pass it along
     local proxy = reqt.proxy or _M.PROXY
@@ -249,11 +264,11 @@ local function adjustheaders(reqt)
         proxy = url.parse(proxy)
         if proxy.user and proxy.password then
             lower["proxy-authorization"] =
-                "Basic " ..  (mime.b64(proxy.user .. ":" .. proxy.password))
+                "Basic " .. (mime.b64(proxy.user .. ":" .. proxy.password))
         end
     end
     -- override with user headers
-    for i,v in base.pairs(reqt.headers or lower) do
+    for i, v in base.pairs(reqt.headers or lower) do
         lower[string.lower(i)] = v
     end
     return lower
@@ -261,18 +276,19 @@ end
 
 -- default url parts
 local default = {
-    path ="/"
-    , scheme = "http"
+    path = "/"
+    ,
+    scheme = "http"
 }
 
 local function adjustrequest(reqt)
     -- parse url if provided
     local nreqt = reqt.url and url.parse(reqt.url, default) or {}
     -- explicit components override url
-    for i,v in base.pairs(reqt) do nreqt[i] = v end
+    for i, v in base.pairs(reqt) do nreqt[i] = v end
     -- default to scheme particulars
     local schemedefs, host, port, method
-        = SCHEMES[nreqt.scheme], nreqt.host, nreqt.port, nreqt.method
+    = SCHEMES[nreqt.scheme], nreqt.host, nreqt.port, nreqt.method
     if not nreqt.create then nreqt.create = schemedefs.create(nreqt) end
     if not (port and port ~= '') then nreqt.port = schemedefs.port end
     if not (method and method ~= '') then nreqt.method = 'GET' end
@@ -307,11 +323,11 @@ local function shouldredirect(reqt, code, headers)
     -- avoid https downgrades
     if ('https' == reqt.scheme) and ('https' ~= scheme) then return false end
     return (reqt.redirect ~= false) and
-           (code == 301 or code == 302 or code == 303 or code == 307) and
-           (not reqt.method or reqt.method == "GET" or reqt.method == "HEAD")
+        (code == 301 or code == 302 or code == 303 or code == 307) and
+        (not reqt.method or reqt.method == "GET" or reqt.method == "HEAD")
         and ((false == reqt.maxredirects)
-                or ((reqt.nredirects or 0)
-                        < (reqt.maxredirects or 5)))
+            or ((reqt.nredirects or 0)
+                < (reqt.maxredirects or 5)))
 end
 
 local function shouldreceivebody(reqt, code)
@@ -324,13 +340,15 @@ end
 -- forward declarations
 local trequest, tredirect
 
---[[local]] function tredirect(reqt, location)
+--[[local]]
+function tredirect(reqt, location)
     -- the RFC says the redirect URL may be relative
     local newurl = url.absolute(reqt.url, location)
     -- if switching schemes, reset port and create function
     if url.parse(newurl).scheme ~= reqt.scheme then
         reqt.port = nil
-        reqt.create = nil end
+        reqt.create = nil
+    end
     -- make new request
     local result, code, headers, status = trequest {
         url = newurl,
@@ -348,7 +366,8 @@ local trequest, tredirect
     return result, code, headers, status
 end
 
---[[local]] function trequest(reqt)
+--[[local]]
+function trequest(reqt)
     -- we loop until we get what we want, or
     -- until we are sure there is no way to get it
     local nreqt = adjustrequest(reqt)
@@ -417,8 +436,11 @@ local function srequest(u, b)
 end
 
 _M.request = socket.protect(function(reqt, body)
-    if base.type(reqt) == "string" then return srequest(reqt, body)
-    else return trequest(reqt) end
+    if base.type(reqt) == "string" then
+        return srequest(reqt, body)
+    else
+        return trequest(reqt)
+    end
 end)
 
 _M.schemes = SCHEMES

@@ -9,6 +9,8 @@ local obs = obslua
 local json = require("cjson")
 local tableToString = require("table_to_string")
 local oengus = require("oengus_api.oengus")
+local twitch = require("twitch_api.twitch")
+local curl = require("cURL")
 
 local description = [[
     <center><h2>Fangame Marathon 2023 Layout Program v1</h2></center>
@@ -67,6 +69,21 @@ function create_layouts(layout_props, btn_prop)
     create_1p_w_cam_16x9_layout()
 end
 
+function init_twitch(layout_props, btn_prop)
+    obs.script_log(obs.LOG_INFO, "Initializing Twitch")
+    print(twitch.get_auth_url())
+    local auth_url = twitch.get_auth_url()
+    os.execute('start "" "' .. auth_url .. '"')
+    local client = twitch.auth_listener:accept()
+    twitch.parse_auth_data(client:receive("*l"))
+    client:receive("*a")
+    client:close()
+    twitch.auth_listener:close()
+    twitch.auth_listener = nil
+
+    twitch.get_auth_token()
+end
+
 local previous_updates_size = 0
 local can_update = false
 function do_updates()
@@ -86,8 +103,10 @@ end
 function script_load(settings)
     obs.timer_add(do_updates, 500)
 
-    local test_schedule = oengus.get_schedule(false)
+    local test_schedule = oengus.get_schedule()
     obs.script_log(obs.LOG_INFO, "Obtained marathon schedule " .. tableToString.convert(test_schedule))
+
+    twitch.init()
 
     local settings_json = obs.obs_data_get_json(settings)
     obs.script_log(obs.LOG_INFO, "Settings JSON " .. settings_json)
@@ -118,6 +137,7 @@ end
 function script_properties()
     local props = obs.obs_properties_create()
     obs.obs_properties_add_button(props, "create_layouts", "Create layouts", create_layouts)
+    obs.obs_properties_add_button(props, "init_twitch", "Connect Twitch", init_twitch)
     return props
 end
 

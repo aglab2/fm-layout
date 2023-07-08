@@ -3,9 +3,6 @@ local json = require("cjson")
 local http = require("socket.http")
 local obs = require("obslua")
 
--- Oengus caches the scedule API call for 5 minutes
-local SCHEDULE_CACHE_TIME = 5
-
 
 oengus = {}
 
@@ -48,34 +45,14 @@ local function parse_estimate(estimate)
     return result
 end
 
----Gets the schedule from the file or directly from Oegnus if that is needed
----
----By default accesses Oengus directly
----
----@param pull_from_oengus? boolean
-oengus.get_schedule = function(pull_from_oengus)
-    if pull_from_oengus == nil then
-        pull_from_oengus = true
-    end
-
-    if not pull_from_oengus then
-        if not oengus._has_schedule then
-            local marathon_info = assert(io.open(script_path() .. "/fm_2023_schedule.json", "r"))
-            local json_data = marathon_info:read("*a")
-            local decoded_info = json.decode(json_data)
-            oengus._schedule_cache = decoded_info.schedule
-        end
-
-        return oengus._schedule_cache
-    end
-
-    local time_since_last_call = sec_to_m(os.clock() - oengus._last_schedule_call)
-    if time_since_last_call >= SCHEDULE_CACHE_TIME or not oengus._has_schedule then
+---Gets the schedule from the file
+oengus.get_schedule = function()
+    if not oengus._has_schedule then
+        local marathon_info = assert(io.open(script_path() .. "/fm_2023_schedule.json", "r"))
+        local json_data = marathon_info:read("*a")
+        local decoded_info = json.decode(json_data)
+        oengus._schedule_cache = decoded_info.schedule
         oengus._has_schedule = true
-        oengus._last_schedule_call = os.clock()
-
-        local body, code, headers, status = http.request("https://oengus.io/api/v1/marathons/fm2023/schedule")
-        oengus._schedule_cache = json.decode(body)
     end
 
     return oengus._schedule_cache
@@ -91,7 +68,7 @@ end
 ---@return string
 oengus.get_run_info = function(run_index)
     local schedule = oengus.get_schedule()
-    local run = schedule.lines[run_index + 1]
+    local run = schedule.oengus.lines[run_index + 1]
 
     local run_string = ""
 
