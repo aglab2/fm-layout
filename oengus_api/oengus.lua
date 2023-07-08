@@ -19,6 +19,7 @@ local function parse_estimate(estimate)
     estimate = string.sub(estimate, 3)
     local encountered_hours = false
     local encountered_minutes = false
+    local encountered_seconds = false
 
     -- This is awful but I honestly can't be bothered with pattern matching
     for char in string.gmatch(estimate, ".") do
@@ -36,10 +37,17 @@ local function parse_estimate(estimate)
             if not encountered_minutes then
                 result = "0:00:" .. result
             end
+            encountered_seconds = true
             break
         else
             result = result .. char
         end
+    end
+
+    if encountered_hours and not encountered_minutes and not encountered_seconds then
+        result = result .. ":00:00"
+    elseif encountered_minutes and not encountered_seconds then
+        result = result .. "00"
     end
 
     return result
@@ -98,6 +106,29 @@ oengus.get_run_info = function(run_index)
     run_string = run_string .. estimate
 
     return run_string
+end
+
+oengus.get_run_data = function(run_idx)
+    local data = {}
+
+    local run = oengus.get_schedule().oengus.lines[run_idx + 1]
+
+    data.game_name = run.gameName
+    data.estimate = parse_estimate(run.estimate)
+
+    return data
+end
+
+oengus.get_runs = function()
+    local runs = {}
+    local runs_amount = #(oengus.get_schedule().oengus.lines)
+    for i = 1, runs_amount do
+        local run_info = oengus.get_run_info(i - 1)
+        table.insert(runs, run_info)
+        print(run_info)
+    end
+
+    return runs
 end
 
 return oengus

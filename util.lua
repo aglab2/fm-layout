@@ -82,6 +82,9 @@ util.source_names = {
 }
 
 util.dashboard_names = {
+    runs_list = "Marathon Runs",
+    update_run_info = "Fill run information",
+    update_twitch = "Update Twitch title",
     game_name = "Game Name",
     created_by = "Created By",
     category = "Category",
@@ -132,6 +135,9 @@ util.timer_states = {
 
 util.setting_names = {
     scene = "scene",
+    runs_list = "runs_list",
+    update_run_info = "update_run_info",
+    update_twitch = "update_twitch",
     game_name_source = "game_name_source",
     game_name = "game_name",
     created_by_source = "created_by_source",
@@ -411,6 +417,10 @@ end
 util.set_prop_visible = function(ctx, prop_name, visible)
     local prop = obs.obs_properties_get(ctx.props_def, prop_name)
     obs.obs_property_set_visible(prop, visible)
+end
+
+util.set_prop_text = function(ctx, prop_name, text)
+    obs.obs_data_set_string(ctx.props_settings, prop_name, text)
 end
 
 util.set_item_position = function(sceneitem, item_object)

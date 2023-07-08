@@ -2,6 +2,7 @@ require("util")
 
 local obs = obslua
 local bit = require("bit")
+local oengus = require("oengus_api.oengus")
 
 local show_commentators = function(ctx)
     util.set_prop_visible(ctx, util.setting_names.c2_name, true)
@@ -112,9 +113,35 @@ local slider_modified = function(props, p, settings)
     return true
 end
 
+local update_run_info = function(props, p)
+    local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
+    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
+    local run_data = oengus.get_run_data(run_idx)
+
+    util.set_prop_text(ctx, util.setting_names.game_name, run_data.game_name)
+    util.set_prop_text(ctx, util.setting_names.estimate, run_data.estimate)
+
+    layout_1p_no_cam_4x3_source_def.update(nil, ctx.props_settings)
+
+    return true
+end
+
 layout_1p_no_cam_4x3_source_def.get_properties = function(data)
     local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
     ctx.props_def = obs.obs_properties_create()
+    local runs_list = obs.obs_properties_add_list(ctx.props_def, util.setting_names.runs_list,
+        util.dashboard_names.runs_list, obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_INT)
+
+    local runs = oengus.get_runs()
+    local runs_amount = #(runs)
+    obs.script_log(obs.LOG_INFO, "Runs amount " .. tostring(runs_amount))
+    for i = 1, runs_amount do
+        obs.obs_property_list_add_int(runs_list, runs[i], i - 1)
+    end
+
+    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_run_info,
+        util.dashboard_names.update_run_info, update_run_info)
+
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.created_by, util.dashboard_names.created_by,
