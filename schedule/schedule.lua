@@ -1,0 +1,302 @@
+-- File for working with the schedule file
+local json = require("cjson")
+local http = require("socket.http")
+local obs = require("obslua")
+
+
+schedule = {}
+
+schedule._has_schedule = false
+schedule._schedule_cache = {}
+
+local columns = {
+    game_name = "Game Name",
+    setup = "Setup",
+    restreamer = "Restreamer",
+    run_category = "Run Category",
+    run_type = "Run Type",
+    runners = "Runner(s)",
+    runner_prs = "Runner Pronouns",
+    commentators = "Commentators",
+    window_size = "Window Size",
+    created_by = "Created By",
+    directory = "Directory",
+    console = "Console"
+}
+
+local function sec_to_m(seconds)
+    return seconds / 60.0
+end
+
+local function parse_ratio(ratio)
+    local result_ratio = {
+        width = 0,
+        height = 0,
+        is_ratio = false
+    }
+
+    if not ratio then
+        return nil
+    end
+
+    if not string.find(ratio, "^%d") then
+        return nil
+    end
+
+    local has_x = false
+    local has_colon = false
+    local width = ""
+    local height = ""
+    for char in string.gmatch(ratio, ".") do
+        local skip = false
+        if char == "x" or char == "X" then
+            has_x = true
+            skip = true
+        end
+
+        if char == ":" then
+            has_colon = true
+            result_ratio.is_ratio = true
+            skip = true
+        end
+
+        if not skip then
+            if not has_x or not has_colon then
+                width = width .. char
+            else
+                height = height .. char
+            end
+        end
+    end
+
+    result_ratio.width = tonumber(width)
+    result_ratio.height = tonumber(height)
+
+    return result_ratio
+end
+
+
+---Parses runners into a table array
+---@param runners_string string
+---@return table
+local function parse_runners(runners_string)
+    local result = {}
+
+    if runners_string:match(".") ~= "[" then
+        table.insert(result, runners_string)
+        return result
+    end
+
+    for runner in runners_string:gmatch("%[(.-)%]") do
+        table.insert(result, runner)
+    end
+
+    return result
+end
+
+---Parses runner's pronouns
+---@param pronouns_string string
+---@return table
+local function parse_runners_pronouns(pronouns_string)
+    local result = {}
+
+    for pronouns in pronouns_string:gmatch("%((.-)%)") do
+        table.insert(result, pronouns)
+    end
+
+    return result
+end
+
+
+---Parses commentators into a table array
+---@param commentators_string string
+---@return table
+local function parse_commentators(commentators_string)
+    local result = {}
+
+    if commentators_string == "null" then
+        return result
+    end
+
+    commentators_string = commentators_string:gsub("%+", "")
+    commentators_string = commentators_string:gsub("%((.-)%)", "")
+    commentators_string = commentators_string:gsub("%s+", " ")
+
+    for commentator in commentators_string:gmatch("%S+") do
+        table.insert(result, commentator)
+    end
+
+    return result
+end
+
+---Parses commentators into their pronouns array
+---@param commentators_string string
+---@return table
+local function parse_commentators_pronouns(commentators_string)
+    local result = {}
+
+    if commentators_string == "null" then
+        return result
+    end
+
+    for pronouns in commentators_string:gmatch("%((.-)%)") do
+        table.insert(result, pronouns)
+    end
+
+    return result
+end
+
+local function parse_estimate(estimate)
+    local result = ""
+    estimate = string.sub(estimate, 3)
+    local encountered_hours = false
+    local encountered_minutes = false
+    local encountered_seconds = false
+
+    -- This is awful but I honestly can't be bothered with pattern matching
+    for char in string.gmatch(estimate, ".") do
+        if char == "H" then
+            result = result .. ":"
+            encountered_hours = true
+        elseif char == "M" then
+            if not encountered_hours then
+                result = "0:" .. result
+                encountered_hours = true
+            end
+            result = result .. ":"
+            encountered_minutes = true
+        elseif char == "S" then
+            if not encountered_minutes then
+                result = "0:00:" .. result
+            end
+            encountered_seconds = true
+            break
+        else
+            result = result .. char
+        end
+    end
+
+    if encountered_hours and not encountered_minutes and not encountered_seconds then
+        result = result .. "00:00"
+    elseif encountered_minutes and not encountered_seconds then
+        result = result .. "00"
+    end
+
+    return result
+end
+
+local function get_horaro_column(data, column)
+    return data[schedule.column_map[column]]
+end
+
+---Gets the schedule from the file
+---@param force_reload? boolean
+schedule.get_schedule = function(force_reload)
+    if not schedule._has_schedule or force_reload then
+        local marathon_info = assert(io.open(script_path() .. "/fm_2023_schedule.json", "r"))
+        local json_data = marathon_info:read("*a")
+        local decoded_info = json.decode(json_data)
+        schedule._schedule_cache = decoded_info.schedule
+        schedule._has_schedule = true
+
+        schedule.column_map = {}
+        for i = 1, #(schedule._schedule_cache.columns) do
+            schedule.column_map[schedule._schedule_cache.columns[i]] = i
+        end
+    end
+
+    return schedule._schedule_cache
+end
+
+--- Get the run information string in the form of `[Game] [Platform(if present)] [Runners] [Category] [Estimate]`
+---
+--- For setup blocks returns information string in the form of `[Setup block name]`
+---
+--- Function is 0 indexed and converts to lua's array indexing internally
+---
+---@param run_index integer
+---@return string
+schedule.get_run_info = function(run_index)
+    local schedule = schedule.get_schedule()
+    local run = schedule.oengus.lines[run_index + 1]
+
+    local run_string = ""
+
+    if run.setupBlock then
+        run_string = run.setupBlockText
+        return run_string
+    end
+
+    run_string = run.gameName
+    run_string = run_string .. " "
+    if run.console ~= "null" then
+        run_string = run_string .. run.console
+        run_string = run_string .. " "
+    end
+
+    local runners_amt = #(run.runners)
+    for i = 1, runners_amt do
+        local runner = run.runners[i]
+        run_string = run_string .. runner.username
+        run_string = run_string .. " "
+    end
+
+    run_string = run_string .. run.categoryName
+    run_string = run_string .. " "
+
+    local estimate = parse_estimate(run.estimate)
+    run_string = run_string .. estimate
+
+    return run_string
+end
+
+schedule.get_run_data = function(run_idx)
+    local data = {}
+
+    local run = schedule.get_schedule().oengus.lines[run_idx + 1]
+    local horaro_run = schedule.get_schedule().items[run_idx + 1].data
+
+    data.game_name = run.gameName
+    data.estimate = parse_estimate(run.estimate)
+    data.category = run.categoryName
+    data.ratio = parse_ratio(get_horaro_column(horaro_run, columns.window_size))
+    data.created_by = get_horaro_column(horaro_run, columns.created_by)
+    data.twitch_directory = get_horaro_column(horaro_run, columns.directory)
+
+    local runner_names = parse_runners(get_horaro_column(horaro_run, columns.runners))
+    local runner_pronouns = parse_runners_pronouns(get_horaro_column(horaro_run, columns.runner_prs))
+    data.runners = {}
+    local runner_amt = #(runner_names)
+    for i = 1, runner_amt do
+        table.insert(data.runners, {
+            name = runner_names[i],
+            pronouns = runner_pronouns[i]
+        })
+    end
+
+    data.commentators = {}
+    local comm_names = parse_commentators(get_horaro_column(horaro_run, columns.commentators))
+    local comm_pronouns = parse_commentators_pronouns(get_horaro_column(horaro_run, columns.commentators))
+    local comm_amt = #(comm_names)
+    for i = 1, comm_amt do
+        table.insert(data.commentators, {
+            name = comm_names[i],
+            pronouns = comm_pronouns[i]
+        })
+    end
+
+    return data
+end
+
+schedule.get_runs = function()
+    local runs = {}
+    local runs_amount = #(schedule.get_schedule().oengus.lines)
+    for i = 1, runs_amount do
+        local run_info = schedule.get_run_info(i - 1)
+        table.insert(runs, run_info)
+    end
+
+    return runs
+end
+
+return schedule

@@ -8,7 +8,7 @@ require("timer_controller")
 local obs = obslua
 local json = require("cjson")
 local tableToString = require("table_to_string")
-local oengus = require("oengus_api.oengus")
+local schedule = require("schedule.schedule")
 local twitch = require("twitch_api.twitch")
 local curl = require("cURL")
 
@@ -23,6 +23,8 @@ local description = [[
     In the Dashboard itself DO NOT and I say DO NOT click the Defaults button under ANY circumstances. This WILL break the entire program and will force you to recreate the layouts.
     <p>
     After creating the layouts you can add new elements if you need to, but they won't be automated by the Dashboard provided for each scene.
+    <p>
+    MAKE SURE that you are logged into FangameMarathon Twitch account before pressing Connect Twitch button! Otherwise, title updating won't work!
 ]]
 
 -- Creates a timer controller for the scene
@@ -67,11 +69,14 @@ function create_layouts(layout_props, btn_prop)
     create_4p_4x3_layout()
     create_1p_no_cam_16x9_layout()
     create_1p_w_cam_16x9_layout()
+    create_2p_tournament_layout()
+    create_2p_monkey_ball_layout()
+    create_relay_race_layout()
+    create_fish_out_water_layout()
 end
 
 function init_twitch(layout_props, btn_prop)
     obs.script_log(obs.LOG_INFO, "Initializing Twitch")
-    print(twitch.get_auth_url())
     local auth_url = twitch.get_auth_url()
     os.execute('start "" "' .. auth_url .. '"')
     local client = twitch.auth_listener:accept()
@@ -103,7 +108,7 @@ end
 function script_load(settings)
     obs.timer_add(do_updates, 500)
 
-    oengus.get_schedule()
+    schedule.get_schedule()
 
     twitch.init()
 
@@ -122,7 +127,6 @@ function script_save(settings)
         props_settings = "props_settings"
     })
     local json_string = json.encode(util_ctx_copy)
-    obs.script_log(obs.LOG_INFO, "Json data to save " .. json_string)
     local json_data = obs.obs_data_create_from_json(json_string)
     obs.obs_data_apply(settings, json_data)
     local end_time = os.clock() - start_time
@@ -164,7 +168,7 @@ function create_1p_no_cam_4x3_layout()
     local comm_4_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
         util.colors.white, util.source_names.comm_pr_4, 476, 702)
     local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
-        util.colors.blue, util.source_names.game_name, 1502, 885, obs.S_TRANSFORM_STARTCASE)
+        util.colors.blue, util.source_names.game_name, 1502, 885)
     local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
         util.text_halign.center, util.colors.blue, util.source_names.created_by, 1502, 931)
     local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
@@ -260,7 +264,7 @@ function create_1p_w_cam_4x3_layout()
     local comm_4_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
         util.colors.white, util.source_names.comm_pr_4, 476, 702)
     local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
-        util.colors.blue, util.source_names.game_name, 1502, 885, obs.S_TRANSFORM_STARTCASE)
+        util.colors.blue, util.source_names.game_name, 1502, 885)
     local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
         util.text_halign.center, util.colors.blue, util.source_names.created_by, 1502, 931)
     local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
@@ -353,7 +357,7 @@ function create_2p_4x3_layout()
     local comm_2_pr_text = util.create_text_eaves(new_scene, "Heavy", "They/Them", 16, util.text_halign.center,
         util.colors.white, util.source_names.comm_pr_2, 1191, 1025)
     local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
-        util.colors.blue, util.source_names.game_name, 968, 780, obs.S_TRANSFORM_STARTCASE)
+        util.colors.blue, util.source_names.game_name, 968, 780)
     local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
         util.text_halign.center, util.colors.blue, util.source_names.created_by, 968, 836)
     local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
@@ -426,6 +430,7 @@ function create_2p_4x3_layout()
 
     obs.obs_sceneitem_release(layout_item)
     layout_2p_4x3_source_def.hide_commentators(util.get_item_ctx(layout_2p_4x3_source_def.id))
+    layout_2p_4x3_source_def.hide_finish_times(util.get_item_ctx(layout_2p_4x3_source_def.id))
     obs.obs_data_release(layout_data)
     obs.obs_source_release(layout_source)
     obs.obs_scene_release(new_scene)
@@ -468,8 +473,7 @@ function create_3p_4x3_layout()
     local comm_4_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
         util.colors.white, util.source_names.comm_pr_4, 1159, 941)
     local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 58,
-        util.text_halign.bottom_center, util.colors.blue, util.source_names.game_name, 960, 345,
-        obs.S_TRANSFORM_STARTCASE)
+        util.text_halign.bottom_center, util.colors.blue, util.source_names.game_name, 960, 345)
     local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
         util.text_halign.center, util.colors.blue, util.source_names.created_by, 960, 350)
     local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
@@ -589,8 +593,7 @@ function create_4p_4x3_layout()
     local comm_4_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
         util.colors.white, util.source_names.comm_pr_4, 1159, 941)
     local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 58,
-        util.text_halign.bottom_center, util.colors.blue, util.source_names.game_name, 960, 345,
-        obs.S_TRANSFORM_STARTCASE)
+        util.text_halign.bottom_center, util.colors.blue, util.source_names.game_name, 960, 345)
     local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
         util.text_halign.center, util.colors.blue, util.source_names.created_by, 960, 350)
     local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
@@ -697,7 +700,7 @@ function create_1p_no_cam_16x9_layout()
     local comm_4_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
         util.colors.white, util.source_names.comm_pr_4, 476, 702)
     local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
-        util.colors.blue, util.source_names.game_name, 1502, 885, obs.S_TRANSFORM_STARTCASE)
+        util.colors.blue, util.source_names.game_name, 1502, 885)
     local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
         util.text_halign.center, util.colors.blue, util.source_names.created_by, 1502, 931)
     local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
@@ -793,7 +796,7 @@ function create_1p_w_cam_16x9_layout()
     local comm_4_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
         util.colors.white, util.source_names.comm_pr_4, 476, 702)
     local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
-        util.colors.blue, util.source_names.game_name, 1502, 885, obs.S_TRANSFORM_STARTCASE)
+        util.colors.blue, util.source_names.game_name, 1502, 885)
     local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
         util.text_halign.center, util.colors.blue, util.source_names.created_by, 1502, 931)
     local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
@@ -859,6 +862,292 @@ function create_1p_w_cam_16x9_layout()
     layout_1p_w_cam_16x9_source_def.hide_commentators(util.get_item_ctx(layout_1p_w_cam_16x9_source_def.id))
 
     obs.obs_data_release(layout_data)
+    obs.obs_source_release(layout_source)
+    obs.obs_scene_release(new_scene)
+end
+
+function create_2p_monkey_ball_layout()
+    local new_scene = util.create_scene(layout_2p_monkey_ball_source_def.scene_name)
+    local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
+        util.colors.blue, util.source_names.runner_1, 280, 746)
+    local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
+        util.colors.white, util.source_names.runner_1_pronouns, 469, 759)
+    local runner_2_text = util.create_text_eaves(new_scene, "Bold", "Siglemic", 40, util.text_halign.center,
+        util.colors.blue, util.source_names.runner_2, 1607, 747)
+    local runner_2_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
+        util.colors.white, util.source_names.runner_2_pronouns, 1792, 759)
+    -- local runner_1_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.center,
+    --     util.colors.blue, util.source_names.runner_1_finish_time, 283, 806)
+    -- local runner_2_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.center,
+    --     util.colors.blue, util.source_names.runner_2_finish_time, 1608, 806)
+    local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_1, 119, 918)
+    local comm_2_text = util.create_text_eaves(new_scene, "Regular", "KrakkaCafe", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_2, 371, 918)
+    local comm_3_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_3, 119, 972)
+    local comm_4_text = util.create_text_eaves(new_scene, "Regular", "KrakkaCafe", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_4, 371, 972)
+    local comm_1_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_1, 223, 924)
+    local comm_2_pr_text = util.create_text_eaves(new_scene, "Heavy", "They/Them", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_2, 474, 924)
+    local comm_3_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_3, 223, 976)
+    local comm_4_pr_text = util.create_text_eaves(new_scene, "Heavy", "They/Them", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_4, 474, 976)
+    local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
+        util.colors.blue, util.source_names.game_name, 968, 805)
+    local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
+        util.text_halign.center, util.colors.blue, util.source_names.created_by, 968, 861)
+    local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
+        util.colors.white, util.source_names.category, 826, 928)
+    local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
+        util.colors.white, util.source_names.estimate, 1110, 928)
+    local timer = util.create_timer(new_scene, util.source_names.timer, 1498, 880, 250, 70)
+
+    local layout_data = obs.obs_data_create()
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_pr_source, runner_1_pronouns.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_source, runner_2_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_pr_source, runner_2_pronouns.uuid)
+    -- obs.obs_data_set_string(layout_data, util.setting_names.r1_time, runner_1_time.uuid)
+    -- obs.obs_data_set_string(layout_data, util.setting_names.r1_time_source, runner_1_time.uuid)
+    -- obs.obs_data_set_string(layout_data, util.setting_names.r2_time, runner_2_time.uuid)
+    -- obs.obs_data_set_string(layout_data, util.setting_names.r2_time_source, runner_2_time.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_source, comm_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_source, comm_2_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c3_source, comm_3_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c4_source, comm_4_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_pr_source, comm_1_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c3_pr_source, comm_3_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c4_pr_source, comm_4_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.game_name_source, game_name_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.estimate_source, estimate_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
+
+    local layout_source = obs.obs_source_create(layout_2p_monkey_ball_source_def.id, "Dashboard", layout_data, nil)
+    obs.obs_scene_add(new_scene, layout_source)
+
+    create_timer_controller(new_scene, layout_2p_monkey_ball_source_def.scene_name, timer, 1)
+    -- { runner_1_time, runner_2_time })
+
+    local scene_ctx = util.get_item_ctx(layout_2p_monkey_ball_source_def.id)
+    scene_ctx.scene = layout_2p_monkey_ball_source_def.scene_name
+    scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
+    scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
+    scene_ctx.layout_objects[runner_2_text.uuid] = runner_2_text
+    scene_ctx.layout_objects[runner_2_pronouns.uuid] = runner_2_pronouns
+    -- scene_ctx.layout_objects[runner_1_time.uuid] = runner_1_time
+    -- scene_ctx.layout_objects[runner_2_time.uuid] = runner_2_time
+    scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
+    scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
+    scene_ctx.layout_objects[comm_3_text.uuid] = comm_3_text
+    scene_ctx.layout_objects[comm_4_text.uuid] = comm_4_text
+    scene_ctx.layout_objects[comm_1_pr_text.uuid] = comm_1_pr_text
+    scene_ctx.layout_objects[comm_2_pr_text.uuid] = comm_2_pr_text
+    scene_ctx.layout_objects[comm_3_pr_text.uuid] = comm_3_pr_text
+    scene_ctx.layout_objects[comm_4_pr_text.uuid] = comm_4_pr_text
+    scene_ctx.layout_objects[game_name_text.uuid] = game_name_text
+    scene_ctx.layout_objects[created_by_text.uuid] = created_by_text
+    scene_ctx.layout_objects[category_text.uuid] = category_text
+    scene_ctx.layout_objects[estimate_text.uuid] = estimate_text
+    scene_ctx.layout_objects[timer.uuid] = timer
+
+    local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
+    obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
+
+    obs.obs_sceneitem_release(layout_item)
+    layout_2p_monkey_ball_source_def.hide_commentators(util.get_item_ctx(layout_2p_monkey_ball_source_def.id))
+    obs.obs_data_release(layout_data)
+    obs.obs_source_release(layout_source)
+    obs.obs_scene_release(new_scene)
+end
+
+function create_2p_tournament_layout()
+    local new_scene = util.create_scene(layout_2p_tournament_source_def.scene_name)
+    local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
+        util.colors.blue, util.source_names.runner_1, 280, 746)
+    local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
+        util.colors.white, util.source_names.runner_1_pronouns, 469, 759)
+    local runner_2_text = util.create_text_eaves(new_scene, "Bold", "Siglemic", 40, util.text_halign.center,
+        util.colors.blue, util.source_names.runner_2, 1607, 747)
+    local runner_2_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
+        util.colors.white, util.source_names.runner_2_pronouns, 1792, 759)
+    local runner_1_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.center,
+        util.colors.blue, util.source_names.runner_1_finish_time, 283, 806)
+    local runner_2_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.center,
+        util.colors.blue, util.source_names.runner_2_finish_time, 1608, 806)
+    local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_1, 119, 918)
+    local comm_2_text = util.create_text_eaves(new_scene, "Regular", "KrakkaCafe", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_2, 371, 918)
+    local comm_3_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_3, 119, 972)
+    local comm_4_text = util.create_text_eaves(new_scene, "Regular", "KrakkaCafe", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_4, 371, 972)
+    local comm_1_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_1, 223, 924)
+    local comm_2_pr_text = util.create_text_eaves(new_scene, "Heavy", "They/Them", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_2, 474, 924)
+    local comm_3_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_3, 223, 976)
+    local comm_4_pr_text = util.create_text_eaves(new_scene, "Heavy", "They/Them", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_4, 474, 976)
+    local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
+        util.colors.blue, util.source_names.game_name, 968, 805)
+    local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
+        util.text_halign.center, util.colors.blue, util.source_names.created_by, 968, 861)
+    local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
+        util.colors.white, util.source_names.category, 826, 928)
+    local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
+        util.colors.white, util.source_names.estimate, 1110, 928)
+    local timer = util.create_timer(new_scene, util.source_names.timer, 1498, 880, 250, 70)
+
+    local layout_data = obs.obs_data_create()
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_pr_source, runner_1_pronouns.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_source, runner_2_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_pr_source, runner_2_pronouns.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_time, runner_1_time.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_time_source, runner_1_time.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_time, runner_2_time.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_time_source, runner_2_time.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_source, comm_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_source, comm_2_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c3_source, comm_3_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c4_source, comm_4_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_pr_source, comm_1_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c3_pr_source, comm_3_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c4_pr_source, comm_4_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.game_name_source, game_name_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.estimate_source, estimate_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
+
+    local layout_source = obs.obs_source_create(layout_2p_tournament_source_def.id, "Dashboard", layout_data, nil)
+    obs.obs_scene_add(new_scene, layout_source)
+
+    create_timer_controller(new_scene, layout_2p_tournament_source_def.scene_name, timer, 2,
+        { runner_1_time, runner_2_time })
+
+    local scene_ctx = util.get_item_ctx(layout_2p_tournament_source_def.id)
+    scene_ctx.scene = layout_2p_tournament_source_def.scene_name
+    scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
+    scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
+    scene_ctx.layout_objects[runner_2_text.uuid] = runner_2_text
+    scene_ctx.layout_objects[runner_2_pronouns.uuid] = runner_2_pronouns
+    scene_ctx.layout_objects[runner_1_time.uuid] = runner_1_time
+    scene_ctx.layout_objects[runner_2_time.uuid] = runner_2_time
+    scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
+    scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
+    scene_ctx.layout_objects[comm_3_text.uuid] = comm_3_text
+    scene_ctx.layout_objects[comm_4_text.uuid] = comm_4_text
+    scene_ctx.layout_objects[comm_1_pr_text.uuid] = comm_1_pr_text
+    scene_ctx.layout_objects[comm_2_pr_text.uuid] = comm_2_pr_text
+    scene_ctx.layout_objects[comm_3_pr_text.uuid] = comm_3_pr_text
+    scene_ctx.layout_objects[comm_4_pr_text.uuid] = comm_4_pr_text
+    scene_ctx.layout_objects[game_name_text.uuid] = game_name_text
+    scene_ctx.layout_objects[created_by_text.uuid] = created_by_text
+    scene_ctx.layout_objects[category_text.uuid] = category_text
+    scene_ctx.layout_objects[estimate_text.uuid] = estimate_text
+    scene_ctx.layout_objects[timer.uuid] = timer
+
+    local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
+    obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
+
+    obs.obs_sceneitem_release(layout_item)
+    layout_2p_tournament_source_def.hide_commentators(util.get_item_ctx(layout_2p_tournament_source_def.id))
+    layout_2p_tournament_source_def.hide_finish_times(util.get_item_ctx(layout_2p_tournament_source_def.id))
+    obs.obs_data_release(layout_data)
+    obs.obs_source_release(layout_source)
+    obs.obs_scene_release(new_scene)
+end
+
+function create_fish_out_water_layout()
+    local new_scene = util.create_scene(layout_fish_out_water_source_def.scene_name)
+
+    local timer = util.create_timer(new_scene, util.source_names.timer, 1463, 686, 250, 70)
+
+    local layout_data = obs.obs_data_create()
+    obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
+
+    local layout_source = obs.obs_source_create(layout_fish_out_water_source_def.id, "Dashboard", layout_data, nil)
+    obs.obs_scene_add(new_scene, layout_source)
+
+    create_timer_controller(new_scene, layout_fish_out_water_source_def.scene_name, timer, 1)
+
+    local scene_ctx = util.get_item_ctx(layout_fish_out_water_source_def.id)
+    scene_ctx.layout_objects[timer.uuid] = timer
+
+    local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
+    obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
+    obs.obs_sceneitem_release(layout_item)
+
+    obs.obs_data_release(layout_data)
+    obs.obs_source_release(layout_source)
+    obs.obs_scene_release(new_scene)
+end
+
+function create_relay_race_layout()
+    local new_scene = util.create_scene(layout_relay_race_source_def.scene_name)
+    local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 26, util.text_halign.center,
+        util.colors.yellow, util.source_names.runner_1, 826, 671)
+    local runner_2_text = util.create_text_eaves(new_scene, "Bold", "Siglemic", 26, util.text_halign.center,
+        util.colors.red, util.source_names.runner_2, 826, 812)
+    local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_1, 159, 913)
+    local comm_2_text = util.create_text_eaves(new_scene, "Regular", "KrakkaCafe", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_2, 401, 913)
+    local comm_1_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_1, 261, 916)
+    local comm_2_pr_text = util.create_text_eaves(new_scene, "Heavy", "They/Them", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_2, 508, 916)
+    local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
+        util.colors.white, util.source_names.category, 189, 784)
+    local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
+        util.colors.white, util.source_names.estimate, 438, 784)
+    -- TODO: Team names
+    local timer = util.create_timer(new_scene, util.source_names.timer, 188, 970, 250, 70)
+
+    local layout_data = obs.obs_data_create()
+    obs.obs_data_set_string(layout_data, util.setting_names.r1_source, runner_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.r2_source, runner_2_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_source, comm_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_source, comm_2_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_pr_source, comm_1_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.estimate_source, estimate_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
+
+    local layout_source = obs.obs_source_create(layout_relay_race_source_def.id, "Dashboard", layout_data, nil)
+    obs.obs_scene_add(new_scene, layout_source)
+
+    create_timer_controller(new_scene, layout_relay_race_source_def.scene_name, timer, 1)
+
+    local scene_ctx = util.get_item_ctx(layout_relay_race_source_def.id)
+    scene_ctx.scene = layout_relay_race_source_def.scene_name
+    scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
+    scene_ctx.layout_objects[runner_2_text.uuid] = runner_2_text
+    scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
+    scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
+    scene_ctx.layout_objects[comm_1_pr_text.uuid] = comm_1_pr_text
+    scene_ctx.layout_objects[comm_2_pr_text.uuid] = comm_2_pr_text
+    scene_ctx.layout_objects[category_text.uuid] = category_text
+    scene_ctx.layout_objects[estimate_text.uuid] = estimate_text
+    scene_ctx.layout_objects[timer.uuid] = timer
+
+    local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
+    obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
+
+    obs.obs_sceneitem_release(layout_item)
+    layout_relay_race_source_def.hide_commentators(util.get_item_ctx(layout_relay_race_source_def.id))
     obs.obs_source_release(layout_source)
     obs.obs_scene_release(new_scene)
 end

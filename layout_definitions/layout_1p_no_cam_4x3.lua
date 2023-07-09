@@ -2,7 +2,7 @@ require("util")
 
 local obs = obslua
 local bit = require("bit")
-local oengus = require("oengus_api.oengus")
+local schedule = require("schedule.schedule")
 
 local show_commentators = function(ctx)
     util.set_prop_visible(ctx, util.setting_names.c2_name, true)
@@ -116,10 +116,51 @@ end
 local update_run_info = function(props, p)
     local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
     local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
-    local run_data = oengus.get_run_data(run_idx)
+    local run_data = schedule.get_run_data(run_idx)
 
     util.set_prop_text(ctx, util.setting_names.game_name, run_data.game_name)
+    util.set_prop_text(ctx, util.setting_names.created_by, run_data.created_by)
     util.set_prop_text(ctx, util.setting_names.estimate, run_data.estimate)
+    util.set_prop_text(ctx, util.setting_names.category, run_data.category)
+    util.set_prop_text(ctx, util.setting_names.r1_name, run_data.runners[1].name)
+    util.set_prop_text(ctx, util.setting_names.r1_pr, run_data.runners[1].pronouns)
+
+    local comm_amt = #(run_data.commentators)
+    if comm_amt == 0 then
+        util.set_prop_text(ctx, util.setting_names.c1_name, "")
+        util.set_prop_text(ctx, util.setting_names.c1_pr, "")
+        util.set_prop_text(ctx, util.setting_names.c2_name, "")
+        util.set_prop_text(ctx, util.setting_names.c2_pr, "")
+        util.set_prop_text(ctx, util.setting_names.c3_name, "")
+        util.set_prop_text(ctx, util.setting_names.c3_pr, "")
+        util.set_prop_text(ctx, util.setting_names.c4_name, "")
+        util.set_prop_text(ctx, util.setting_names.c4_pr, "")
+    end
+
+    if comm_amt > 4 then
+        comm_amt = 4
+    end
+
+    for i = 1, comm_amt do
+        if i == 1 then
+            util.set_prop_text(ctx, util.setting_names.c1_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c1_pr, run_data.commentators[i].pronouns)
+        end
+        if i == 2 then
+            util.set_prop_text(ctx, util.setting_names.c2_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c2_pr, run_data.commentators[i].pronouns)
+        end
+        if i == 3 then
+            util.set_prop_text(ctx, util.setting_names.c3_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c3_pr, run_data.commentators[i].pronouns)
+        end
+        if i == 4 then
+            util.set_prop_text(ctx, util.setting_names.c4_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c4_pr, run_data.commentators[i].pronouns)
+        end
+    end
+
+    obs.obs_data_set_int(ctx.props_settings, util.setting_names.comm_amt, comm_amt)
 
     layout_1p_no_cam_4x3_source_def.update(nil, ctx.props_settings)
 
@@ -132,9 +173,8 @@ layout_1p_no_cam_4x3_source_def.get_properties = function(data)
     local runs_list = obs.obs_properties_add_list(ctx.props_def, util.setting_names.runs_list,
         util.dashboard_names.runs_list, obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_INT)
 
-    local runs = oengus.get_runs()
+    local runs = schedule.get_runs()
     local runs_amount = #(runs)
-    obs.script_log(obs.LOG_INFO, "Runs amount " .. tostring(runs_amount))
     for i = 1, runs_amount do
         obs.obs_property_list_add_int(runs_list, runs[i], i - 1)
     end
@@ -250,6 +290,7 @@ layout_1p_no_cam_4x3_source_def.video_render = function(data, effect)
 
     local ctx = util.get_item_ctx(layout_1p_no_cam_4x3_source_def.id)
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
+    local commentators_info = util.commentators_info(ctx, comm_amt)
 
     effect = obs.obs_get_base_effect(obs.OBS_EFFECT_DEFAULT)
 
@@ -270,16 +311,23 @@ layout_1p_no_cam_4x3_source_def.video_render = function(data, effect)
         obs.obs_source_draw(data.estimate_frame.texture, 1511, 968, 257, 38, false)
         -- Category frame
         obs.obs_source_draw(data.estimate_frame.texture, 1234, 968, 257, 38, false)
+
+        -- Runner pronouns
         obs.obs_source_draw(data.runner_pr_frame.texture, 410, 493, 92, 31, false)
+
         local row_indx = 0
         local x_off = 287 - 35
         local y_off = 697 - 652
         -- Draw commentator boxes
         for i = 1, comm_amt do
-            obs.obs_source_draw(data.comm_name_box.texture, 35 + x_off * (i - 1 - row_indx * 2), 648 + y_off * row_indx,
-                235, 35, false)
-            obs.obs_source_draw(data.comm_pr_frame.texture, 185 + x_off * (i - 1 - row_indx * 2), 652 + y_off * row_indx,
-                79, 26, false)
+            if commentators_info[i].has_name then
+                obs.obs_source_draw(data.comm_name_box.texture, 35 + x_off * (i - 1 - row_indx * 2),
+                    648 + y_off * row_indx, 235, 35, false)
+            end
+            if commentators_info[i].has_name then
+                obs.obs_source_draw(data.comm_pr_frame.texture, 185 + x_off * (i - 1 - row_indx * 2),
+                    652 + y_off * row_indx, 79, 26, false)
+            end
             if i % 2 == 0 then
                 row_indx = row_indx + 1
             end

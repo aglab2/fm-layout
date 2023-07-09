@@ -27,6 +27,11 @@ layout_2p_tournament_source_def.hide_commentators = function(ctx)
     util.set_item_visible(ctx, util.setting_names.c4_pr_source, false)
 end
 
+layout_2p_tournament_source_def.hide_finish_times = function(ctx)
+    util.set_item_visible(ctx, util.setting_names.r1_time_source, false)
+    util.set_item_visible(ctx, util.setting_names.r2_time_source, false)
+end
+
 layout_2p_tournament_source_def.get_name = function()
     return "FM 4x3 2 person tournament layout"
 end
@@ -42,32 +47,15 @@ layout_2p_tournament_source_def.create = function(settings, source)
 
     data.background = obs.gs_image_file()
     data.comm_name_box = obs.gs_image_file()
-    data.logo = obs.gs_image_file()
-    data.player_frame = obs.gs_image_file()
-    data.runner_box = obs.gs_image_file()
     data.game_frame = obs.gs_image_file()
-    data.estimate_frame = obs.gs_image_file()
-    data.runner_pr_frame = obs.gs_image_file()
     data.comm_pr_frame = obs.gs_image_file()
-    data.comm_box = obs.gs_image_file()
-    data.twitch_logo = obs.gs_image_file()
-    data.timer_frame = obs.gs_image_file()
-    data.fade_box = obs.gs_image_file()
 
     local img_path = script_path() .. util.layout_builder_path
-    util.image_source_load(data.background, img_path .. "background.png")
+    local template_path = script_path() .. util.layout_templates_path
+    util.image_source_load(data.background, template_path .. "2_person_tournament.png")
     util.image_source_load(data.comm_name_box, img_path .. "2p_comm_name_box.png")
-    util.image_source_load(data.logo, img_path .. "background_delfruit.png")
-    util.image_source_load(data.player_frame, img_path .. "2p_4x3_player_frame.png")
-    util.image_source_load(data.runner_box, img_path .. "2p_runner_box.png")
     util.image_source_load(data.game_frame, img_path .. "2p_tournament_game_frame.png")
-    util.image_source_load(data.estimate_frame, img_path .. "estimate_frame.png")
-    util.image_source_load(data.runner_pr_frame, img_path .. "2p_pronouns_box.png")
     util.image_source_load(data.comm_pr_frame, img_path .. "comm_pronouns_box.png")
-    util.image_source_load(data.comm_box, img_path .. "2p_commentators_box.png")
-    util.image_source_load(data.twitch_logo, img_path .. "twitch_logo.png")
-    util.image_source_load(data.timer_frame, img_path .. "time_box.png")
-    util.image_source_load(data.fade_box, img_path .. "fade_4_3_2p_left.png")
 
     return data
 end
@@ -206,17 +194,8 @@ layout_2p_tournament_source_def.destroy = function(data)
     obs.obs_enter_graphics()
     obs.gs_image_file_free(data.background)
     obs.gs_image_file_free(data.comm_name_box)
-    obs.gs_image_file_free(data.logo)
-    obs.gs_image_file_free(data.player_frame)
-    obs.gs_image_file_free(data.runner_box)
     obs.gs_image_file_free(data.game_frame)
-    obs.gs_image_file_free(data.estimate_frame)
-    obs.gs_image_file_free(data.runner_pr_frame)
     obs.gs_image_file_free(data.comm_pr_frame)
-    obs.gs_image_file_free(data.comm_box)
-    obs.gs_image_file_free(data.twitch_logo)
-    obs.gs_image_file_free(data.timer_frame)
-    obs.gs_image_file_free(data.fade_box)
     obs.obs_leave_graphics()
 end
 
@@ -236,33 +215,13 @@ layout_2p_tournament_source_def.video_render = function(data, effect)
     while obs.gs_effect_loop(effect, "Draw") do
         -- Background
         obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
-        obs.obs_source_draw(data.logo.texture, 837, 751, 248, 252, false)
-        obs.obs_source_draw(data.fade_box.texture, 0, 80, 597, 996, false)
-        obs.obs_source_draw(data.fade_box.texture, 1323, 80, 597, 996, false)
-
-        -- Runner 1
-        obs.obs_source_draw(data.player_frame.texture, 75, 666, 453, 320, false)
-        obs.obs_source_draw(data.runner_box.texture, 67, 996, 465, 56, false)
-        obs.obs_source_draw(data.twitch_logo.texture, 107, 1008, 30, 30, false)
-        obs.obs_source_draw(data.runner_pr_frame.texture, 427, 1009, 88, 29, false)
-        -- Runner 2
-        obs.obs_source_draw(data.player_frame.texture, 1402, 666, 453, 320, false)
-        obs.obs_source_draw(data.runner_box.texture, 1393, 996, 465, 56, false)
-        obs.obs_source_draw(data.twitch_logo.texture, 1432, 1008, 30, 30, false)
-        obs.obs_source_draw(data.runner_pr_frame.texture, 1750, 1009, 88, 29, false)
-
-        obs.obs_source_draw(data.comm_box.texture, 693, 971, 534, 33, false)
 
         obs.obs_source_draw(data.game_frame.texture, 74, 23, 832, 625, false)
         obs.obs_source_draw(data.game_frame.texture, 1015, 23, 832, 625, false)
-        -- Actual estimate frame
-        obs.obs_source_draw(data.estimate_frame.texture, 979, 892, 257, 38, false)
-        -- Category frame
-        obs.obs_source_draw(data.estimate_frame.texture, 702, 892, 257, 38, false)
 
         local row_indx = 0
-        local box_start_x = 716
-        local box_start_y = 877
+        local box_start_x = 31
+        local box_start_y = 915
         local box_width = 236
         local box_height = 37
         local x_off = box_width + 16
@@ -270,15 +229,13 @@ layout_2p_tournament_source_def.video_render = function(data, effect)
         -- Draw commentator boxes
         for i = 1, comm_amt do
             obs.obs_source_draw(data.comm_name_box.texture, box_start_x + x_off * (i - 1 - row_indx * 2),
-                box_start_y + y_off * row_indx,
-                235, 35, false)
-            obs.obs_source_draw(data.comm_pr_frame.texture, 185 + x_off * (i - 1 - row_indx * 2), 652 + y_off * row_indx,
+                box_start_y + y_off * row_indx, box_width, box_height, false)
+            obs.obs_source_draw(data.comm_pr_frame.texture, 183 + x_off * (i - 1 - row_indx * 2), 920 + y_off * row_indx,
                 79, 26, false)
             if i % 2 == 0 then
                 row_indx = row_indx + 1
             end
         end
-        obs.obs_source_draw(data.timer_frame.texture, 715, 669, 492, 90, false)
     end
 
     obs.gs_matrix_pop()

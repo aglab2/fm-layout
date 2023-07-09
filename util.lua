@@ -44,7 +44,9 @@ util.text_halign = {
 
 util.colors = {
     blue = 0x01CAB8,
-    white = 0xFFFFFF
+    white = 0xFFFFFF,
+    red = 0xFF0600,
+    yellow = 0xFFDF8C
 }
 
 util.source_names = {
@@ -140,6 +142,8 @@ util.setting_names = {
     update_twitch = "update_twitch",
     game_name_source = "game_name_source",
     game_name = "game_name",
+    game_width = "game_width",
+    game_height = "game_height",
     created_by_source = "created_by_source",
     created_by = "created_by",
     category_source = "category_source",
@@ -463,6 +467,71 @@ util.create_timer = function(scene, name, x, y, w, h)
     obs.obs_sceneitem_release(timer_sceneitem)
 
     return timer_object
+end
+
+util.commentators_info = function(ctx, comm_amt)
+    local result_array = {}
+    local result = {}
+
+    result[util.setting_names.c1_name] = string.len(obs.obs_data_get_string(ctx.props_settings,
+        util.setting_names.c1_name)) ~= 0
+    result[util.setting_names.c1_pr] = string.len(obs.obs_data_get_string(ctx.props_settings,
+        util.setting_names.c1_pr)) ~= 0
+    if comm_amt == 2 then
+        result[util.setting_names.c2_name] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c2_name)) ~= 0
+        result[util.setting_names.c2_pr] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c2_pr)) ~= 0
+    elseif comm_amt == 3 then
+        result[util.setting_names.c2_name] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c2_name)) ~= 0
+        result[util.setting_names.c3_name] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c3_name)) ~= 0
+        result[util.setting_names.c2_pr] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c2_pr)) ~= 0
+        result[util.setting_names.c3_pr] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c3_pr)) ~= 0
+    elseif comm_amt == 4 then
+        result[util.setting_names.c2_name] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c2_name)) ~= 0
+        result[util.setting_names.c3_name] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c3_name)) ~= 0
+        result[util.setting_names.c4_name] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c4_name)) ~= 0
+        result[util.setting_names.c2_pr] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c2_pr)) ~= 0
+        result[util.setting_names.c3_pr] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c3_pr)) ~= 0
+        result[util.setting_names.c4_pr] = string.len(obs.obs_data_get_string(ctx.props_settings,
+            util.setting_names.c4_pr)) ~= 0
+    end
+
+    for i = 1, comm_amt do
+        local flag_table = {
+            has_name = false,
+            has_prs = false
+        }
+        if i == 1 then
+            flag_table.has_name = result[util.setting_names.c1_name]
+            flag_table.has_prs = result[util.setting_names.c1_pr]
+        end
+        if i == 2 then
+            flag_table.has_name = result[util.setting_names.c2_name]
+            flag_table.has_prs = result[util.setting_names.c2_pr]
+        end
+        if i == 3 then
+            flag_table.has_name = result[util.setting_names.c3_name]
+            flag_table.has_prs = result[util.setting_names.c3_pr]
+        end
+        if i == 4 then
+            flag_table.has_name = result[util.setting_names.c4_name]
+            flag_table.has_prs = result[util.setting_names.c4_pr]
+        end
+
+        table.insert(result_array, flag_table)
+    end
+
+    return result_array
 end
 
 util.create_object = function(uuid, x, y)
