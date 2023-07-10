@@ -91,6 +91,10 @@ function init_twitch(layout_props, btn_prop)
     twitch.get_auth_token()
 end
 
+function reload_schedule()
+    schedule.get_schedule(true)
+end
+
 local previous_updates_size = 0
 local can_update = false
 function do_updates()
@@ -138,6 +142,7 @@ end
 function script_properties()
     local props = obs.obs_properties_create()
     obs.obs_properties_add_button(props, "create_layouts", "Create layouts", create_layouts)
+    obs.obs_properties_add_button(props, "reload_schedule", "Reload schedule file", reload_schedule)
     obs.obs_properties_add_button(props, "init_twitch", "Connect Twitch", init_twitch)
     return props
 end
