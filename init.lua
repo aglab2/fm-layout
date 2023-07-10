@@ -126,7 +126,7 @@ function script_defaults(settings)
 end
 
 function script_save(settings)
-    local start_time = os.clock()
+    -- local start_time = os.clock()
     local util_ctx_copy = util.copy_exclude(util.items_ctx, nil, {
         props_def = "props_def",
         props_settings = "props_settings"
@@ -134,7 +134,7 @@ function script_save(settings)
     local json_string = json.encode(util_ctx_copy)
     local json_data = obs.obs_data_create_from_json(json_string)
     obs.obs_data_apply(settings, json_data)
-    local end_time = os.clock() - start_time
+    -- local end_time = os.clock() - start_time
     -- obs.script_log(obs.LOG_INFO, "It took " .. end_time .. " seconds to save the script settings")
     obs.obs_data_release(json_data)
 end
@@ -279,12 +279,10 @@ function create_1p_w_cam_4x3_layout()
     local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
         util.colors.white, util.source_names.estimate, 1638, 975)
     local timer = util.create_timer(new_scene, util.source_names.timer, 705, 900, 250, 70)
+    local commentators_text = util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center,
+        util.colors.white, util.source_names.commentators, 276, 607)
 
     -- Non-cached elements that will be static in the layout
-    util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, util.colors.white,
-        util.source_names.commentators, 276, 607)
-    util.create_text_eaves(new_scene, "Regular", "#FangameMarathon", 41, util.text_halign.center, util.colors.blue,
-        util.source_names.hashtag, 276, 1010)
     util.create_text_eaves(new_scene, "Book", "category", 24, util.text_halign.center, util.colors.white,
         util.source_names.category_static, 1365, 1016, obs.S_TRANSFORM_UPPERCASE)
     util.create_text_eaves(new_scene, "Book", "estimate", 24, util.text_halign.center, util.colors.white,
@@ -301,6 +299,7 @@ function create_1p_w_cam_4x3_layout()
     obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c3_pr_source, comm_3_pr_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c4_pr_source, comm_4_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.comms, commentators_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.game_name_source, game_name_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
@@ -316,6 +315,7 @@ function create_1p_w_cam_4x3_layout()
     scene_ctx.scene = layout_1p_w_cam_4x3_source_def.scene_name
     scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
     scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
+    scene_ctx.layout_objects[commentators_text.uuid] = commentators_text
     scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
     scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
     scene_ctx.layout_objects[comm_3_text.uuid] = comm_3_text
@@ -716,12 +716,10 @@ function create_1p_no_cam_16x9_layout()
         util.colors.white, util.source_names.estimate, 1638, 975)
     local timer = util.create_timer(new_scene, util.source_names.timer, 702, 900, 250, 70)
     local runner_avatar = util.create_image(new_scene, util.source_names.runner_1_avatar, 115 + 158, 147 + 145, 317, 289)
+    local commentators_text = util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center,
+        util.colors.white, util.source_names.commentators, 276, 607)
 
     -- Non-cached elements that will be static in the layout
-    util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, util.colors.white,
-        util.source_names.commentators, 276, 607)
-    util.create_text_eaves(new_scene, "Regular", "#FangameMarathon", 41, util.text_halign.center, util.colors.blue,
-        util.source_names.hashtag, 276, 1010)
     util.create_text_eaves(new_scene, "Book", "category", 24, util.text_halign.center, util.colors.white,
         util.source_names.category_static, 1365, 1016, obs.S_TRANSFORM_UPPERCASE)
     util.create_text_eaves(new_scene, "Book", "estimate", 24, util.text_halign.center, util.colors.white,
@@ -738,6 +736,7 @@ function create_1p_no_cam_16x9_layout()
     obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c3_pr_source, comm_3_pr_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c4_pr_source, comm_4_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.comms, commentators_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.game_name_source, game_name_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
@@ -754,6 +753,7 @@ function create_1p_no_cam_16x9_layout()
     scene_ctx.scene = layout_1p_no_cam_16x9_source_def.scene_name
     scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
     scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
+    scene_ctx.layout_objects[commentators_text.uuid] = commentators_text
     scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
     scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
     scene_ctx.layout_objects[comm_3_text.uuid] = comm_3_text
@@ -811,12 +811,10 @@ function create_1p_w_cam_16x9_layout()
     local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
         util.colors.white, util.source_names.estimate, 1638, 975)
     local timer = util.create_timer(new_scene, util.source_names.timer, 705, 900, 250, 70)
+    local commentators_text = util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center,
+        util.colors.white, util.source_names.commentators, 276, 607)
 
     -- Non-cached elements that will be static in the layout
-    util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, util.colors.white,
-        util.source_names.commentators, 276, 607)
-    util.create_text_eaves(new_scene, "Regular", "#FangameMarathon", 41, util.text_halign.center, util.colors.blue,
-        util.source_names.hashtag, 276, 1010)
     util.create_text_eaves(new_scene, "Book", "category", 24, util.text_halign.center, util.colors.white,
         util.source_names.category_static, 1365, 1016, obs.S_TRANSFORM_UPPERCASE)
     util.create_text_eaves(new_scene, "Book", "estimate", 24, util.text_halign.center, util.colors.white,
@@ -829,6 +827,7 @@ function create_1p_w_cam_16x9_layout()
     obs.obs_data_set_string(layout_data, util.setting_names.c2_source, comm_2_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c3_source, comm_3_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c4_source, comm_4_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.comms, commentators_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c1_pr_source, comm_1_pr_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c3_pr_source, comm_3_pr_text.uuid)
@@ -848,6 +847,7 @@ function create_1p_w_cam_16x9_layout()
     scene_ctx.scene = layout_1p_w_cam_16x9_source_def.scene_name
     scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
     scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
+    scene_ctx.layout_objects[commentators_text.uuid] = commentators_text
     scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
     scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
     scene_ctx.layout_objects[comm_3_text.uuid] = comm_3_text

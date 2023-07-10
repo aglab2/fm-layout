@@ -35,6 +35,12 @@ layout_1p_w_cam_4x3_source_def.create = function(settings, source)
     local data = {}
     local ctx = util.create_item_ctx(layout_1p_w_cam_4x3_source_def.id)
     ctx.scene = layout_1p_w_cam_4x3_source_def.scene_name
+    ctx.game_width = 1340
+    ctx.game_height = 760
+    ctx.game_x = 557
+    ctx.game_y = 45
+    ctx.offset_x = ctx.game_x
+    ctx.offset_y = ctx.game_y
 
     -- obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
 
@@ -112,9 +118,105 @@ local slider_modified = function(props, p, settings)
     return true
 end
 
+local update_run_info = function(props, p)
+    local ctx = util.get_item_ctx(layout_1p_w_cam_4x3_source_def.id)
+    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
+    local run_data = schedule.get_run_data(run_idx)
+
+    util.set_prop_text(ctx, util.setting_names.game_name, run_data.game_name)
+    util.set_prop_text(ctx, util.setting_names.created_by, run_data.created_by)
+    util.set_prop_text(ctx, util.setting_names.estimate, run_data.estimate)
+    util.set_prop_text(ctx, util.setting_names.category, run_data.category)
+    util.set_prop_text(ctx, util.setting_names.r1_name, run_data.runners[1].name)
+    util.set_prop_text(ctx, util.setting_names.r1_pr, run_data.runners[1].pronouns)
+
+    local comm_amt = #(run_data.commentators)
+    util.set_item_visible(ctx, util.setting_names.comms, true)
+    if comm_amt == 0 then
+        util.set_item_visible(ctx, util.setting_names.comms, false)
+        util.set_prop_text(ctx, util.setting_names.c1_name, "")
+        util.set_prop_text(ctx, util.setting_names.c1_pr, "")
+        util.set_prop_text(ctx, util.setting_names.c2_name, "")
+        util.set_prop_text(ctx, util.setting_names.c2_pr, "")
+        util.set_prop_text(ctx, util.setting_names.c3_name, "")
+        util.set_prop_text(ctx, util.setting_names.c3_pr, "")
+        util.set_prop_text(ctx, util.setting_names.c4_name, "")
+        util.set_prop_text(ctx, util.setting_names.c4_pr, "")
+    end
+
+    if comm_amt > 4 then
+        comm_amt = 4
+    end
+
+    for i = 1, comm_amt do
+        if i == 1 then
+            util.set_prop_text(ctx, util.setting_names.c1_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c1_pr, run_data.commentators[i].pronouns)
+        end
+        if i == 2 then
+            util.set_prop_text(ctx, util.setting_names.c2_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c2_pr, run_data.commentators[i].pronouns)
+        end
+        if i == 3 then
+            util.set_prop_text(ctx, util.setting_names.c3_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c3_pr, run_data.commentators[i].pronouns)
+        end
+        if i == 4 then
+            util.set_prop_text(ctx, util.setting_names.c4_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c4_pr, run_data.commentators[i].pronouns)
+        end
+    end
+
+    obs.obs_data_set_int(ctx.props_settings, util.setting_names.comm_amt, comm_amt)
+
+    local max_size = {
+        width = 1340,
+        height = 760
+    }
+
+    local x, y, width, height = util.fit_screen(run_data.ratio.width, run_data.ratio.height, max_size.width,
+        max_size.height)
+
+    ctx.game_x = ctx.offset_x + x
+    ctx.game_y = ctx.offset_y + y
+    ctx.game_width = width
+    ctx.game_height = height
+
+    obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_width, ctx.game_width)
+    obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_height, ctx.game_height)
+    obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_x, ctx.game_x)
+    obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_y, ctx.game_y)
+
+    layout_1p_w_cam_4x3_source_def.update(nil, ctx.props_settings)
+
+    return true
+end
+
+local function update_twitch(props, p)
+    local ctx = util.get_item_ctx(layout_1p_w_cam_4x3_source_def.id)
+    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
+    local run_data = schedule.get_run_data(run_idx)
+
+    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string)
+end
+
 layout_1p_w_cam_4x3_source_def.get_properties = function(data)
     local ctx = util.get_item_ctx(layout_1p_w_cam_4x3_source_def.id)
     ctx.props_def = obs.obs_properties_create()
+    local runs_list = obs.obs_properties_add_list(ctx.props_def, util.setting_names.runs_list,
+        util.dashboard_names.runs_list, obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_INT)
+
+    local runs = schedule.get_runs()
+    local runs_amount = #(runs)
+    for i = 1, runs_amount do
+        obs.obs_property_list_add_int(runs_list, runs[i], i - 1)
+    end
+
+    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_run_info,
+        util.dashboard_names.update_run_info, update_run_info)
+    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_twitch,
+        util.dashboard_names.update_twitch, update_twitch)
+
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.created_by, util.dashboard_names.created_by,
@@ -230,11 +332,15 @@ layout_1p_w_cam_4x3_source_def.video_render = function(data, effect)
         obs.obs_source_draw(data.fade_box.texture, 0, 81, 546, 995, false)
         obs.obs_source_draw(data.player_frame.texture, 30, 90, 494, 349, false)
         obs.obs_source_draw(data.runner_box.texture, 34, 479, 490, 59, false)
-        obs.obs_source_draw(data.comm_box.texture, 39, 603, 478, 33, false)
+
+        if comm_amt ~= 0 then
+            obs.obs_source_draw(data.comm_box.texture, 39, 603, 478, 33, false)
+        end
+
         obs.obs_source_draw(data.twitch_logo.texture, 75, 492, 30, 30, false)
 
-        obs.obs_source_draw(data.logo.texture, 179, 769, 230, 232, false)
-        obs.obs_source_draw(data.game_frame.texture, 742, 45, 1064, 805, false)
+        obs.obs_source_draw(data.logo.texture, 160, 769, 230, 232, false)
+        obs.obs_source_draw(data.game_frame.texture, ctx.game_x, ctx.game_y, ctx.game_width, ctx.game_height, false)
         -- Actual estimate frame
         obs.obs_source_draw(data.estimate_frame.texture, 1511, 968, 257, 38, false)
         -- Category frame

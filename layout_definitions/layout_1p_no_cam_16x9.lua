@@ -2,6 +2,8 @@ require("util")
 
 local obs = obslua
 local bit = require("bit")
+local schedule = require("schedule.schedule")
+local twitch = require("twitch_api.twitch")
 
 local show_commentators = function(ctx)
     util.set_prop_visible(ctx, util.setting_names.c2_name, true)
@@ -131,7 +133,9 @@ local update_run_info = function(props, p)
     util.set_prop_text(ctx, util.setting_names.r1_pr, run_data.runners[1].pronouns)
 
     local comm_amt = #(run_data.commentators)
+    util.set_item_visible(ctx, util.setting_names.comms, true)
     if comm_amt == 0 then
+        util.set_item_visible(ctx, util.setting_names.comms, false)
         util.set_prop_text(ctx, util.setting_names.c1_name, "")
         util.set_prop_text(ctx, util.setting_names.c1_pr, "")
         util.set_prop_text(ctx, util.setting_names.c2_name, "")
@@ -336,6 +340,7 @@ layout_1p_no_cam_16x9_source_def.video_render = function(data, effect)
 
     local ctx = util.get_item_ctx(layout_1p_no_cam_16x9_source_def.id)
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
+    local commentators_info = util.commentators_info(ctx, comm_amt)
 
     effect = obs.obs_get_base_effect(obs.OBS_EFFECT_DEFAULT)
 
@@ -347,25 +352,36 @@ layout_1p_no_cam_16x9_source_def.video_render = function(data, effect)
         obs.obs_source_draw(data.fade_box.texture, 0, 81, 546, 995, false)
         obs.obs_source_draw(data.player_frame.texture, 107, 139, 333, 305, false)
         obs.obs_source_draw(data.runner_box.texture, 34, 479, 490, 59, false)
-        obs.obs_source_draw(data.comm_box.texture, 39, 603, 478, 33, false)
+
+        if comm_amt ~= 0 then
+            obs.obs_source_draw(data.comm_box.texture, 39, 603, 478, 33, false)
+        end
+
         obs.obs_source_draw(data.twitch_logo.texture, 75, 492, 30, 30, false)
 
-        obs.obs_source_draw(data.logo.texture, 179, 769, 230, 232, false)
+        obs.obs_source_draw(data.logo.texture, 160, 769, 230, 232, false)
         obs.obs_source_draw(data.game_frame.texture, ctx.game_x, ctx.game_y, ctx.game_width, ctx.game_height, false)
         -- Actual estimate frame
         obs.obs_source_draw(data.estimate_frame.texture, 1511, 968, 257, 38, false)
         -- Category frame
         obs.obs_source_draw(data.estimate_frame.texture, 1234, 968, 257, 38, false)
+
+        -- Runner pronouns
         obs.obs_source_draw(data.runner_pr_frame.texture, 410, 493, 92, 31, false)
+
         local row_indx = 0
         local x_off = 287 - 35
         local y_off = 697 - 652
         -- Draw commentator boxes
         for i = 1, comm_amt do
-            obs.obs_source_draw(data.comm_name_box.texture, 35 + x_off * (i - 1 - row_indx * 2), 648 + y_off * row_indx,
-                235, 35, false)
-            obs.obs_source_draw(data.comm_pr_frame.texture, 185 + x_off * (i - 1 - row_indx * 2), 652 + y_off * row_indx,
-                79, 26, false)
+            if commentators_info[i].has_name then
+                obs.obs_source_draw(data.comm_name_box.texture, 35 + x_off * (i - 1 - row_indx * 2),
+                    648 + y_off * row_indx, 235, 35, false)
+            end
+            if commentators_info[i].has_name then
+                obs.obs_source_draw(data.comm_pr_frame.texture, 185 + x_off * (i - 1 - row_indx * 2),
+                    652 + y_off * row_indx, 79, 26, false)
+            end
             if i % 2 == 0 then
                 row_indx = row_indx + 1
             end
