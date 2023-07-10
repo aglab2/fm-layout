@@ -24,7 +24,7 @@ layout_fish_out_water_source_def.create = function(settings, source)
 
     ctx.props_settings = settings
 
-    obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
+    -- obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
 
     local template_path = script_path() .. util.layout_templates_path
     local img_path = script_path() .. util.layout_builder_path

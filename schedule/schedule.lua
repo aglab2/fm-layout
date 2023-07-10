@@ -61,7 +61,7 @@ local function parse_ratio(ratio)
         end
 
         if not skip then
-            if not has_x or not has_colon then
+            if not has_x and not has_colon then
                 width = width .. char
             else
                 height = height .. char
@@ -220,14 +220,14 @@ schedule.get_run_info = function(run_index)
     local schedule = schedule.get_schedule()
     local run = schedule.oengus.lines[run_index + 1]
 
-    local run_string = ""
+    local run_string = tostring(run_index + 1) .. ". "
 
     if run.setupBlock then
-        run_string = run.setupBlockText
+        run_string = run_string .. run.setupBlockText
         return run_string
     end
 
-    run_string = run.gameName
+    run_string = run_string .. run.gameName
     run_string = run_string .. " "
     if run.console ~= "null" then
         run_string = run_string .. run.console
@@ -262,28 +262,57 @@ schedule.get_run_data = function(run_idx)
     data.ratio = parse_ratio(get_horaro_column(horaro_run, columns.window_size))
     data.created_by = get_horaro_column(horaro_run, columns.created_by)
     data.twitch_directory = get_horaro_column(horaro_run, columns.directory)
+    data.runner_string = ""
 
     local runner_names = parse_runners(get_horaro_column(horaro_run, columns.runners))
     local runner_pronouns = parse_runners_pronouns(get_horaro_column(horaro_run, columns.runner_prs))
     data.runners = {}
     local runner_amt = #(runner_names)
     for i = 1, runner_amt do
+        local pronouns = runner_pronouns[i]
+        if pronouns == "???" then
+            pronouns = "ASK FOR PRONOUNS"
+        end
+
         table.insert(data.runners, {
             name = runner_names[i],
-            pronouns = runner_pronouns[i]
+            pronouns = pronouns
         })
     end
+
+    local runner_array = {}
+    for i = 1, runner_amt do
+        table.insert(runner_array, runner_names[i])
+    end
+
+    data.runner_string = table.concat(runner_array, ", ")
 
     data.commentators = {}
     local comm_names = parse_commentators(get_horaro_column(horaro_run, columns.commentators))
     local comm_pronouns = parse_commentators_pronouns(get_horaro_column(horaro_run, columns.commentators))
     local comm_amt = #(comm_names)
     for i = 1, comm_amt do
+        local pronouns = comm_pronouns[i]
+        if pronouns == "???" then
+            pronouns = "ASK FOR PRONOUNS"
+        end
+
         table.insert(data.commentators, {
             name = comm_names[i],
-            pronouns = comm_pronouns[i]
+            pronouns = pronouns
         })
     end
+
+
+
+    return data
+end
+
+schedule.get_twitch_data = function(run_idx)
+    local data = {}
+
+    local run = schedule.get_schedule().oengus.lines[run_idx + 1]
+    local horaro_run = schedule.get_schedule().items[run_idx + 1].data
 
     return data
 end

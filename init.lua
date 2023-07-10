@@ -7,10 +7,8 @@ require("util")
 require("timer_controller")
 local obs = obslua
 local json = require("cjson")
-local tableToString = require("table_to_string")
 local schedule = require("schedule.schedule")
 local twitch = require("twitch_api.twitch")
-local curl = require("cURL")
 
 local description = [[
     <center><h2>Fangame Marathon 2023 Layout Program v1</h2></center>
@@ -25,6 +23,8 @@ local description = [[
     After creating the layouts you can add new elements if you need to, but they won't be automated by the Dashboard provided for each scene.
     <p>
     MAKE SURE that you are logged into FangameMarathon Twitch account before pressing Connect Twitch button! Otherwise, title updating won't work!
+    <p>
+    <h1>!!!!!IF YOU RESTARTED THE OBS YOU NEED TO PRESS Connect Twitch BUTTON AGAIN!!!!!</h1>
 ]]
 
 -- Creates a timer controller for the scene
@@ -61,22 +61,24 @@ local function create_timer_controller(new_scene, scene_name, timer, runners_amo
 end
 
 function create_layouts(layout_props, btn_prop)
-    obs.script_log(obs.LOG_INFO, "Creating layouts...")
+    -- obs.script_log(obs.LOG_INFO, "Creating layouts...")
     create_1p_no_cam_4x3_layout()
+    create_1p_no_cam_16x9_layout()
     create_1p_w_cam_4x3_layout()
+    create_1p_w_cam_16x9_layout()
     create_2p_4x3_layout()
     create_3p_4x3_layout()
     create_4p_4x3_layout()
-    create_1p_no_cam_16x9_layout()
-    create_1p_w_cam_16x9_layout()
     create_2p_tournament_layout()
     create_2p_monkey_ball_layout()
     create_relay_race_layout()
     create_fish_out_water_layout()
+    create_kh2_randomizer_layout()
+    create_lm2_randomizer_layout()
 end
 
 function init_twitch(layout_props, btn_prop)
-    obs.script_log(obs.LOG_INFO, "Initializing Twitch")
+    -- obs.script_log(obs.LOG_INFO, "Initializing Twitch")
     local auth_url = twitch.get_auth_url()
     os.execute('start "" "' .. auth_url .. '"')
     local client = twitch.auth_listener:accept()
@@ -95,7 +97,6 @@ function do_updates()
     local updates_size = #(util.delayed_update)
     local update_next_time = previous_updates_size ~= updates_size
     if can_update and updates_size > 0 then
-        obs.script_log(obs.LOG_INFO, "Doing delayed updates")
         for i = 1, updates_size do
             util.delayed_update[i]()
         end
@@ -130,7 +131,7 @@ function script_save(settings)
     local json_data = obs.obs_data_create_from_json(json_string)
     obs.obs_data_apply(settings, json_data)
     local end_time = os.clock() - start_time
-    obs.script_log(obs.LOG_INFO, "It took " .. end_time .. " seconds to save the script settings")
+    -- obs.script_log(obs.LOG_INFO, "It took " .. end_time .. " seconds to save the script settings")
     obs.obs_data_release(json_data)
 end
 
@@ -177,12 +178,11 @@ function create_1p_no_cam_4x3_layout()
         util.colors.white, util.source_names.estimate, 1638, 975)
     local timer = util.create_timer(new_scene, util.source_names.timer, 702, 900, 250, 70)
     local runner_avatar = util.create_image(new_scene, util.source_names.runner_1_avatar, 115 + 158, 147 + 145, 317, 289)
+    local commentators_text = util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center,
+        util.colors.white, util.source_names.commentators, 276, 607)
 
     -- Non-cached elements that will be static in the layout
-    util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, util.colors.white,
-        util.source_names.commentators, 276, 607)
-    util.create_text_eaves(new_scene, "Regular", "#FangameMarathon", 41, util.text_halign.center, util.colors.blue,
-        util.source_names.hashtag, 276, 1010)
+
     util.create_text_eaves(new_scene, "Book", "category", 24, util.text_halign.center, util.colors.white,
         util.source_names.category_static, 1365, 1016, obs.S_TRANSFORM_UPPERCASE)
     util.create_text_eaves(new_scene, "Book", "estimate", 24, util.text_halign.center, util.colors.white,
@@ -203,6 +203,7 @@ function create_1p_no_cam_4x3_layout()
     obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.estimate_source, estimate_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.comms, commentators_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.r1_avatar_source, runner_avatar.uuid)
 
@@ -215,6 +216,7 @@ function create_1p_no_cam_4x3_layout()
     scene_ctx.scene = layout_1p_no_cam_4x3_source_def.scene_name
     scene_ctx.layout_objects[runner_1_text.uuid] = runner_1_text
     scene_ctx.layout_objects[runner_1_pronouns.uuid] = runner_1_pronouns
+    scene_ctx.layout_objects[commentators_text.uuid] = commentators_text
     scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
     scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
     scene_ctx.layout_objects[comm_3_text.uuid] = comm_3_text
@@ -1148,6 +1150,90 @@ function create_relay_race_layout()
 
     obs.obs_sceneitem_release(layout_item)
     layout_relay_race_source_def.hide_commentators(util.get_item_ctx(layout_relay_race_source_def.id))
+    obs.obs_source_release(layout_source)
+    obs.obs_scene_release(new_scene)
+end
+
+function create_kh2_randomizer_layout()
+    local new_scene = util.create_scene(layout_kh2_randomizer_source_def.scene_name)
+    local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_1, 120, 1012)
+    local comm_2_text = util.create_text_eaves(new_scene, "Regular", "KrakkaCafe", 26, util.text_halign.center,
+        util.colors.blue, util.source_names.comm_2, 368, 1012)
+    local comm_1_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_1, 224, 1018)
+    local comm_2_pr_text = util.create_text_eaves(new_scene, "Heavy", "They/Them", 16, util.text_halign.center,
+        util.colors.white, util.source_names.comm_pr_2, 476, 1018)
+    local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
+        util.colors.blue, util.source_names.game_name, 1502, 885)
+    local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
+        util.text_halign.center, util.colors.blue, util.source_names.created_by, 1502, 931)
+    local timer = util.create_timer(new_scene, util.source_names.timer, 702, 900, 250, 70)
+
+    local layout_data = obs.obs_data_create()
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_source, comm_1_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_source, comm_2_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c1_pr_source, comm_1_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.game_name_source, game_name_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
+
+    local layout_source = obs.obs_source_create(layout_kh2_randomizer_source_def.id, "Dashboard", layout_data, nil)
+    obs.obs_scene_add(new_scene, layout_source)
+
+    create_timer_controller(new_scene, layout_kh2_randomizer_source_def.scene_name, timer, 1)
+
+    local scene_ctx = util.get_item_ctx(layout_kh2_randomizer_source_def.id)
+    scene_ctx.scene = layout_kh2_randomizer_source_def.scene_name
+    scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
+    scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
+    scene_ctx.layout_objects[comm_1_pr_text.uuid] = comm_1_pr_text
+    scene_ctx.layout_objects[comm_2_pr_text.uuid] = comm_2_pr_text
+    scene_ctx.layout_objects[game_name_text.uuid] = game_name_text
+    scene_ctx.layout_objects[created_by_text.uuid] = created_by_text
+    scene_ctx.layout_objects[timer.uuid] = timer
+
+    local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
+    obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
+    obs.obs_sceneitem_release(layout_item)
+
+    layout_kh2_randomizer_source_def.hide_commentators(util.get_item_ctx(layout_kh2_randomizer_source_def.id))
+
+    obs.obs_data_release(layout_data)
+    obs.obs_source_release(layout_source)
+    obs.obs_scene_release(new_scene)
+end
+
+function create_lm2_randomizer_layout()
+    local new_scene = util.create_scene(layout_lm2_randomizer_source_def.scene_name)
+    local game_name_text = util.create_text_eaves(new_scene, "Heavy", "My own video game", 50, util.text_halign.center,
+        util.colors.blue, util.source_names.game_name, 1502, 885)
+    local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
+        util.text_halign.center, util.colors.blue, util.source_names.created_by, 1502, 931)
+    local timer = util.create_timer(new_scene, util.source_names.timer, 702, 911, 250, 70)
+
+    local layout_data = obs.obs_data_create()
+    obs.obs_data_set_string(layout_data, util.setting_names.game_name_source, game_name_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
+
+    local layout_source = obs.obs_source_create(layout_lm2_randomizer_source_def.id, "Dashboard", layout_data, nil)
+    obs.obs_scene_add(new_scene, layout_source)
+
+    create_timer_controller(new_scene, layout_lm2_randomizer_source_def.scene_name, timer, 1)
+
+    local scene_ctx = util.get_item_ctx(layout_lm2_randomizer_source_def.id)
+    scene_ctx.scene = layout_lm2_randomizer_source_def.scene_name
+    scene_ctx.layout_objects[game_name_text.uuid] = game_name_text
+    scene_ctx.layout_objects[created_by_text.uuid] = created_by_text
+    scene_ctx.layout_objects[timer.uuid] = timer
+
+    local layout_item = obs.obs_scene_sceneitem_from_source(new_scene, layout_source)
+    obs.obs_sceneitem_set_order(layout_item, obs.OBS_ORDER_MOVE_BOTTOM)
+    obs.obs_sceneitem_release(layout_item)
+
+    obs.obs_data_release(layout_data)
     obs.obs_source_release(layout_source)
     obs.obs_scene_release(new_scene)
 end

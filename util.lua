@@ -88,6 +88,10 @@ util.dashboard_names = {
     update_run_info = "Fill run information",
     update_twitch = "Update Twitch title",
     game_name = "Game Name",
+    game_width = "Game Width",
+    game_height = "Game Height",
+    game_x = "Game X",
+    game_y = "Game Y",
     created_by = "Created By",
     category = "Category",
     estimate = "Estimate",
@@ -144,6 +148,8 @@ util.setting_names = {
     game_name = "game_name",
     game_width = "game_width",
     game_height = "game_height",
+    game_x = "game_x",
+    game_y = "game_y",
     created_by_source = "created_by_source",
     created_by = "created_by",
     category_source = "category_source",
@@ -180,6 +186,7 @@ util.setting_names = {
     r4_time = "runner_4_time",
     r4_time_source = "runner_4_time_source",
     comm_amt = "comm_amount",
+    comms = "commentators",
     c1_source = "commentator_1_text_source",
     c1_pr_source = "commentator_1_pronouns_source",
     c1_name = "commentator_1_name",
@@ -216,9 +223,9 @@ util.image_source_load = function(image, file)
     obs.gs_image_file_init_texture(image);
     obs.obs_leave_graphics();
 
-    if not image.loaded then
-        obs.script_log(obs.LOG_INFO, "Failed to load texture " .. file);
-    end
+    -- if not image.loaded then
+    --     obs.script_log(obs.LOG_INFO, "Failed to load texture " .. file);
+    -- end
 end
 
 -- This function returns an OPEN handler for the scene so you have to manually free it
@@ -532,6 +539,24 @@ util.commentators_info = function(ctx, comm_amt)
     end
 
     return result_array
+end
+
+util.fit_screen = function(source_width, source_height, target_width, target_height)
+    local ratio = source_height / source_width
+    local new_width = target_height / ratio
+    local new_height
+
+    if new_width > target_width then
+        new_width = target_width
+        new_height = new_width * ratio
+    else
+        new_height = target_height
+    end
+
+    local x = math.floor((target_width - new_width) / 2)
+    local y = math.floor((target_height - new_height) / 2)
+
+    return x, y, math.floor(new_width), math.floor(new_height)
 end
 
 util.create_object = function(uuid, x, y)

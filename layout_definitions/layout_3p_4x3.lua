@@ -13,7 +13,7 @@ local show_commentators = function(ctx)
 end
 
 layout_3p_4x3_source_def = {}
-layout_3p_4x3_source_def.scene_name = "FM 3 person 4x3 layout"
+layout_3p_4x3_source_def.scene_name = "FM 3 person layout"
 layout_3p_4x3_source_def.id = "fm_2023_3_person_4x3"
 layout_3p_4x3_source_def.output_flags = bit.bor(bit.bor(obs.OBS_SOURCE_VIDEO, obs.OBS_SOURCE_CUSTOM_DRAW),
     obs.OBS_SOURCE_CAP_DISABLED)
@@ -42,19 +42,60 @@ layout_3p_4x3_source_def.create = function(settings, source)
     data.background = obs.gs_image_file()
     data.comm_name_box = obs.gs_image_file()
     data.comm_pr_frame = obs.gs_image_file()
+    data.game_frame = obs.gs_image_file()
+    data.logo_frame = obs.gs_image_file()
+    data.commentators_box = obs.gs_image_file()
 
     local ctx = util.create_item_ctx(layout_3p_4x3_source_def.id)
     ctx.scene = layout_3p_4x3_source_def.scene_name
 
+    ctx.game_resolutions = {
+        {
+            offset_x = 14,
+            offset_y = 22,
+            width = 670,
+            height = 504,
+            game_x = 14,
+            game_y = 22
+        },
+        {
+            offset_x = 1238,
+            offset_y = 22,
+            width = 670,
+            height = 504,
+            game_x = 1238,
+            game_y = 22
+        },
+        {
+            offset_x = 14,
+            offset_y = 555,
+            width = 670,
+            height = 504,
+            game_x = 14,
+            game_y = 555
+        },
+        {
+            offset_x = 1238,
+            offset_y = 555,
+            width = 670,
+            height = 504,
+            game_x = 1238,
+            game_y = 555
+        }
+    }
+
     ctx.props_settings = settings
 
-    obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
+    -- obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
 
     local template_path = script_path() .. util.layout_templates_path
     local img_path = script_path() .. util.layout_builder_path
     util.image_source_load(data.background, template_path .. "3_person_4x3.png")
     util.image_source_load(data.comm_name_box, img_path .. "3p_comm_name_box.png")
     util.image_source_load(data.comm_pr_frame, img_path .. "comm_pronouns_box.png")
+    util.image_source_load(data.game_frame, img_path .. "3p_game_frame.png")
+    util.image_source_load(data.logo_frame, img_path .. "3p_logo_frame.png")
+    util.image_source_load(data.commentators_box, img_path .. "3p_commentators_box.png")
 
     return data
 end
@@ -209,6 +250,9 @@ layout_3p_4x3_source_def.destroy = function(data)
     obs.gs_image_file_free(data.background)
     obs.gs_image_file_free(data.comm_name_box)
     obs.gs_image_file_free(data.comm_pr_frame)
+    obs.gs_image_file_free(data.commentators_box)
+    obs.gs_image_file_free(data.game_frame)
+    obs.gs_image_file_free(data.logo_frame)
     obs.obs_leave_graphics()
 end
 
@@ -227,6 +271,16 @@ layout_3p_4x3_source_def.video_render = function(data, effect)
 
     while obs.gs_effect_loop(effect, "Draw") do
         obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false);
+
+        for i = 1, 3 do
+            obs.obs_source_draw(data.game_frame.texture, ctx.game_resolutions[i].game_x, ctx.game_resolutions[i].game_y,
+                ctx.game_resolutions[i].width, ctx.game_resolutions[i].height, false)
+        end
+
+        obs.obs_source_draw(data.logo_frame.texture, ctx.game_resolutions[4].game_x, ctx.game_resolutions[4].game_y,
+            ctx.game_resolutions[4].width, ctx.game_resolutions[4].height, false)
+
+        obs.obs_source_draw(data.commentators_box.texture, 720, 834, 478, 33, false)
 
         local row_indx = 0
         local box_start_x = 716

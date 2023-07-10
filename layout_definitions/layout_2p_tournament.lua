@@ -41,7 +41,7 @@ layout_2p_tournament_source_def.create = function(settings, source)
     local ctx = util.create_item_ctx(layout_2p_tournament_source_def.id)
     ctx.scene = layout_2p_tournament_source_def.scene_name
 
-    obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
+    -- obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
 
     ctx.props_settings = settings
 

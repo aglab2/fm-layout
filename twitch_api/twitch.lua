@@ -6,6 +6,7 @@ local socket = require("socket")
 
 twitch = {
     initialized = false,
+    has_connect_data = false,
     client_secret = "",
     client_id = "",
     redirect_url = "",
@@ -92,13 +93,13 @@ twitch.init = function()
     twitch.client_id = decoded_info.id
     twitch.redirect_url = decoded_info.redirect
     twitch.redirect_port = decoded_info.port
-    twitch.initialized = true
+    twitch.has_connect_data = true
 
     twitch.auth_listener = socket.bind("127.0.0.1", twitch.redirect_port)
 end
 
 twitch.get_refresh_token = function()
-    assert(twitch.initialized, "TWITCH API NOT INITIALIZED")
+    assert(twitch.initialized, "TWITCH API NOT INITIALIZED. MAKE SURE YOU CONNECTED TWITCH")
 
     local refresh_request = "https://id.twitch.tv/oauth2/token"
     local params = "grant_type=refresh_token"
@@ -108,6 +109,7 @@ twitch.get_refresh_token = function()
     local headers = {
         ["Content-Type"] = "application/x-www-form-urlencoded"
     }
+    print(params)
     local body, code = network.post(refresh_request, headers, params)
     assert(code == 200, "Failed to refresh Twitch token! " .. body)
 
@@ -118,7 +120,7 @@ twitch.get_refresh_token = function()
 end
 
 twitch.get_auth_token = function()
-    assert(twitch.initialized, "TWITCH API NOT INITIALIZED")
+    assert(twitch.has_connect_data, "DATA TO GET TWITCH AUTH TOKEN NOT OBTAINED")
 
     local token_request = "https://id.twitch.tv/oauth2/token"
     local params = build_twitch_params("authorization_code")
@@ -132,6 +134,7 @@ twitch.get_auth_token = function()
     twitch.token = auth_info.access_token
     twitch.token_type = auth_info.token_type
     twitch.refresh_token = auth_info.refresh_token
+    twitch.initialized = true
 end
 
 twitch.get_marathon_id = function()
@@ -139,7 +142,7 @@ twitch.get_marathon_id = function()
         return twitch.marathon_id
     end
 
-    assert(twitch.initialized, "TWITCH API NOT INITIALIZED")
+    assert(twitch.initialized, "TWITCH API NOT INITIALIZED. MAKE SURE YOU CONNECTED TWITCH")
 
     local url = API .. end_points.users .. "?login=FangameMarathon"
     local headers = {
@@ -147,8 +150,6 @@ twitch.get_marathon_id = function()
         ["Client-Id"] = twitch.client_id
     }
     local body, code = check_request(network.get, url, headers)
-    print(body)
-    print(tostring(code))
     local user_info = json.decode(body)
     twitch.marathon_id = user_info.data[1].id
     return twitch.marathon_id
@@ -159,7 +160,7 @@ twitch.get_game_id = function(game_name)
         return twitch.games_database[game_name]
     end
 
-    assert(twitch.initialized, "TWITCH API NOT INITIALIZED")
+    assert(twitch.initialized, "TWITCH API NOT INITIALIZED. MAKE SURE YOU CONNECTED TWITCH")
 
     local url = API .. end_points.games .. "?name=" .. game_name
     local headers = {
@@ -167,14 +168,22 @@ twitch.get_game_id = function(game_name)
         ["Client-Id"] = twitch.client_id
     }
     local body, code = check_request(network.get, url, headers)
+    print(body)
+    print(code)
     local game_info = json.decode(body)
     twitch.games_database[game_name] = game_info.data[1].id
 
     return twitch.games_database[game_name]
 end
 
-twitch.update_title = function(game, runner, is_tas)
-    assert(twitch.initialized, "TWITCH API NOT INITIALIZED")
+
+---Updates Twitch title over at FM channel
+---@param game string
+---@param directory string
+---@param runner string
+---@param is_tas? boolean
+twitch.update_title = function(game, directory, runner, is_tas)
+    assert(twitch.initialized, "TWITCH API NOT INITIALIZED. MAKE SURE YOU CONNECTED TWITCH")
 
     if not is_tas then
         is_tas = false
@@ -195,11 +204,11 @@ twitch.update_title = function(game, runner, is_tas)
     local title = "FM2023 || " .. game_string .. ", by " .. runner
 
     -- Use this title after done testing "Fangame Marathon 2023 || July 12-16" and set game as "Special Events"
-    game = url_lib.escape(game)
+    directory = url_lib.escape(directory)
 
     local data = {
         title = title,
-        game_id = twitch.get_game_id(game)
+        game_id = twitch.get_game_id(directory)
     }
     local encoded_data = json.encode(data)
 
@@ -207,7 +216,7 @@ twitch.update_title = function(game, runner, is_tas)
 end
 
 function twitch.get_auth_url()
-    assert(twitch.initialized, "TWITCH API NOT INITIALIZED")
+    assert(twitch.has_connect_data, "TWITCH API NOT INITIALIZED. MAKE SURE YOU CONNECTED TWITCH")
 
     twitch.auth_url = "https://id.twitch.tv/oauth2/authorize?response_type=code"
     twitch.auth_url = twitch.auth_url .. "&client_id=" .. twitch.client_id

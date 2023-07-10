@@ -13,7 +13,7 @@ local show_commentators = function(ctx)
 end
 
 layout_1p_w_cam_16x9_source_def = {}
-layout_1p_w_cam_16x9_source_def.scene_name = "FM 1 person w/ cam 16x9 layout"
+layout_1p_w_cam_16x9_source_def.scene_name = "FM 1 person w/ cam layout 2"
 layout_1p_w_cam_16x9_source_def.id = "fm_2023_1_person_w_cam_16x9"
 layout_1p_w_cam_16x9_source_def.output_flags = bit.bor(bit.bor(obs.OBS_SOURCE_VIDEO, obs.OBS_SOURCE_CUSTOM_DRAW),
     obs.OBS_SOURCE_CAP_DISABLED)
@@ -36,7 +36,7 @@ layout_1p_w_cam_16x9_source_def.create = function(settings, source)
     local ctx = util.create_item_ctx(layout_1p_w_cam_16x9_source_def.id)
     ctx.scene = layout_1p_w_cam_16x9_source_def.scene_name
 
-    obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
+    -- obs.script_log(obs.LOG_INFO, obs.obs_data_get_json(settings))
 
     ctx.props_settings = settings
 
