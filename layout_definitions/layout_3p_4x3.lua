@@ -45,6 +45,7 @@ layout_3p_4x3_source_def.create = function(settings, source)
     data.game_frame = obs.gs_image_file()
     data.logo_frame = obs.gs_image_file()
     data.commentators_box = obs.gs_image_file()
+    data.logo = obs.gs_image_file()
 
     local ctx = util.create_item_ctx(layout_3p_4x3_source_def.id)
     ctx.scene = layout_3p_4x3_source_def.scene_name
@@ -96,6 +97,7 @@ layout_3p_4x3_source_def.create = function(settings, source)
     util.image_source_load(data.game_frame, img_path .. "3p_game_frame.png")
     util.image_source_load(data.logo_frame, img_path .. "3p_logo_frame.png")
     util.image_source_load(data.commentators_box, img_path .. "3p_commentators_box.png")
+    util.image_source_load(data.logo, img_path .. "logo.png")
 
     return data
 end
@@ -362,6 +364,7 @@ layout_3p_4x3_source_def.destroy = function(data)
     obs.gs_image_file_free(data.commentators_box)
     obs.gs_image_file_free(data.game_frame)
     obs.gs_image_file_free(data.logo_frame)
+    obs.gs_image_file_free(data.logo)
     obs.obs_leave_graphics()
 end
 
@@ -388,6 +391,8 @@ layout_3p_4x3_source_def.video_render = function(data, effect)
 
         obs.obs_source_draw(data.logo_frame.texture, ctx.game_resolutions[4].game_x, ctx.game_resolutions[4].game_y,
             ctx.game_resolutions[4].width, ctx.game_resolutions[4].height, false)
+
+        obs.obs_source_draw(data.logo.texture, 1453, 695, 230, 232, false)
 
         if comm_amt ~= 0 then
             obs.obs_source_draw(data.commentators_box.texture, 720, 834, 478, 33, false)
