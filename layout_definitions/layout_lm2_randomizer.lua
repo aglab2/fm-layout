@@ -35,9 +35,44 @@ layout_lm2_randomizer_source_def.get_defaults = function(settings)
     obs.obs_data_set_default_string(settings, util.setting_names.created_by, "Kayin")
 end
 
+local update_run_info = function(props, p)
+    local ctx = util.get_item_ctx(layout_lm2_randomizer_source_def.id)
+    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
+    local run_data = schedule.get_run_data(run_idx)
+
+    util.set_prop_text(ctx, util.setting_names.game_name, run_data.game_name)
+    util.set_prop_text(ctx, util.setting_names.created_by, run_data.created_by)
+
+    layout_lm2_randomizer_source_def.update(nil, ctx.props_settings)
+
+    return true
+end
+
+local function update_twitch(props, p)
+    local ctx = util.get_item_ctx(layout_lm2_randomizer_source_def.id)
+    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
+    local run_data = schedule.get_run_data(run_idx)
+
+    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string)
+end
+
 layout_lm2_randomizer_source_def.get_properties = function(data)
     local ctx = util.get_item_ctx(layout_lm2_randomizer_source_def.id)
     ctx.props_def = obs.obs_properties_create()
+    local runs_list = obs.obs_properties_add_list(ctx.props_def, util.setting_names.runs_list,
+        util.dashboard_names.runs_list, obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_INT)
+
+    local runs = schedule.get_runs()
+    local runs_amount = #(runs)
+    for i = 1, runs_amount do
+        obs.obs_property_list_add_int(runs_list, runs[i], i - 1)
+    end
+
+    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_run_info,
+        util.dashboard_names.update_run_info, update_run_info)
+    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_twitch,
+        util.dashboard_names.update_twitch, update_twitch)
+
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.created_by, util.dashboard_names.created_by,
@@ -76,7 +111,6 @@ layout_lm2_randomizer_source_def.video_render = function(data, effect)
         obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
     end
 
-    obs.gs_matrix_pop()
     obs.gs_blend_state_pop()
 end
 

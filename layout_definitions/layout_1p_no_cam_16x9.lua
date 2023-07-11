@@ -189,6 +189,16 @@ local update_run_info = function(props, p)
     obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_x, ctx.game_x)
     obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_y, ctx.game_y)
 
+    local avatars_path = script_path() .. util.avatars_path
+    local avatar = avatars_path .. run_data.runners[1].name .. ".png"
+    if util.file_exists(avatar) then
+        obs.obs_data_set_string(ctx.props_settings, util.setting_names.r1_avatar,
+            avatars_path .. run_data.runners[1].name .. ".png")
+    else
+        obs.obs_data_set_string(ctx.props_settings, util.setting_names.r1_avatar,
+            avatars_path .. "placeholder.png")
+    end
+
     layout_1p_no_cam_16x9_source_def.update(nil, ctx.props_settings)
 
     return true
@@ -243,7 +253,7 @@ layout_1p_no_cam_16x9_source_def.get_properties = function(data)
         obs.OBS_PATH_FILE, "Image files (*.bmp *.tga *.png *.jpeg *.jpg *.jxr *.gif *.psd *.webp)", nil)
 
     local slider = obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt,
-        util.dashboard_names.comm_amt, 1, 4, 1)
+        util.dashboard_names.comm_amt, 0, 4, 1)
     obs.obs_property_set_modified_callback(slider, slider_modified)
 
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_name, util.dashboard_names.c1_name,
@@ -273,6 +283,10 @@ layout_1p_no_cam_16x9_source_def.update = function(data, settings)
     ctx.props_settings = settings
 
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
+    util.set_item_visible(ctx, util.setting_names.comms, false)
+    if comm_amt > 0 then
+        util.set_item_visible(ctx, util.setting_names.comms, true)
+    end
     util.set_item_visible(ctx, util.setting_names.c2_source, true)
     util.set_item_visible(ctx, util.setting_names.c2_pr_source, true)
     util.set_item_visible(ctx, util.setting_names.c3_source, true)
@@ -389,7 +403,6 @@ layout_1p_no_cam_16x9_source_def.video_render = function(data, effect)
         obs.obs_source_draw(data.timer_frame.texture, 587, 895, 492, 90, false)
     end
 
-    obs.gs_matrix_pop()
     obs.gs_blend_state_pop()
 end
 

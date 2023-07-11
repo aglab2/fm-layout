@@ -219,6 +219,14 @@ layout_1p_w_cam_4x3_source_def.get_properties = function(data)
 
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_DEFAULT)
+    obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_width, util.dashboard_names.game_width,
+        1, 1340, 1)
+    obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_height, util.dashboard_names.game_height,
+        1, 760, 1)
+    obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_x, util.dashboard_names.game_x,
+        0, 1920, 1)
+    obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_y, util.dashboard_names.game_y,
+        0, 1080, 1)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.created_by, util.dashboard_names.created_by,
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.category, util.dashboard_names.category,
@@ -231,7 +239,7 @@ layout_1p_w_cam_4x3_source_def.get_properties = function(data)
         obs.OBS_TEXT_DEFAULT)
 
     local slider = obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt,
-        util.dashboard_names.comm_amt, 1, 4, 1)
+        util.dashboard_names.comm_amt, 0, 4, 1)
     obs.obs_property_set_modified_callback(slider, slider_modified)
 
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_name, util.dashboard_names.c1_name,
@@ -261,6 +269,10 @@ layout_1p_w_cam_4x3_source_def.update = function(data, settings)
     ctx.props_settings = settings
 
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
+    util.set_item_visible(ctx, util.setting_names.comms, false)
+    if comm_amt > 0 then
+        util.set_item_visible(ctx, util.setting_names.comms, true)
+    end
     util.set_item_visible(ctx, util.setting_names.c2_source, true)
     util.set_item_visible(ctx, util.setting_names.c2_pr_source, true)
     util.set_item_visible(ctx, util.setting_names.c3_source, true)
@@ -279,6 +291,11 @@ layout_1p_w_cam_4x3_source_def.update = function(data, settings)
         util.set_item_visible(ctx, util.setting_names.c2_source, false)
         util.set_item_visible(ctx, util.setting_names.c2_pr_source, false)
     end
+
+    ctx.game_width = obs.obs_data_get_int(ctx.props_settings, util.setting_names.game_width)
+    ctx.game_height = obs.obs_data_get_int(ctx.props_settings, util.setting_names.game_height)
+    ctx.game_x = obs.obs_data_get_int(ctx.props_settings, util.setting_names.game_x)
+    ctx.game_y = obs.obs_data_get_int(ctx.props_settings, util.setting_names.game_y)
 
     util.set_obs_text(ctx, util.setting_names.game_name_source, util.setting_names.game_name)
     util.set_obs_text(ctx, util.setting_names.created_by_source, util.setting_names.created_by, "Created by ")
@@ -362,7 +379,6 @@ layout_1p_w_cam_4x3_source_def.video_render = function(data, effect)
         obs.obs_source_draw(data.timer_frame.texture, 587, 895, 492, 90, false)
     end
 
-    obs.gs_matrix_pop()
     obs.gs_blend_state_pop()
 end
 

@@ -219,6 +219,7 @@ end
 schedule.get_run_info = function(run_index)
     local schedule = schedule.get_schedule()
     local run = schedule.oengus.lines[run_index + 1]
+    local horaro_run = schedule.items[run_index + 1]
 
     local run_string = tostring(run_index + 1) .. ". "
 
@@ -234,12 +235,19 @@ schedule.get_run_info = function(run_index)
         run_string = run_string .. " "
     end
 
-    local runners_amt = #(run.runners)
-    run_string = run_string .. tostring(runners_amt) .. " player(s) "
-    for i = 1, runners_amt do
-        local runner = run.runners[i]
-        run_string = run_string .. runner.username
-        run_string = run_string .. " "
+
+    if horaro_run.is_multiplayer then
+        local participants_names = parse_commentators(horaro_run.participants)
+        local participants_amt = #(participants_names)
+        run_string = run_string .. tostring(participants_amt) .. " participants "
+    else
+        local runners_amt = #(run.runners)
+        run_string = run_string .. tostring(runners_amt) .. " player(s) "
+        for i = 1, runners_amt do
+            local runner = run.runners[i]
+            run_string = run_string .. runner.username
+            run_string = run_string .. " "
+        end
     end
 
     run_string = run_string .. run.categoryName
@@ -251,7 +259,7 @@ schedule.get_run_info = function(run_index)
     return run_string
 end
 
-schedule.get_run_data = function(run_idx)
+schedule.get_run_data = function(run_idx, is_multiplayer)
     local data = {}
 
     local run = schedule.get_schedule().oengus.lines[run_idx + 1]
@@ -281,6 +289,25 @@ schedule.get_run_data = function(run_idx)
         })
     end
 
+    if is_multiplayer then
+        data.participants = {}
+        local participants_string = schedule.get_schedule().items[run_idx + 1].participants
+        local participant_names = parse_commentators(participants_string)
+        local participant_pronouns = parse_commentators_pronouns(participants_string)
+        local participants_amt = #(participant_names)
+        for i = 1, participants_amt do
+            local pronouns = participant_pronouns[i]
+            if pronouns == "???" then
+                pronouns = "ASK FOR PRONOUNS"
+            end
+
+            table.insert(data.participants, {
+                name = participant_names[i],
+                pronouns = pronouns
+            })
+        end
+    end
+
     local runner_array = {}
     for i = 1, runner_amt do
         table.insert(runner_array, runner_names[i])
@@ -304,17 +331,6 @@ schedule.get_run_data = function(run_idx)
         })
     end
 
-
-
-    return data
-end
-
-schedule.get_twitch_data = function(run_idx)
-    local data = {}
-
-    local run = schedule.get_schedule().oengus.lines[run_idx + 1]
-    local horaro_run = schedule.get_schedule().items[run_idx + 1].data
-
     return data
 end
 
@@ -324,6 +340,23 @@ schedule.get_runs = function()
     for i = 1, runs_amount do
         local run_info = schedule.get_run_info(i - 1)
         table.insert(runs, run_info)
+    end
+
+    return runs
+end
+
+schedule.get_multiplayer_runs = function()
+    local runs = {}
+    local runs_amount = #(schedule.get_schedule().items)
+    for i = 1, runs_amount do
+        local run_info = schedule.get_schedule().items[i]
+        if run_info.is_multiplayer then
+            local run_table = {
+                name = schedule.get_run_info(i - 1),
+                index = i
+            }
+            table.insert(runs, run_table)
+        end
     end
 
     return runs

@@ -171,23 +171,42 @@ local update_run_info = function(props, p)
         height = 625
     }
 
-    -- TODO: Fix some games not fitting properly or getting weird offsets
     local x, y, width, height = util.fit_screen(run_data.ratio.width, run_data.ratio.height, max_size.width,
         max_size.height)
 
     for i = 1, 2 do
         ctx.game_resolutions[i].game_x = ctx.game_resolutions[i].offset_x + x
         ctx.game_resolutions[i].game_y = ctx.game_resolutions[i].offset_y + y
-        ctx.game_resolutions[i].game_width = width
-        ctx.game_resolutions[i].game_height = height
+        ctx.game_resolutions[i].width = width
+        ctx.game_resolutions[i].height = height
         obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_width .. tostring(i),
-            ctx.game_resolutions[i].game_width)
+            ctx.game_resolutions[i].width)
         obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_height .. tostring(i),
-            ctx.game_resolutions[i].game_height)
+            ctx.game_resolutions[i].height)
         obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_x .. tostring(i),
             ctx.game_resolutions[i].game_x)
         obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_y .. tostring(i),
             ctx.game_resolutions[i].game_y)
+    end
+
+    if runner_amount == 2 then
+        local avatars_path = script_path() .. util.avatars_path
+        local avatar_1 = avatars_path .. run_data.runners[1].name .. ".png"
+        local avatar_2 = avatars_path .. run_data.runners[2].name .. ".png"
+        if util.file_exists(avatar_1) then
+            obs.obs_data_set_string(ctx.props_settings, util.setting_names.r1_avatar,
+                avatars_path .. run_data.runners[1].name .. ".png")
+        else
+            obs.obs_data_set_string(ctx.props_settings, util.setting_names.r1_avatar,
+                avatars_path .. "placeholder.png")
+        end
+        if util.file_exists(avatar_2) then
+            obs.obs_data_set_string(ctx.props_settings, util.setting_names.r2_avatar,
+                avatars_path .. run_data.runners[2].name .. ".png")
+        else
+            obs.obs_data_set_string(ctx.props_settings, util.setting_names.r2_avatar,
+                avatars_path .. "placeholder.png")
+        end
     end
 
     layout_2p_4x3_source_def.update(nil, ctx.props_settings)
@@ -222,6 +241,17 @@ layout_2p_4x3_source_def.get_properties = function(data)
 
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_DEFAULT)
+    for i = 1, 2 do
+        obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_width .. tostring(i),
+            util.dashboard_names.game_width .. " " .. tostring(i), 1, 832, 1)
+        obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_height .. tostring(i),
+            util.dashboard_names.game_height .. " " .. tostring(i), 1, 625, 1)
+        obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_x .. tostring(i),
+            util.dashboard_names.game_x .. " " .. tostring(i), 0, 1920, 1)
+        obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_y .. tostring(i),
+            util.dashboard_names.game_y .. " " .. tostring(i), 0, 1080, 1)
+    end
+
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.created_by, util.dashboard_names.created_by,
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.category, util.dashboard_names.category,
@@ -243,7 +273,7 @@ layout_2p_4x3_source_def.get_properties = function(data)
         obs.OBS_PATH_FILE, "Image files (*.bmp *.tga *.png *.jpeg *.jpg *.jxr *.gif *.psd *.webp)", nil)
 
     local slider = obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt,
-        util.dashboard_names.comm_amt, 1, 2, 1)
+        util.dashboard_names.comm_amt, 0, 2, 1)
     obs.obs_property_set_modified_callback(slider, slider_modified)
 
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_name, util.dashboard_names.c1_name,
@@ -265,15 +295,36 @@ layout_2p_4x3_source_def.update = function(data, settings)
     ctx.props_settings = settings
 
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
+    util.set_item_visible(ctx, util.setting_names.comms, false)
+    if comm_amt > 0 then
+        util.set_item_visible(ctx, util.setting_names.comms, true)
+    end
+    util.set_item_visible(ctx, util.setting_names.c1_source, true)
+    util.set_item_visible(ctx, util.setting_names.c1_pr_source, true)
     util.set_item_visible(ctx, util.setting_names.c2_source, true)
     util.set_item_visible(ctx, util.setting_names.c2_pr_source, true)
     if comm_amt <= 1 then
         util.set_item_visible(ctx, util.setting_names.c2_source, false)
         util.set_item_visible(ctx, util.setting_names.c2_pr_source, false)
     end
+    if comm_amt == 0 then
+        util.set_item_visible(ctx, util.setting_names.c1_source, false)
+        util.set_item_visible(ctx, util.setting_names.c1_pr_source, false)
+    end
 
     util.set_obs_image_path(ctx, util.setting_names.r1_avatar_source, util.setting_names.r1_avatar)
     util.set_obs_image_path(ctx, util.setting_names.r2_avatar_source, util.setting_names.r2_avatar)
+
+    for i = 1, 2 do
+        ctx.game_resolutions[i].game_x = obs.obs_data_get_int(ctx.props_settings,
+            util.setting_names.game_x .. tostring(i))
+        ctx.game_resolutions[i].game_y = obs.obs_data_get_int(ctx.props_settings,
+            util.setting_names.game_y .. tostring(i))
+        ctx.game_resolutions[i].width = obs.obs_data_get_int(ctx.props_settings,
+            util.setting_names.game_width .. tostring(i))
+        ctx.game_resolutions[i].height = obs.obs_data_get_int(ctx.props_settings,
+            util.setting_names.game_height .. tostring(i))
+    end
 
     util.set_obs_text(ctx, util.setting_names.game_name_source, util.setting_names.game_name)
     util.set_obs_text(ctx, util.setting_names.created_by_source, util.setting_names.created_by, "Created by ")
@@ -338,7 +389,9 @@ layout_2p_4x3_source_def.video_render = function(data, effect)
         obs.obs_source_draw(data.twitch_logo.texture, 1432, 1008, 30, 30, false)
         obs.obs_source_draw(data.runner_pr_frame.texture, 1750, 1009, 88, 29, false)
 
-        obs.obs_source_draw(data.comm_box.texture, 693, 971, 534, 33, false)
+        if comm_amt > 0 then
+            obs.obs_source_draw(data.comm_box.texture, 693, 971, 534, 33, false)
+        end
 
         for i = 1, 2 do
             obs.obs_source_draw(data.game_frame.texture, ctx.game_resolutions[i].game_x, ctx.game_resolutions[i].game_y,
@@ -361,7 +414,6 @@ layout_2p_4x3_source_def.video_render = function(data, effect)
         obs.obs_source_draw(data.timer_frame.texture, 715, 669, 492, 90, false)
     end
 
-    obs.gs_matrix_pop()
     obs.gs_blend_state_pop()
 end
 

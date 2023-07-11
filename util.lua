@@ -32,6 +32,7 @@ end
 
 util.layout_builder_path = "layout-builder-pictures/"
 util.layout_templates_path = "layout-templates/"
+util.avatars_path = "avatars/"
 
 util.items_ctx = {}
 
@@ -58,6 +59,8 @@ util.source_names = {
     category_static = "Category Static",
     estimate_static = "Estimate Static",
     timer = "Timer",
+    yellow_team_name = "Yellow team name",
+    red_team_name = "Red team name",
     runner_1_avatar = "Runner 1 Avatar",
     runner_1 = "Runner 1",
     runner_1_pronouns = "Runner 1 Pronouns",
@@ -85,8 +88,20 @@ util.source_names = {
 
 util.dashboard_names = {
     runs_list = "Marathon Runs",
+    participants_list_1 = "Participant 1",
+    participants_list_2 = "Participant 2",
+    fill_with_participant = "Fill with participants",
     update_run_info = "Fill run information",
     update_twitch = "Update Twitch title",
+    player_1_score = "Player 1 score",
+    player_2_score = "Player 2 score",
+    start_relay = "Start the Relay Race",
+    yellow_team_finish = "Yellow team finished",
+    red_team_finish = "Red team finished",
+    yellow_team_position = "Yellow team's game",
+    red_team_position = "Red team's game",
+    yellow_team = "Yellow team name",
+    red_team = "Red team name",
     game_name = "Game Name",
     game_width = "Game Width",
     game_height = "Game Height",
@@ -142,8 +157,22 @@ util.timer_states = {
 util.setting_names = {
     scene = "scene",
     runs_list = "runs_list",
+    participants_list_1 = "participants_list_1",
+    participants_list_2 = "participants_list_2",
+    fill_with_participant = "fill_with_participant",
     update_run_info = "update_run_info",
     update_twitch = "update_twitch",
+    player_1_score = "player_1_score",
+    player_2_score = "player_2_score",
+    start_relay = "start_relay",
+    yellow_team_finish = "yellow_team_finish",
+    red_team_finish = "red_team_finish",
+    yellow_team_position = "yellow_team_position",
+    yellow_team_name = "yellow_team_name",
+    yellow_team_name_source = "yellow_team_name_source",
+    red_team_position = "red_team_position",
+    red_team_name = "red_team_name",
+    red_team_name_source = "red_team_name_source",
     game_name_source = "game_name_source",
     game_name = "game_name",
     game_width = "game_width",
@@ -367,6 +396,26 @@ util.set_obs_text = function(ctx, src_name, setting_name, add_text)
         add_text .. obs.obs_data_get_string(ctx.props_settings, setting_name))
 end
 
+util.set_obs_text_no_source = function(ctx, src_name, text)
+    util.set_obs_text_source_text(ctx, obs.obs_data_get_string(ctx.props_settings, src_name), text)
+end
+
+util.set_obs_position = function(ctx, src_name, position)
+    local source = obs.obs_get_source_by_uuid(obs.obs_data_get_string(ctx.props_settings, src_name))
+    local scene = obs.obs_get_scene_by_name(ctx.scene)
+    local sceneitem = obs.obs_scene_sceneitem_from_source(scene, source)
+    util.set_item_position(sceneitem, {
+        x = position.x,
+        y = position.y
+    })
+
+    obs.obs_source_release(source)
+    obs.obs_sceneitem_release(sceneitem)
+    obs.obs_scene_release(scene)
+end
+
+util.lerp = function(a, b, t) return a * (1 - t) + b * t end
+
 util.update_image_scale = function(ctx, src_name)
     local uuid = obs.obs_data_get_string(ctx.props_settings, src_name)
     local source = obs.obs_get_source_by_uuid(uuid)
@@ -474,6 +523,16 @@ util.create_timer = function(scene, name, x, y, w, h)
     obs.obs_sceneitem_release(timer_sceneitem)
 
     return timer_object
+end
+
+util.file_exists = function(path)
+    local f = io.open(path, "r")
+    if f ~= nil then
+        io.close(f)
+        return true
+    else
+        return false
+    end
 end
 
 util.commentators_info = function(ctx, comm_amt)

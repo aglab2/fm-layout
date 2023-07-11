@@ -377,10 +377,10 @@ function create_2p_4x3_layout()
         302, 826, 324 - border_size, 324 - border_size)
     local runner_2_avatar = util.create_image(new_scene, util.source_names.runner_2_avatar,
         1645, 826, 324 - border_size, 324 - border_size)
+    local commentators_text = util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center,
+        util.colors.white, util.source_names.commentators, 968, 974)
 
     -- Non-cached elements that will be static in the layout
-    util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center, util.colors.white,
-        util.source_names.commentators, 968, 974)
     util.create_text_eaves(new_scene, "Book", "category", 24, util.text_halign.center, util.colors.white,
         util.source_names.category_static, 831, 935, obs.S_TRANSFORM_UPPERCASE)
     util.create_text_eaves(new_scene, "Book", "estimate", 24, util.text_halign.center, util.colors.white,
@@ -399,6 +399,7 @@ function create_2p_4x3_layout()
     obs.obs_data_set_string(layout_data, util.setting_names.c2_source, comm_2_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c1_pr_source, comm_1_pr_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.comms, commentators_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.game_name_source, game_name_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.created_by_source, created_by_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
@@ -420,6 +421,7 @@ function create_2p_4x3_layout()
     scene_ctx.layout_objects[runner_2_pronouns.uuid] = runner_2_pronouns
     scene_ctx.layout_objects[runner_1_time.uuid] = runner_1_time
     scene_ctx.layout_objects[runner_2_time.uuid] = runner_2_time
+    scene_ctx.layout_objects[commentators_text.uuid] = commentators_text
     scene_ctx.layout_objects[comm_1_text.uuid] = comm_1_text
     scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
     scene_ctx.layout_objects[comm_1_pr_text.uuid] = comm_1_pr_text
@@ -1009,9 +1011,9 @@ function create_2p_tournament_layout()
     local created_by_text = util.create_text_eaves(new_scene, "Regular", "Created by Smartkin", 24,
         util.text_halign.center, util.colors.blue, util.source_names.created_by, 968, 861)
     local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
-        util.colors.white, util.source_names.category, 826, 928)
+        util.colors.white, util.source_names.category, 826, 930)
     local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
-        util.colors.white, util.source_names.estimate, 1110, 928)
+        util.colors.white, util.source_names.estimate, 1110, 930)
     local timer = util.create_timer(new_scene, util.source_names.timer, 1498, 880, 250, 70)
 
     local layout_data = obs.obs_data_create()
@@ -1112,14 +1114,19 @@ function create_relay_race_layout()
     local comm_2_text = util.create_text_eaves(new_scene, "Regular", "KrakkaCafe", 26, util.text_halign.center,
         util.colors.blue, util.source_names.comm_2, 401, 913)
     local comm_1_pr_text = util.create_text_eaves(new_scene, "Heavy", "He/Him", 16, util.text_halign.center,
-        util.colors.white, util.source_names.comm_pr_1, 261, 916)
+        util.colors.white, util.source_names.comm_pr_1, 262, 916)
     local comm_2_pr_text = util.create_text_eaves(new_scene, "Heavy", "They/Them", 16, util.text_halign.center,
         util.colors.white, util.source_names.comm_pr_2, 508, 916)
     local category_text = util.create_text_eaves(new_scene, "Heavy", "Full send%", 24, util.text_halign.center,
         util.colors.white, util.source_names.category, 189, 784)
     local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
         util.colors.white, util.source_names.estimate, 438, 784)
-    -- TODO: Team names
+    local yellow_team_text = util.create_text_eaves(new_scene, "Bold", "Indecision Gang", 24,
+        util.text_halign.bottom_center, util.colors.yellow, util.source_names.yellow_team_name, 742, 810,
+        obs.S_TRANSFORM_UPPERCASE)
+    local red_team_text = util.create_text_eaves(new_scene, "Bold", "Indecision Gang Too", 24,
+        util.text_halign.bottom_center, util.colors.red, util.source_names.red_team_name, 742, 926,
+        obs.S_TRANSFORM_UPPERCASE)
     local timer = util.create_timer(new_scene, util.source_names.timer, 188, 970, 250, 70)
 
     local layout_data = obs.obs_data_create()
@@ -1129,6 +1136,8 @@ function create_relay_race_layout()
     obs.obs_data_set_string(layout_data, util.setting_names.c2_source, comm_2_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c1_pr_source, comm_1_pr_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.c2_pr_source, comm_2_pr_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.yellow_team_name_source, yellow_team_text.uuid)
+    obs.obs_data_set_string(layout_data, util.setting_names.red_team_name_source, red_team_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.category_source, category_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.estimate_source, estimate_text.uuid)
     obs.obs_data_set_string(layout_data, util.setting_names.timer_source, timer.uuid)
@@ -1146,6 +1155,8 @@ function create_relay_race_layout()
     scene_ctx.layout_objects[comm_2_text.uuid] = comm_2_text
     scene_ctx.layout_objects[comm_1_pr_text.uuid] = comm_1_pr_text
     scene_ctx.layout_objects[comm_2_pr_text.uuid] = comm_2_pr_text
+    scene_ctx.layout_objects[yellow_team_text.uuid] = yellow_team_text
+    scene_ctx.layout_objects[red_team_text.uuid] = red_team_text
     scene_ctx.layout_objects[category_text.uuid] = category_text
     scene_ctx.layout_objects[estimate_text.uuid] = estimate_text
     scene_ctx.layout_objects[timer.uuid] = timer

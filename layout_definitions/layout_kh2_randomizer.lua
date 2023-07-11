@@ -67,9 +67,76 @@ local slider_modified = function(props, p, settings)
     return true
 end
 
+local update_run_info = function(props, p)
+    local ctx = util.get_item_ctx(layout_kh2_randomizer_source_def.id)
+    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
+    local run_data = schedule.get_run_data(run_idx)
+
+    util.set_prop_text(ctx, util.setting_names.game_name, run_data.game_name)
+    util.set_prop_text(ctx, util.setting_names.created_by, run_data.created_by)
+    util.set_prop_text(ctx, util.setting_names.estimate, run_data.estimate)
+    util.set_prop_text(ctx, util.setting_names.category, run_data.category)
+    util.set_prop_text(ctx, util.setting_names.r1_name, run_data.runners[1].name)
+    util.set_prop_text(ctx, util.setting_names.r1_pr, run_data.runners[1].pronouns)
+
+    local comm_amt = #(run_data.commentators)
+    util.set_item_visible(ctx, util.setting_names.comms, true)
+    if comm_amt == 0 then
+        util.set_item_visible(ctx, util.setting_names.comms, false)
+        util.set_prop_text(ctx, util.setting_names.c1_name, "")
+        util.set_prop_text(ctx, util.setting_names.c1_pr, "")
+        util.set_prop_text(ctx, util.setting_names.c2_name, "")
+        util.set_prop_text(ctx, util.setting_names.c2_pr, "")
+    end
+
+    if comm_amt > 2 then
+        comm_amt = 2
+    end
+
+    for i = 1, comm_amt do
+        if i == 1 then
+            util.set_prop_text(ctx, util.setting_names.c1_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c1_pr, run_data.commentators[i].pronouns)
+        end
+        if i == 2 then
+            util.set_prop_text(ctx, util.setting_names.c2_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c2_pr, run_data.commentators[i].pronouns)
+        end
+    end
+
+    obs.obs_data_set_int(ctx.props_settings, util.setting_names.comm_amt, comm_amt)
+
+    layout_kh2_randomizer_source_def.update(nil, ctx.props_settings)
+
+    return true
+end
+
+local function update_twitch(props, p)
+    local ctx = util.get_item_ctx(layout_kh2_randomizer_source_def.id)
+    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
+    local run_data = schedule.get_run_data(run_idx)
+
+    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string)
+end
+
 layout_kh2_randomizer_source_def.get_properties = function(data)
     local ctx = util.get_item_ctx(layout_kh2_randomizer_source_def.id)
     ctx.props_def = obs.obs_properties_create()
+
+    local runs_list = obs.obs_properties_add_list(ctx.props_def, util.setting_names.runs_list,
+        util.dashboard_names.runs_list, obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_INT)
+
+    local runs = schedule.get_runs()
+    local runs_amount = #(runs)
+    for i = 1, runs_amount do
+        obs.obs_property_list_add_int(runs_list, runs[i], i - 1)
+    end
+
+    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_run_info,
+        util.dashboard_names.update_run_info, update_run_info)
+    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_twitch,
+        util.dashboard_names.update_twitch, update_twitch)
+
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.created_by, util.dashboard_names.created_by,
@@ -107,6 +174,10 @@ layout_kh2_randomizer_source_def.update = function(data, settings)
 
     util.set_obs_text(ctx, util.setting_names.game_name_source, util.setting_names.game_name)
     util.set_obs_text(ctx, util.setting_names.created_by_source, util.setting_names.created_by, "Created by ")
+    util.set_obs_text(ctx, util.setting_names.c1_source, util.setting_names.c1_name)
+    util.set_obs_text(ctx, util.setting_names.c2_source, util.setting_names.c2_name)
+    util.set_obs_text(ctx, util.setting_names.c1_pr_source, util.setting_names.c1_pr)
+    util.set_obs_text(ctx, util.setting_names.c2_pr_source, util.setting_names.c2_pr)
 end
 
 layout_kh2_randomizer_source_def.destroy = function(data)
@@ -147,7 +218,6 @@ layout_kh2_randomizer_source_def.video_render = function(data, effect)
         end
     end
 
-    obs.gs_matrix_pop()
     obs.gs_blend_state_pop()
 end
 

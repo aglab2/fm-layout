@@ -212,19 +212,18 @@ local update_run_info = function(props, p)
         height = 504
     }
 
-    -- TODO: Fix some games not fitting properly or getting weird offsets
     local x, y, width, height = util.fit_screen(run_data.ratio.width, run_data.ratio.height, max_size.width,
         max_size.height)
 
     for i = 1, 4 do
         ctx.game_resolutions[i].game_x = ctx.game_resolutions[i].offset_x + x
         ctx.game_resolutions[i].game_y = ctx.game_resolutions[i].offset_y + y
-        ctx.game_resolutions[i].game_width = width
-        ctx.game_resolutions[i].game_height = height
+        ctx.game_resolutions[i].width = width
+        ctx.game_resolutions[i].height = height
         obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_width .. tostring(i),
-            ctx.game_resolutions[i].game_width)
+            ctx.game_resolutions[i].width)
         obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_height .. tostring(i),
-            ctx.game_resolutions[i].game_height)
+            ctx.game_resolutions[i].height)
         obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_x .. tostring(i),
             ctx.game_resolutions[i].game_x)
         obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_y .. tostring(i),
@@ -264,6 +263,27 @@ layout_3p_4x3_source_def.get_properties = function(data)
 
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_MULTILINE)
+
+    for i = 1, 3 do
+        obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_width .. tostring(i),
+            util.dashboard_names.game_width .. " " .. tostring(i), 1, 670, 1)
+        obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_height .. tostring(i),
+            util.dashboard_names.game_height .. " " .. tostring(i), 1, 504, 1)
+        obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_x .. tostring(i),
+            util.dashboard_names.game_x .. " " .. tostring(i), 0, 1920, 1)
+        obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_y .. tostring(i),
+            util.dashboard_names.game_y .. " " .. tostring(i), 0, 1080, 1)
+    end
+
+    obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_width .. tostring(4),
+        "Filler width", 1, 670, 1)
+    obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_height .. tostring(4),
+        "Filler height", 1, 504, 1)
+    obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_x .. tostring(4),
+        "Filler x", 0, 1920, 1)
+    obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_y .. tostring(4),
+        "Filler y", 0, 1080, 1)
+
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.created_by, util.dashboard_names.created_by,
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.category, util.dashboard_names.category,
@@ -284,7 +304,7 @@ layout_3p_4x3_source_def.get_properties = function(data)
         obs.OBS_TEXT_DEFAULT)
 
     local slider = obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt,
-        util.dashboard_names.comm_amt, 1, 4, 1)
+        util.dashboard_names.comm_amt, 0, 4, 1)
     obs.obs_property_set_modified_callback(slider, slider_modified)
 
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_name, util.dashboard_names.c1_name,
@@ -314,6 +334,8 @@ layout_3p_4x3_source_def.update = function(data, settings)
     ctx.props_settings = settings
 
     local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
+    util.set_item_visible(ctx, util.setting_names.c1_source, true)
+    util.set_item_visible(ctx, util.setting_names.c1_pr_source, true)
     util.set_item_visible(ctx, util.setting_names.c2_source, true)
     util.set_item_visible(ctx, util.setting_names.c2_pr_source, true)
     util.set_item_visible(ctx, util.setting_names.c3_source, true)
@@ -331,6 +353,21 @@ layout_3p_4x3_source_def.update = function(data, settings)
     if comm_amt <= 1 then
         util.set_item_visible(ctx, util.setting_names.c2_source, false)
         util.set_item_visible(ctx, util.setting_names.c2_pr_source, false)
+    end
+    if comm_amt == 0 then
+        util.set_item_visible(ctx, util.setting_names.c1_source, false)
+        util.set_item_visible(ctx, util.setting_names.c1_pr_source, false)
+    end
+
+    for i = 1, 4 do
+        ctx.game_resolutions[i].game_x = obs.obs_data_get_int(ctx.props_settings,
+            util.setting_names.game_x .. tostring(i))
+        ctx.game_resolutions[i].game_y = obs.obs_data_get_int(ctx.props_settings,
+            util.setting_names.game_y .. tostring(i))
+        ctx.game_resolutions[i].width = obs.obs_data_get_int(ctx.props_settings,
+            util.setting_names.game_width .. tostring(i))
+        ctx.game_resolutions[i].height = obs.obs_data_get_int(ctx.props_settings,
+            util.setting_names.game_height .. tostring(i))
     end
 
     util.set_obs_text(ctx, util.setting_names.game_name_source, util.setting_names.game_name)
@@ -416,8 +453,6 @@ layout_3p_4x3_source_def.video_render = function(data, effect)
             end
         end
     end
-
-    obs.gs_matrix_pop()
 
     obs.gs_blend_state_pop()
 end
