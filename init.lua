@@ -574,7 +574,7 @@ function create_4p_4x3_layout()
     local runner_4_text = util.create_text_eaves(new_scene, "Regular", "Nobody", 32, util.text_halign.right,
         util.colors.blue, util.source_names.runner_4, 1210, 1033)
     local runner_4_pronouns = util.create_text_eaves(new_scene, "Heavy", "Any", 14, util.text_halign.center,
-        util.colors.white, util.source_names.runner_4_pronouns, 1176, 1014)
+        util.colors.white, util.source_names.runner_4_pronouns, 1183, 1014)
     local runner_1_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.left,
         util.colors.blue, util.source_names.runner_1_finish_time, 705, 70)
     local runner_2_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.right,

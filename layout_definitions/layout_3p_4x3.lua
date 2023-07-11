@@ -147,10 +147,119 @@ local slider_modified = function(props, p, settings)
     return true
 end
 
+local update_run_info = function(props, p)
+    local ctx = util.get_item_ctx(layout_3p_4x3_source_def.id)
+    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
+    local run_data = schedule.get_run_data(run_idx)
+
+    util.set_prop_text(ctx, util.setting_names.game_name, run_data.game_name)
+    util.set_prop_text(ctx, util.setting_names.created_by, run_data.created_by)
+    util.set_prop_text(ctx, util.setting_names.estimate, run_data.estimate)
+    util.set_prop_text(ctx, util.setting_names.category, run_data.category)
+
+    local runner_amount = #(run_data.runners)
+
+    if runner_amount > 3 then
+        runner_amount = 3
+    end
+
+    for i = 1, runner_amount do
+        util.set_prop_text(ctx, util.setting_names["r" .. tostring(i) .. "_name"], run_data.runners[i].name)
+        util.set_prop_text(ctx, util.setting_names["r" .. tostring(i) .. "_pr"], run_data.runners[i].pronouns)
+    end
+
+    local comm_amt = #(run_data.commentators)
+    if comm_amt == 0 then
+        util.set_prop_text(ctx, util.setting_names.c1_name, "")
+        util.set_prop_text(ctx, util.setting_names.c1_pr, "")
+        util.set_prop_text(ctx, util.setting_names.c2_name, "")
+        util.set_prop_text(ctx, util.setting_names.c2_pr, "")
+        util.set_prop_text(ctx, util.setting_names.c3_name, "")
+        util.set_prop_text(ctx, util.setting_names.c3_pr, "")
+        util.set_prop_text(ctx, util.setting_names.c4_name, "")
+        util.set_prop_text(ctx, util.setting_names.c4_pr, "")
+    end
+
+    if comm_amt > 4 then
+        comm_amt = 4
+    end
+
+    for i = 1, comm_amt do
+        if i == 1 then
+            util.set_prop_text(ctx, util.setting_names.c1_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c1_pr, run_data.commentators[i].pronouns)
+        end
+        if i == 2 then
+            util.set_prop_text(ctx, util.setting_names.c2_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c2_pr, run_data.commentators[i].pronouns)
+        end
+        if i == 3 then
+            util.set_prop_text(ctx, util.setting_names.c3_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c3_pr, run_data.commentators[i].pronouns)
+        end
+        if i == 4 then
+            util.set_prop_text(ctx, util.setting_names.c4_name, run_data.commentators[i].name)
+            util.set_prop_text(ctx, util.setting_names.c4_pr, run_data.commentators[i].pronouns)
+        end
+    end
+
+    obs.obs_data_set_int(ctx.props_settings, util.setting_names.comm_amt, comm_amt)
+
+    local max_size = {
+        width = 670,
+        height = 504
+    }
+
+    -- TODO: Fix some games not fitting properly or getting weird offsets
+    local x, y, width, height = util.fit_screen(run_data.ratio.width, run_data.ratio.height, max_size.width,
+        max_size.height)
+
+    for i = 1, 4 do
+        ctx.game_resolutions[i].game_x = ctx.game_resolutions[i].offset_x + x
+        ctx.game_resolutions[i].game_y = ctx.game_resolutions[i].offset_y + y
+        ctx.game_resolutions[i].game_width = width
+        ctx.game_resolutions[i].game_height = height
+        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_width .. tostring(i),
+            ctx.game_resolutions[i].game_width)
+        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_height .. tostring(i),
+            ctx.game_resolutions[i].game_height)
+        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_x .. tostring(i),
+            ctx.game_resolutions[i].game_x)
+        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_y .. tostring(i),
+            ctx.game_resolutions[i].game_y)
+    end
+
+    layout_3p_4x3_source_def.update(nil, ctx.props_settings)
+
+    return true
+end
+
+local function update_twitch(props, p)
+    local ctx = util.get_item_ctx(layout_3p_4x3_source_def.id)
+    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
+    local run_data = schedule.get_run_data(run_idx)
+
+    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string)
+end
+
 layout_3p_4x3_source_def.get_properties = function(data)
     local ctx = util.get_item_ctx(layout_3p_4x3_source_def.id)
     ctx.scene = layout_3p_4x3_source_def.scene_name
     ctx.props_def = obs.obs_properties_create()
+    local runs_list = obs.obs_properties_add_list(ctx.props_def, util.setting_names.runs_list,
+        util.dashboard_names.runs_list, obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_INT)
+
+    local runs = schedule.get_runs()
+    local runs_amount = #(runs)
+    for i = 1, runs_amount do
+        obs.obs_property_list_add_int(runs_list, runs[i], i - 1)
+    end
+
+    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_run_info,
+        util.dashboard_names.update_run_info, update_run_info)
+    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_twitch,
+        util.dashboard_names.update_twitch, update_twitch)
+
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_MULTILINE)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.created_by, util.dashboard_names.created_by,
@@ -280,7 +389,9 @@ layout_3p_4x3_source_def.video_render = function(data, effect)
         obs.obs_source_draw(data.logo_frame.texture, ctx.game_resolutions[4].game_x, ctx.game_resolutions[4].game_y,
             ctx.game_resolutions[4].width, ctx.game_resolutions[4].height, false)
 
-        obs.obs_source_draw(data.commentators_box.texture, 720, 834, 478, 33, false)
+        if comm_amt ~= 0 then
+            obs.obs_source_draw(data.commentators_box.texture, 720, 834, 478, 33, false)
+        end
 
         local row_indx = 0
         local box_start_x = 716

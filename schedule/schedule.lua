@@ -235,6 +235,7 @@ schedule.get_run_info = function(run_index)
     end
 
     local runners_amt = #(run.runners)
+    run_string = run_string .. tostring(runners_amt) .. " player(s) "
     for i = 1, runners_amt do
         local runner = run.runners[i]
         run_string = run_string .. runner.username
