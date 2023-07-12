@@ -38,9 +38,9 @@ layout_1p_no_cam_16x9_source_def.create = function(settings, source)
     local ctx = util.create_item_ctx(layout_1p_no_cam_16x9_source_def.id)
     ctx.scene = layout_1p_no_cam_16x9_source_def.scene_name
     ctx.game_width = 1340
-    ctx.game_height = 760
-    ctx.game_x = 557
-    ctx.game_y = 45
+    ctx.game_height = 850
+    ctx.game_x = 560
+    ctx.game_y = 23
     ctx.offset_x = ctx.game_x
     ctx.offset_y = ctx.game_y
 
@@ -172,8 +172,8 @@ local update_run_info = function(props, p)
     obs.obs_data_set_int(ctx.props_settings, util.setting_names.comm_amt, comm_amt)
 
     local max_size = {
-        width = 1340,
-        height = 760
+        width = 1346,
+        height = 850
     }
 
     local x, y, width, height = util.fit_screen(run_data.ratio.width, run_data.ratio.height, max_size.width,
@@ -232,9 +232,9 @@ layout_1p_no_cam_16x9_source_def.get_properties = function(data)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_DEFAULT)
     obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_width, util.dashboard_names.game_width,
-        1, 1340, 1)
+        1, 1920, 1)
     obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_height, util.dashboard_names.game_height,
-        1, 760, 1)
+        1, 1080, 1)
     obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_x, util.dashboard_names.game_x,
         0, 1920, 1)
     obs.obs_properties_add_int(ctx.props_def, util.setting_names.game_y, util.dashboard_names.game_y,
@@ -364,7 +364,7 @@ layout_1p_no_cam_16x9_source_def.video_render = function(data, effect)
     while obs.gs_effect_loop(effect, "Draw") do
         -- obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
         obs.obs_source_draw(data.fade_box.texture, 0, 81, 546, 995, false)
-        obs.obs_source_draw(data.player_frame.texture, 107, 139, 300, 300, false)
+        obs.obs_source_draw(data.player_frame.texture, 132, 139, 300, 300, false)
         obs.obs_source_draw(data.runner_box.texture, 34, 479, 490, 59, false)
 
         if comm_amt ~= 0 then
@@ -400,7 +400,7 @@ layout_1p_no_cam_16x9_source_def.video_render = function(data, effect)
                 row_indx = row_indx + 1
             end
         end
-        obs.obs_source_draw(data.timer_frame.texture, 587, 895, 492, 90, false)
+        obs.obs_source_draw(data.timer_frame.texture, 587, 915, 492, 90, false)
     end
 
     obs.gs_blend_state_pop()

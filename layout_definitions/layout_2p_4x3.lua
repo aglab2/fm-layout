@@ -71,7 +71,8 @@ layout_2p_4x3_source_def.create = function(settings, source)
     data.fade_box = obs.gs_image_file()
 
     local img_path = script_path() .. util.layout_builder_path
-    util.image_source_load(data.background, img_path .. "background.png")
+    local template_path = script_path() .. util.layout_templates_path
+    util.image_source_load(data.background, template_path .. "2_person_background.png")
     util.image_source_load(data.comm_name_box, img_path .. "2p_comm_name_box.png")
     util.image_source_load(data.logo, img_path .. "background_delfruit.png")
     util.image_source_load(data.player_frame, img_path .. "2p_4x3_player_frame.png")
@@ -375,8 +376,8 @@ layout_2p_4x3_source_def.video_render = function(data, effect)
         -- Background
         -- obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
         obs.obs_source_draw(data.logo.texture, 837, 751, 248, 252, false)
-        obs.obs_source_draw(data.fade_box.texture, 0, 80, 597, 996, false)
-        obs.obs_source_draw(data.fade_box.texture, 1323, 80, 597, 996, false)
+        -- obs.obs_source_draw(data.fade_box.texture, 0, 80, 597, 996, false)
+        -- obs.obs_source_draw(data.fade_box.texture, 1323, 80, 597, 996, false)
 
         -- Runner 1
         obs.obs_source_draw(data.player_frame.texture, 75, 666, 453, 320, false)
