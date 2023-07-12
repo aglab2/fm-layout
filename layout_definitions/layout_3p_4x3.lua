@@ -240,7 +240,7 @@ local function update_twitch(props, p)
     local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
     local run_data = schedule.get_run_data(run_idx)
 
-    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string)
+    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string, run_data.is_tas)
 end
 
 layout_3p_4x3_source_def.get_properties = function(data)
@@ -419,7 +419,7 @@ layout_3p_4x3_source_def.video_render = function(data, effect)
     obs.gs_reset_blend_state()
 
     while obs.gs_effect_loop(effect, "Draw") do
-        obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false);
+        -- obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
 
         for i = 1, 3 do
             obs.obs_source_draw(data.game_frame.texture, ctx.game_resolutions[i].game_x, ctx.game_resolutions[i].game_y,

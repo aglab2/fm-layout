@@ -154,7 +154,7 @@ end
 function create_1p_no_cam_4x3_layout()
     local new_scene = util.create_scene(layout_1p_no_cam_4x3_source_def.scene_name)
     local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
-        util.colors.blue, util.source_names.runner_1, 271, 488)
+        util.colors.blue, util.source_names.runner_1, 241, 488)
     local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
         util.colors.white, util.source_names.runner_1_pronouns, 455, 499)
     local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
@@ -182,7 +182,7 @@ function create_1p_no_cam_4x3_layout()
     local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
         util.colors.white, util.source_names.estimate, 1638, 975)
     local timer = util.create_timer(new_scene, util.source_names.timer, 702, 900, 250, 70)
-    local runner_avatar = util.create_image(new_scene, util.source_names.runner_1_avatar, 115 + 158, 147 + 145, 317, 289)
+    local runner_avatar = util.create_image(new_scene, util.source_names.runner_1_avatar, 99 + 158, 146 + 145, 286, 286)
     local commentators_text = util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center,
         util.colors.white, util.source_names.commentators, 276, 607)
 
@@ -251,7 +251,7 @@ end
 function create_1p_w_cam_4x3_layout()
     local new_scene = util.create_scene(layout_1p_w_cam_4x3_source_def.scene_name)
     local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
-        util.colors.blue, util.source_names.runner_1, 271, 488)
+        util.colors.blue, util.source_names.runner_1, 241, 488)
     local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
         util.colors.white, util.source_names.runner_1_pronouns, 455, 499)
     local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
@@ -344,13 +344,13 @@ end
 function create_2p_4x3_layout()
     local new_scene = util.create_scene(layout_2p_4x3_source_def.scene_name)
     local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
-        util.colors.blue, util.source_names.runner_1, 293, 1004)
+        util.colors.blue, util.source_names.runner_1, 263, 1004)
     local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
-        util.colors.white, util.source_names.runner_1_pronouns, 471, 1013)
+        util.colors.white, util.source_names.runner_1_pronouns, 471, 1016)
     local runner_2_text = util.create_text_eaves(new_scene, "Bold", "Siglemic", 40, util.text_halign.center,
-        util.colors.blue, util.source_names.runner_2, 1616, 1004)
+        util.colors.blue, util.source_names.runner_2, 1586, 1004)
     local runner_2_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
-        util.colors.white, util.source_names.runner_2_pronouns, 1794, 1013)
+        util.colors.white, util.source_names.runner_2_pronouns, 1794, 1016)
     local runner_1_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.left,
         util.colors.blue, util.source_names.runner_1_finish_time, 537, 667)
     local runner_2_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.right,
@@ -689,7 +689,7 @@ end
 function create_1p_no_cam_16x9_layout()
     local new_scene = util.create_scene(layout_1p_no_cam_16x9_source_def.scene_name)
     local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
-        util.colors.blue, util.source_names.runner_1, 271, 488)
+        util.colors.blue, util.source_names.runner_1, 241, 488)
     local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
         util.colors.white, util.source_names.runner_1_pronouns, 455, 499)
     local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
@@ -717,7 +717,7 @@ function create_1p_no_cam_16x9_layout()
     local estimate_text = util.create_text_eaves(new_scene, "Heavy", "1:30:00", 24, util.text_halign.center,
         util.colors.white, util.source_names.estimate, 1638, 975)
     local timer = util.create_timer(new_scene, util.source_names.timer, 702, 900, 250, 70)
-    local runner_avatar = util.create_image(new_scene, util.source_names.runner_1_avatar, 115 + 158, 147 + 145, 317, 289)
+    local runner_avatar = util.create_image(new_scene, util.source_names.runner_1_avatar, 99 + 158, 146 + 145, 286, 286)
     local commentators_text = util.create_text_eaves(new_scene, "Regular", "COMMENTATORS", 26, util.text_halign.center,
         util.colors.white, util.source_names.commentators, 276, 607)
 
@@ -785,7 +785,7 @@ end
 function create_1p_w_cam_16x9_layout()
     local new_scene = util.create_scene(layout_1p_w_cam_16x9_source_def.scene_name)
     local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
-        util.colors.blue, util.source_names.runner_1, 271, 488)
+        util.colors.blue, util.source_names.runner_1, 241, 488)
     local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
         util.colors.white, util.source_names.runner_1_pronouns, 455, 499)
     local comm_1_text = util.create_text_eaves(new_scene, "Regular", "Wolsk", 26, util.text_halign.center,
@@ -878,13 +878,13 @@ end
 function create_2p_monkey_ball_layout()
     local new_scene = util.create_scene(layout_2p_monkey_ball_source_def.scene_name)
     local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
-        util.colors.blue, util.source_names.runner_1, 280, 746)
+        util.colors.blue, util.source_names.runner_1, 268, 746)
     local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
-        util.colors.white, util.source_names.runner_1_pronouns, 469, 759)
+        util.colors.white, util.source_names.runner_1_pronouns, 471, 759)
     local runner_2_text = util.create_text_eaves(new_scene, "Bold", "Siglemic", 40, util.text_halign.center,
-        util.colors.blue, util.source_names.runner_2, 1607, 747)
+        util.colors.blue, util.source_names.runner_2, 1589, 747)
     local runner_2_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
-        util.colors.white, util.source_names.runner_2_pronouns, 1792, 759)
+        util.colors.white, util.source_names.runner_2_pronouns, 1794, 759)
     -- local runner_1_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.center,
     --     util.colors.blue, util.source_names.runner_1_finish_time, 283, 806)
     -- local runner_2_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.center,
@@ -981,11 +981,11 @@ function create_2p_tournament_layout()
     local runner_1_text = util.create_text_eaves(new_scene, "Bold", "Cosmoing", 40, util.text_halign.center,
         util.colors.blue, util.source_names.runner_1, 280, 746)
     local runner_1_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
-        util.colors.white, util.source_names.runner_1_pronouns, 469, 759)
+        util.colors.white, util.source_names.runner_1_pronouns, 471, 759)
     local runner_2_text = util.create_text_eaves(new_scene, "Bold", "Siglemic", 40, util.text_halign.center,
         util.colors.blue, util.source_names.runner_2, 1607, 747)
     local runner_2_pronouns = util.create_text_eaves(new_scene, "Heavy", "He/Him", 18, util.text_halign.center,
-        util.colors.white, util.source_names.runner_2_pronouns, 1792, 759)
+        util.colors.white, util.source_names.runner_2_pronouns, 1794, 759)
     local runner_1_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.center,
         util.colors.blue, util.source_names.runner_1_finish_time, 283, 806)
     local runner_2_time = util.create_text_eaves(new_scene, "Heavy", "0:00:00", 32, util.text_halign.center,

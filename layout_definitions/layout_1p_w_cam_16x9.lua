@@ -197,7 +197,7 @@ local function update_twitch(props, p)
     local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
     local run_data = schedule.get_run_data(run_idx)
 
-    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string)
+    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string, run_data.is_tas)
 end
 
 layout_1p_w_cam_16x9_source_def.get_properties = function(data)
@@ -351,7 +351,7 @@ layout_1p_w_cam_16x9_source_def.video_render = function(data, effect)
     obs.gs_reset_blend_state()
 
     while obs.gs_effect_loop(effect, "Draw") do
-        obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
+        -- obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
         obs.obs_source_draw(data.fade_box.texture, 0, 81, 546, 995, false)
         obs.obs_source_draw(data.player_frame.texture, 30, 90, 494, 349, false)
         obs.obs_source_draw(data.runner_box.texture, 34, 479, 490, 59, false)
@@ -360,7 +360,7 @@ layout_1p_w_cam_16x9_source_def.video_render = function(data, effect)
             obs.obs_source_draw(data.comm_box.texture, 39, 603, 478, 33, false)
         end
 
-        obs.obs_source_draw(data.twitch_logo.texture, 75, 492, 30, 30, false)
+        -- obs.obs_source_draw(data.twitch_logo.texture, 75, 492, 30, 30, false)
 
         obs.obs_source_draw(data.logo.texture, 160, 769, 230, 232, false)
         obs.obs_source_draw(data.game_frame.texture, ctx.game_x, ctx.game_y, ctx.game_width, ctx.game_height, false)

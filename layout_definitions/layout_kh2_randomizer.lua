@@ -116,7 +116,7 @@ local function update_twitch(props, p)
     local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
     local run_data = schedule.get_run_data(run_idx)
 
-    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string)
+    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string, run_data.is_tas)
 end
 
 layout_kh2_randomizer_source_def.get_properties = function(data)

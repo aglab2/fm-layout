@@ -272,6 +272,7 @@ schedule.get_run_data = function(run_idx, is_multiplayer)
     data.created_by = get_horaro_column(horaro_run, columns.created_by)
     data.twitch_directory = get_horaro_column(horaro_run, columns.directory)
     data.runner_string = ""
+    data.is_tas = get_horaro_column(horaro_run, columns.run_type) == "TAS"
 
     local runner_names = parse_runners(get_horaro_column(horaro_run, columns.runners))
     local runner_pronouns = parse_runners_pronouns(get_horaro_column(horaro_run, columns.runner_prs))

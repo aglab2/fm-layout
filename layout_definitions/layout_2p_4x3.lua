@@ -219,7 +219,7 @@ local function update_twitch(props, p)
     local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
     local run_data = schedule.get_run_data(run_idx)
 
-    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string)
+    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string, run_data.is_tas)
 end
 
 layout_2p_4x3_source_def.get_properties = function(data)
@@ -373,7 +373,7 @@ layout_2p_4x3_source_def.video_render = function(data, effect)
 
     while obs.gs_effect_loop(effect, "Draw") do
         -- Background
-        obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
+        -- obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
         obs.obs_source_draw(data.logo.texture, 837, 751, 248, 252, false)
         obs.obs_source_draw(data.fade_box.texture, 0, 80, 597, 996, false)
         obs.obs_source_draw(data.fade_box.texture, 1323, 80, 597, 996, false)
@@ -381,13 +381,13 @@ layout_2p_4x3_source_def.video_render = function(data, effect)
         -- Runner 1
         obs.obs_source_draw(data.player_frame.texture, 75, 666, 453, 320, false)
         obs.obs_source_draw(data.runner_box.texture, 67, 996, 465, 56, false)
-        obs.obs_source_draw(data.twitch_logo.texture, 107, 1008, 30, 30, false)
-        obs.obs_source_draw(data.runner_pr_frame.texture, 427, 1009, 88, 29, false)
+        -- obs.obs_source_draw(data.twitch_logo.texture, 107, 1008, 30, 30, false)
+        obs.obs_source_draw(data.runner_pr_frame.texture, 427, 1011, 88, 29, false)
         -- Runner 2
         obs.obs_source_draw(data.player_frame.texture, 1402, 666, 453, 320, false)
         obs.obs_source_draw(data.runner_box.texture, 1393, 996, 465, 56, false)
-        obs.obs_source_draw(data.twitch_logo.texture, 1432, 1008, 30, 30, false)
-        obs.obs_source_draw(data.runner_pr_frame.texture, 1750, 1009, 88, 29, false)
+        -- obs.obs_source_draw(data.twitch_logo.texture, 1432, 1008, 30, 30, false)
+        obs.obs_source_draw(data.runner_pr_frame.texture, 1750, 1011, 88, 29, false)
 
         if comm_amt > 0 then
             obs.obs_source_draw(data.comm_box.texture, 693, 971, 534, 33, false)

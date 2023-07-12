@@ -218,7 +218,7 @@ local function update_twitch(props, p)
     local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
     local run_data = schedule.get_run_data(run_idx, true)
 
-    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string)
+    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string, run_data.is_tas)
 end
 
 local function start_relay(props, p)
@@ -369,7 +369,7 @@ layout_relay_race_source_def.video_render = function(data, effect)
 
     while obs.gs_effect_loop(effect, "Draw") do
         -- Background
-        obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
+        -- obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
 
         obs.obs_source_draw(data.yellow_team_box.texture, ctx.game_resolutions[1].game_x, ctx.game_resolutions[1].game_y,
             ctx.game_resolutions[1].width, ctx.game_resolutions[1].height, false)

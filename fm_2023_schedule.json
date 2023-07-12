@@ -647,6 +647,49 @@
           "customDataDTO": null
         },
         {
+          "id": 27741,
+          "gameName": "FLARE NUINUI QUEST",
+          "console": "PC",
+          "emulated": false,
+          "ratio": "16:9",
+          "categoryName": "All Achievements",
+          "estimate": "PT40M",
+          "setupTime": "PT20M",
+          "setupBlock": false,
+          "customRun": false,
+          "position": 14,
+          "categoryId": 54248,
+          "type": "SINGLE",
+          "runners": [
+            {
+              "id": 13394,
+              "username": "anxKha",
+              "usernameJapanese": null,
+              "enabled": true,
+              "roles": ["ROLE_USER"],
+              "connections": [
+                {
+                  "id": 23221,
+                  "platform": "DISCORD",
+                  "username": "anxKha#2007"
+                },
+                {
+                  "id": 23222,
+                  "platform": "TWITCH",
+                  "username": "anxKha_"
+                }
+              ],
+              "emailVerified": false,
+              "pronouns": null,
+              "country": null,
+              "languagesSpoken": ""
+            }
+          ],
+          "setupBlockText": null,
+          "date": "2023-07-13T22:39:00Z",
+          "customDataDTO": null
+        },
+        {
           "id": 27740,
           "gameName": "Garudius '95",
           "console": "PC-98",
@@ -697,49 +740,6 @@
           ],
           "setupBlockText": null,
           "date": "2023-07-13T21:29:00Z",
-          "customDataDTO": null
-        },
-        {
-          "id": 27741,
-          "gameName": "FLARE NUINUI QUEST",
-          "console": "PC",
-          "emulated": false,
-          "ratio": "16:9",
-          "categoryName": "All Achievements",
-          "estimate": "PT40M",
-          "setupTime": "PT20M",
-          "setupBlock": false,
-          "customRun": false,
-          "position": 14,
-          "categoryId": 54248,
-          "type": "SINGLE",
-          "runners": [
-            {
-              "id": 13394,
-              "username": "anxKha",
-              "usernameJapanese": null,
-              "enabled": true,
-              "roles": ["ROLE_USER"],
-              "connections": [
-                {
-                  "id": 23221,
-                  "platform": "DISCORD",
-                  "username": "anxKha#2007"
-                },
-                {
-                  "id": 23222,
-                  "platform": "TWITCH",
-                  "username": "anxKha_"
-                }
-              ],
-              "emailVerified": false,
-              "pronouns": null,
-              "country": null,
-              "languagesSpoken": ""
-            }
-          ],
-          "setupBlockText": null,
-          "date": "2023-07-13T22:39:00Z",
           "customDataDTO": null
         },
         {
@@ -3907,26 +3907,6 @@
         ]
       },
       {
-        "length": "PT1H",
-        "length_t": 3600,
-        "scheduled": "2023-07-13T15:29:00-06:00",
-        "scheduled_t": 1689283740,
-        "data": [
-          "[Garudius '95](http://japanesepccompendium.blogspot.com/2013/02/garudius-95.html)",
-          ".",
-          "**Cosmo**",
-          "1 Credit Clear",
-          "Solo Run",
-          "[SuperViperT302](https://www.twitch.tv/supervipert302)",
-          "(He/Him)",
-          null,
-          "800x600",
-          "CO2",
-          "Games + Demos",
-          "PC-98"
-        ]
-      },
-      {
         "length": "PT50M",
         "length_t": 3000,
         "scheduled": "2023-07-13T16:39:00-06:00",
@@ -3944,6 +3924,26 @@
           "sulpx",
           "Flare Nuinui Quest",
           "PC"
+        ]
+      },
+      {
+        "length": "PT1H",
+        "length_t": 3600,
+        "scheduled": "2023-07-13T15:29:00-06:00",
+        "scheduled_t": 1689283740,
+        "data": [
+          "[Garudius '95](http://japanesepccompendium.blogspot.com/2013/02/garudius-95.html)",
+          ".",
+          "**Cosmo**",
+          "1 Credit Clear",
+          "Solo Run",
+          "[SuperViperT302](https://www.twitch.tv/supervipert302)",
+          "(He/Him)",
+          null,
+          "800x600",
+          "CO2",
+          "Games + Demos",
+          "PC-98"
         ]
       },
       {
@@ -4172,7 +4172,7 @@
         "scheduled": "2023-07-14T08:16:00-06:00",
         "scheduled_t": 1689344160,
         "is_multiplayer": true,
-        "participants": "BigfootTouchedMe (he/him) + ForeverPark (he/him) + Jorickjuhh (he/him) + Mushie64 (he/him) + MXF (he/him) + Sigotu (he/him) + SpaceMan64 () + StarrlightSims (he/him) + TheReverserOfTime (she/her) + tjk (he/him) + Tomatobird8 (he/him) + wintergreen (they/she)",
+        "participants": "BigfootTouchedMe (He/Him) + ForeverPark (He/Him) + Jorickjuhh (He/Him) + Mushie64 (He/Him) + MXF (He/Him) + Sigotu (He/Him) + SpaceMan64 () + StarrlightSims (He/Him) + TheReverserOfTime (She/Her) + tjk (He/Him) + Tomatobird8 (He/Him) + wintergreen (They/She)",
         "data": [
           "Super Mario 64 - Single Star Tournament",
           "0:25:00",
@@ -4514,7 +4514,7 @@
         "scheduled": "2023-07-15T06:20:00-06:00",
         "scheduled_t": 1689423600,
         "is_multiplayer": true,
-        "participants": "Mastermaxify (he/him) + MKey (he/him) + Murzikk (he/him) + Racic (he/him) + DragonXplayer (they/them) + bummer222 (he/him) + Gaborro (he/him) + Daglom (he/him) + Marong_TV (he/him) + TetraField (he/him) + Wolsk (he/him) + Wolfiexe () + Mir (any) + Chazoshtare () + Anuj071 () + IanBoy141 (he/him)",
+        "participants": "Mastermaxify (He/Him) + MKey (He/Him) + Murzikk (He/Him) + Racic (He/Him) + DragonXplayer (They/Them) + bummer222 (He/Him) + Gaborro (He/Him) + Daglom (He/Him) + Marong_TV (He/Him) + TetraField (He/Him) + Wolsk (He/Him) + Wolfiexe () + Mir (Any) + Chazoshtare () + Anuj071 () + IanBoy141 (He/Him)",
         "data": [
           "Ance Tournament",
           "0:25:00",
@@ -4865,7 +4865,7 @@
           "Solo Run",
           "[LogicPQ](https://www.twitch.tv/logicpq)",
           "()",
-          "Floogle (???) + Natsu () + Renex ()",
+          "Floogle (He/Him) + Natsu () + Renex ()",
           "800x600",
           "Cherry Treehouse",
           "I Wanna Be The Guy",
