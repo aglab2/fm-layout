@@ -103,13 +103,12 @@ twitch.get_refresh_token = function()
 
     local refresh_request = "https://id.twitch.tv/oauth2/token"
     local params = "grant_type=refresh_token"
-    append_param(params, "client_id", twitch.client_id)
-    append_param(params, "refresh_token", twitch.refresh_token)
-    append_param(params, "client_secret", twitch.client_secret)
+    params = append_param(params, "client_id", twitch.client_id)
+    params = append_param(params, "refresh_token", twitch.refresh_token)
+    params = append_param(params, "client_secret", twitch.client_secret)
     local headers = {
         ["Content-Type"] = "application/x-www-form-urlencoded"
     }
-    print(params)
     local body, code = network.post(refresh_request, headers, params)
     assert(code == 200, "Failed to refresh Twitch token! " .. body)
 

@@ -35,19 +35,19 @@ layout_2p_4x3_source_def.create = function(settings, source)
 
     ctx.game_resolutions = {
         {
-            offset_x = 73,
+            offset_x = 76,
             offset_y = 23,
             width = 832,
             height = 625,
-            game_x = 73,
+            game_x = 76,
             game_y = 23
         },
         {
-            offset_x = 1014,
+            offset_x = 1854,
             offset_y = 23,
             width = 832,
             height = 625,
-            game_x = 1014,
+            game_x = 1854,
             game_y = 23
         }
     }
@@ -175,8 +175,23 @@ local update_run_info = function(props, p)
     local x, y, width, height = util.fit_screen(run_data.ratio.width, run_data.ratio.height, max_size.width,
         max_size.height)
 
-    for i = 1, 2 do
-        ctx.game_resolutions[i].game_x = ctx.game_resolutions[i].offset_x + x
+    for i = 1, 1 do
+        ctx.game_resolutions[i].game_x = ctx.game_resolutions[i].offset_x
+        ctx.game_resolutions[i].game_y = ctx.game_resolutions[i].offset_y + y
+        ctx.game_resolutions[i].width = width
+        ctx.game_resolutions[i].height = height
+        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_width .. tostring(i),
+            ctx.game_resolutions[i].width)
+        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_height .. tostring(i),
+            ctx.game_resolutions[i].height)
+        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_x .. tostring(i),
+            ctx.game_resolutions[i].game_x)
+        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_y .. tostring(i),
+            ctx.game_resolutions[i].game_y)
+    end
+
+    for i = 2, 2 do
+        ctx.game_resolutions[i].game_x = ctx.game_resolutions[i].offset_x - width
         ctx.game_resolutions[i].game_y = ctx.game_resolutions[i].offset_y + y
         ctx.game_resolutions[i].width = width
         ctx.game_resolutions[i].height = height
@@ -316,7 +331,7 @@ layout_2p_4x3_source_def.update = function(data, settings)
     util.set_obs_image_path(ctx, util.setting_names.r1_avatar_source, util.setting_names.r1_avatar)
     util.set_obs_image_path(ctx, util.setting_names.r2_avatar_source, util.setting_names.r2_avatar)
 
-    for i = 1, 2 do
+    for i = 1, 1 do
         ctx.game_resolutions[i].game_x = obs.obs_data_get_int(ctx.props_settings,
             util.setting_names.game_x .. tostring(i))
         ctx.game_resolutions[i].game_y = obs.obs_data_get_int(ctx.props_settings,
