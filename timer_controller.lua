@@ -47,7 +47,7 @@ timer_controller.timer_start_finish = function(self, data, props, prop)
         state = util.timer_states.stopped
     end
     local timer = obs.obs_get_source_by_uuid(obs.obs_data_get_string(ctx.props_settings, util.setting_names.timer_source))
-    if state == util.timer_states.stopped then
+    if state == util.timer_states.stopped or state == util.timer_states.paused then
         ctx.state = util.timer_states.running
         obs.obs_source_media_play_pause(timer, false)
         obs.obs_property_set_description(prop, util.timer_controller_names.timer_finish)

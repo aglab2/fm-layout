@@ -253,7 +253,7 @@ layout_1p_no_cam_4x3_source_def.get_properties = function(data)
         obs.OBS_PATH_FILE, "Image files (*.bmp *.tga *.png *.jpeg *.jpg *.jxr *.gif *.psd *.webp)", nil)
 
     local slider = obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt,
-        util.dashboard_names.comm_amt, 0, 4, 1)
+        util.dashboard_names.comm_amt, 0, 6, 1)
     obs.obs_property_set_modified_callback(slider, slider_modified)
 
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_name, util.dashboard_names.c1_name,
@@ -389,11 +389,11 @@ layout_1p_no_cam_4x3_source_def.video_render = function(data, effect)
         local y_off = 697 - 652
         -- Draw commentator boxes
         for i = 1, comm_amt do
-            if commentators_info[i].has_name then
+            if commentators_info[i].has_name or i > 4 then
                 obs.obs_source_draw(data.comm_name_box.texture, 35 + x_off * (i - 1 - row_indx * 2),
                     648 + y_off * row_indx, 235, 35, false)
             end
-            if commentators_info[i].has_name then
+            if commentators_info[i].has_name or i > 4 then
                 obs.obs_source_draw(data.comm_pr_frame.texture, 185 + x_off * (i - 1 - row_indx * 2),
                     652 + y_off * row_indx, 79, 26, false)
             end
