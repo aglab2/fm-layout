@@ -293,6 +293,7 @@ layout_relay_race_source_def.get_properties = function(data)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.c2_pr, util.dashboard_names.c2_pr,
         obs.OBS_TEXT_DEFAULT)
 
+    obs.obs_properties_set_flags(ctx.props_def, obs.OBS_PROPERTIES_DEFER_UPDATE);
     obs.obs_properties_apply_settings(ctx.props_def, ctx.props_settings)
 
     return ctx.props_def
@@ -351,11 +352,40 @@ layout_relay_race_source_def.destroy = function(data)
     obs.obs_leave_graphics()
 end
 
+layout_relay_race_source_def.tick_players = function()
+    local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
+    local r1_uuid = obs.obs_data_get_string(ctx.props_settings, util.setting_names.r1_source)
+    local r2_uuid = obs.obs_data_get_string(ctx.props_settings, util.setting_names.r2_source)
+    local r1_pos = ctx.layout_objects[r1_uuid]
+    local r2_pos = ctx.layout_objects[r2_uuid]
+
+    local to_game_offset = 236
+    local yellow_team_position = ctx.relay_data.yellow_team_data.game - 1
+    local red_team_position = ctx.relay_data.red_team_data.game - 1
+    local yellow_text_target_position = r1_pos.x + to_game_offset * yellow_team_position
+    ctx.relay_data.yellow_team_data.text_current_position.x =
+        util.lerp(ctx.relay_data.yellow_team_data.text_current_position.x, yellow_text_target_position, 0.1)
+    local red_text_target_position = r2_pos.x + to_game_offset * red_team_position
+    ctx.relay_data.red_team_data.text_current_position.x =
+        util.lerp(ctx.relay_data.red_team_data.text_current_position.x, red_text_target_position, 0.1)
+    util.set_obs_position(ctx, util.setting_names.r1_source, {
+        x = ctx.relay_data.yellow_team_data.text_current_position.x,
+        y = r1_pos.y
+    })
+    util.set_obs_position(ctx, util.setting_names.r2_source, {
+        x = ctx.relay_data.red_team_data.text_current_position.x,
+        y = r2_pos.y
+    })
+end
+
 layout_relay_race_source_def.video_render = function(data, effect)
     if not data.background.texture then
         return;
     end
 
+    -- Defer updates to player locations, it is not allowed to update the position of sources in the video_render callback
+    -- because lookups by uuid cause deadlocks
+    util.bind_update(layout_relay_race_source_def.tick_players)
     local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
 
     local delta = os.clock() - ctx.last_render_clock
@@ -376,28 +406,9 @@ layout_relay_race_source_def.video_render = function(data, effect)
         obs.obs_source_draw(data.red_team_box.texture, ctx.game_resolutions[2].game_x, ctx.game_resolutions[2].game_y,
             ctx.game_resolutions[2].width, ctx.game_resolutions[2].height, false)
 
-        local r1_uuid = obs.obs_data_get_string(ctx.props_settings, util.setting_names.r1_source)
-        local r2_uuid = obs.obs_data_get_string(ctx.props_settings, util.setting_names.r2_source)
-        local r1_pos = ctx.layout_objects[r1_uuid]
-        local r2_pos = ctx.layout_objects[r2_uuid]
         local to_game_offset = 236
         local yellow_team_position = ctx.relay_data.yellow_team_data.game - 1
         local red_team_position = ctx.relay_data.red_team_data.game - 1
-        local yellow_text_target_position = r1_pos.x + to_game_offset * yellow_team_position
-        ctx.relay_data.yellow_team_data.text_current_position.x =
-            util.lerp(ctx.relay_data.yellow_team_data.text_current_position.x, yellow_text_target_position, 0.1)
-        local red_text_target_position = r2_pos.x + to_game_offset * red_team_position
-        ctx.relay_data.red_team_data.text_current_position.x =
-            util.lerp(ctx.relay_data.red_team_data.text_current_position.x, red_text_target_position, 0.1)
-        util.set_obs_position(ctx, util.setting_names.r1_source, {
-            x = ctx.relay_data.yellow_team_data.text_current_position.x,
-            y = r1_pos.y
-        })
-        util.set_obs_position(ctx, util.setting_names.r2_source, {
-            x = ctx.relay_data.red_team_data.text_current_position.x,
-            y = r2_pos.y
-        })
-
         local yellow_anim_speed = 8 * delta
         local red_anim_speed = 8 * delta
         local yellow_frame_data = data.kid_idle
