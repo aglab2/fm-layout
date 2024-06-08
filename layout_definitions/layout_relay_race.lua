@@ -228,12 +228,12 @@ end
 
 local function yellow_team_finish_relay(props, p)
     local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
-    ctx.relay_data.yellow_team_data.finished = true
+    ctx.relay_data.yellow_team_data.finished = not ctx.relay_data.yellow_team_data.finished
 end
 
 local function red_team_finish_relay(props, p)
     local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
-    ctx.relay_data.red_team_data.finished = true
+    ctx.relay_data.red_team_data.finished = not ctx.relay_data.red_team_data.finished
 end
 
 layout_relay_race_source_def.get_properties = function(data)
@@ -293,7 +293,6 @@ layout_relay_race_source_def.get_properties = function(data)
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.c2_pr, util.dashboard_names.c2_pr,
         obs.OBS_TEXT_DEFAULT)
 
-    obs.obs_properties_set_flags(ctx.props_def, obs.OBS_PROPERTIES_DEFER_UPDATE);
     obs.obs_properties_apply_settings(ctx.props_def, ctx.props_settings)
 
     return ctx.props_def
@@ -376,6 +375,8 @@ layout_relay_race_source_def.tick_players = function()
         x = ctx.relay_data.red_team_data.text_current_position.x,
         y = r2_pos.y
     })
+
+    obs.remove_current_callback()
 end
 
 layout_relay_race_source_def.video_render = function(data, effect)
@@ -385,7 +386,8 @@ layout_relay_race_source_def.video_render = function(data, effect)
 
     -- Defer updates to player locations, it is not allowed to update the position of sources in the video_render callback
     -- because lookups by uuid cause deadlocks
-    util.bind_update(layout_relay_race_source_def.tick_players)
+    obs.timer_add(layout_relay_race_source_def.tick_players, 1)
+    -- util.bind_update(layout_relay_race_source_def.tick_players)
     local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
 
     local delta = os.clock() - ctx.last_render_clock
@@ -399,7 +401,7 @@ layout_relay_race_source_def.video_render = function(data, effect)
 
     while obs.gs_effect_loop(effect, "Draw") do
         -- Background
-        -- obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
+        obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
 
         obs.obs_source_draw(data.yellow_team_box.texture, ctx.game_resolutions[1].game_x, ctx.game_resolutions[1].game_y,
             ctx.game_resolutions[1].width, ctx.game_resolutions[1].height, false)

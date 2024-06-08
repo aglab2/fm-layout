@@ -16,6 +16,7 @@ local description = [[
     <center><h3>Programmer Smartkin</h3></center>
     <center><h3>Layouts designer Oiivae</h3></center>
     <center><h3>Producers Cosmoing, Wolsk</h3></center>
+    <center><h3>Special thanks Aglab2</h3></center>
     DO NOT delete any of the layout elements. This WILL break the Dashboard. Especially the Dashboard itself, it WILL force you to recreate ALL the layouts. Other than the scenes you are free to rename the elements inside them.
     <p>
     In the Dashboard itself DO NOT and I say DO NOT click the Defaults button under ANY circumstances. This WILL break the entire program and will force you to recreate the layouts.

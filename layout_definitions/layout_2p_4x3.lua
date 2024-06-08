@@ -389,10 +389,10 @@ layout_2p_4x3_source_def.video_render = function(data, effect)
 
     while obs.gs_effect_loop(effect, "Draw") do
         -- Background
-        -- obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
+        obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
         obs.obs_source_draw(data.logo.texture, 837, 751, 248, 252, false)
-        -- obs.obs_source_draw(data.fade_box.texture, 0, 80, 597, 996, false)
-        -- obs.obs_source_draw(data.fade_box.texture, 1323, 80, 597, 996, false)
+        obs.obs_source_draw(data.fade_box.texture, 0, 80, 597, 996, false)
+        obs.obs_source_draw(data.fade_box.texture, 1323, 80, 597, 996, false)
 
         -- Runner 1
         obs.obs_source_draw(data.player_frame.texture, 75, 666, 453, 320, false)

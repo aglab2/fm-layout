@@ -351,7 +351,7 @@ layout_1p_w_cam_16x9_source_def.video_render = function(data, effect)
     obs.gs_reset_blend_state()
 
     while obs.gs_effect_loop(effect, "Draw") do
-        -- obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
+        obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
         obs.obs_source_draw(data.fade_box.texture, 0, 81, 546, 995, false)
         obs.obs_source_draw(data.player_frame.texture, 30, 90, 494, 349, false)
         obs.obs_source_draw(data.runner_box.texture, 34, 479, 490, 59, false)

@@ -406,7 +406,7 @@ layout_2p_tournament_source_def.video_render = function(data, effect)
 
     while obs.gs_effect_loop(effect, "Draw") do
         -- Background
-        -- obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
+        obs.obs_source_draw(data.background.texture, 0, 0, 1920, 1080, false)
 
         for i = 1, 2 do
             obs.obs_source_draw(data.game_frame.texture, ctx.game_resolutions[i].game_x, ctx.game_resolutions[i].game_y,
