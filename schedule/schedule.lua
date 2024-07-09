@@ -193,7 +193,7 @@ end
 ---@param force_reload? boolean
 schedule.get_schedule = function(force_reload)
     if not schedule._has_schedule or force_reload then
-        local marathon_info = assert(io.open(script_path() .. "/fm_2023_schedule.json", "r"))
+        local marathon_info = assert(io.open(script_path() .. "/fm_schedule.json", "r"))
         local json_data = marathon_info:read("*a")
         local decoded_info = json.decode(json_data)
         schedule._schedule_cache = decoded_info.schedule
