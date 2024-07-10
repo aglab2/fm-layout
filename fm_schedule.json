@@ -2084,6 +2084,8 @@
         "length_t": 7200,
         "scheduled": "2024-07-13T06:57:00-07:00",
         "scheduled_t": 1720879020,
+        "is_multiplayer": 1,
+        "participants": "LukeIGuess (They/Them) + h3oCharles (He/They) + DragonXPlayer () + Iruenn (She/Her) + Murzikk () + Xoryl () + Kiiview (He/Him) + TetraField () + CeleCele () + Mir (He/Him) + Gaborro () + Mastermaxify (He/Him) + MKey () + 128-Up (He/Him) + Wolsk (He/They) + bummer (He/Him)",
         "data": [
           "Ance Tournament",
           "30",
@@ -2252,6 +2254,8 @@
         "length_t": 9000,
         "scheduled": "2024-07-13T17:42:00-07:00",
         "scheduled_t": 1720917720,
+        "is_multiplayer": 1,
+        "participants": "",
         "data": [
           "IWBTG Relay Race",
           "30",
@@ -2294,6 +2298,8 @@
         "length_t": 3600,
         "scheduled": "2024-07-13T22:42:00-07:00",
         "scheduled_t": 1720935720,
+        "is_multiplayer": 1,
+        "participants": "dmt_goobz (He/Him) + ganon (He/Him) + Nambo (Any) + Zona (He/Him)",
         "data": [
           "[Super Monkey Ball: Stardust](https://smbelite.net/games/stardust)",
           "20",
@@ -2441,6 +2447,8 @@
         "length_t": 9000,
         "scheduled": "2024-07-14T06:27:00-07:00",
         "scheduled_t": 1720963620,
+        "is_multiplayer": 1,
+        "participants": "gian_97 (He/Him) + MrSqurly (He/Him) + Unendlich (He/Him) + CaptainBowser (He/Him) + amsixx (He/Him) + SirNoCancel () + R () + Stranger ()",
         "data": [
           "Super Mario 64 Kaizo Tournament",
           "30",
