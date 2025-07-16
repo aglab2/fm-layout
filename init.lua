@@ -78,20 +78,6 @@ function create_layouts(layout_props, btn_prop)
     create_lm2_randomizer_layout()
 end
 
-function init_twitch(layout_props, btn_prop)
-    -- obs.script_log(obs.LOG_INFO, "Initializing Twitch")
-    local auth_url = twitch.get_auth_url()
-    os.execute('start "" "' .. auth_url .. '"')
-    local client = twitch.auth_listener:accept()
-    twitch.parse_auth_data(client:receive("*l"))
-    client:receive("*a")
-    client:close()
-    twitch.auth_listener:close()
-    twitch.auth_listener = nil
-
-    twitch.get_auth_token()
-end
-
 function reload_schedule()
     schedule.get_schedule(true)
 end
@@ -115,8 +101,6 @@ function script_load(settings)
     obs.timer_add(do_updates, 500)
 
     schedule.get_schedule()
-
-    twitch.init()
 
     local settings_json = obs.obs_data_get_json(settings)
     local ctx_items = json.decode(settings_json)
@@ -144,7 +128,6 @@ function script_properties()
     local props = obs.obs_properties_create()
     obs.obs_properties_add_button(props, "create_layouts", "Create layouts", create_layouts)
     obs.obs_properties_add_button(props, "reload_schedule", "Reload schedule file", reload_schedule)
-    obs.obs_properties_add_button(props, "init_twitch", "Connect Twitch", init_twitch)
     return props
 end
 
