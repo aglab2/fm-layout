@@ -9,6 +9,9 @@ public class SceneInfoViewModel : Screen
     private readonly ObsClient.ObsClient _obs;
     private readonly SelectedSceneService _selectedScene;
     private readonly IWindowManager _windowManager;
+    private string? _search;
+    private BindableCollection<string> _scenesView = [];
+    private BindableCollection<string> _scenes = [];
 
     public SceneInfoViewModel(ObsClient.ObsClient obs, SelectedSceneService selectedScene, IWindowManager windowManager)
     {
@@ -26,20 +29,25 @@ public class SceneInfoViewModel : Screen
     {
         var scenes = _obs.GetSceneNames();
         ObsScenes.Clear();
-        ObsScenes.AddRange(scenes);
+        _scenesView.Clear();
+        _scenesView.AddRange(scenes);
+        _scenes.AddRange(scenes);
     }
 
     private void ObsOnDisconnected(string reason)
     {
-        ObsScenes.Clear();
+        _scenes.Clear();
+        _scenesView.Clear();
     }
 
     private void ObsOnConnected()
     {
         var scenes = _obs.GetSceneNames();
-        ObsScenes.Clear();
+        _scenesView.Clear();
+        _scenes.Clear();
         
-        ObsScenes.AddRange(scenes);
+        _scenesView.AddRange(scenes);
+        _scenes.AddRange(scenes);
         CurrentSceneName = _obs.GetCurrentSceneName();
         
         NotifyOfPropertyChange(nameof(CurrentSceneName));
@@ -60,8 +68,34 @@ public class SceneInfoViewModel : Screen
     {
         _selectedScene.SetSelectedScene(e.AddedItems.Cast<string>().FirstOrDefault());
     }
+
+    private void DoSearch()
+    {
+        _scenesView.Clear();
+        if (Search == null)
+        {
+            _scenesView.AddRange(_scenes);
+            return;
+        }
+        
+        _scenesView.AddRange(_scenes.Where(r => r.ToString().Contains(Search, StringComparison.InvariantCultureIgnoreCase)));
+    }
     
     public string CurrentSceneName { get; set; }
+    public string? Search
+    {
+        get => _search;
+        set
+        {
+            if (_search == value)
+            {
+                return;
+            }
+            
+            _search = value;
+            DoSearch();
+        }
+    }
     
-    public BindableCollection<string> ObsScenes { get; } = [];
+    public BindableCollection<string> ObsScenes => _scenesView;
 }

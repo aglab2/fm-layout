@@ -9,7 +9,7 @@ public class RunsBrowserViewModel : Screen
 {
     private readonly SpreadsheetClient.SpreadsheetClient _spreadsheet;
     private readonly SelectedRunService _selectedRun;
-    private string _search = string.Empty;
+    private string? _search = string.Empty;
     private readonly BindableCollection<RunModel> _runs = [];
     private readonly BindableCollection<RunModel> _runsView = [];
     private RunModel? _currentlySelectedRun;
@@ -26,11 +26,23 @@ public class RunsBrowserViewModel : Screen
     private void DoSearch()
     {
         _runsView.Clear();
+        if (Search == null)
+        {
+            _runsView.AddRange(_runs);
+            return;
+        }
+        
         _runsView.AddRange(_runs.Where(r => r.ToString().Contains(Search, StringComparison.InvariantCultureIgnoreCase)));
     }
 
     public void ChangeSelectedRun(SelectionChangedEventArgs e)
     {
+        if (e.AddedItems.Count == 0)
+        {
+            _currentlySelectedRun = null;
+            return;
+        }
+        
         _currentlySelectedRun = e.AddedItems.Cast<RunModel>().First();
     }
 
@@ -40,7 +52,7 @@ public class RunsBrowserViewModel : Screen
         TryCloseAsync();
     }
 
-    public string Search
+    public string? Search
     {
         get => _search;
         set

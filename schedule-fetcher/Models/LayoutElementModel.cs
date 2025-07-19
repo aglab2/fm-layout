@@ -11,5 +11,5 @@ public class LayoutElementModel
     public string ObsId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public bool AdjustPosition { get; set; } = false;
-    public JObject Settings  { get; set; } = new JObject();
+    public JObject Settings { get; set; } = new();
 }

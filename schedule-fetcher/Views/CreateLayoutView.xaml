@@ -12,7 +12,7 @@
         d:DataContext="{Binding Source={d:DesignInstance viewModels:CreateLayoutViewModel}}"
         ui:WindowHelper.UseModernWindowStyle="True" SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
-        Title="Create layout..." Height="450" Width="800">
+        Title="Create layout..." Height="750" Width="800">
     <Grid>
         <ui:SimpleStackPanel IsEnabled="{Binding IsNotCreating}" Margin="5" Orientation="Vertical">
             <Button cm:Message.Attach="ReloadTemplates" Content="Reload Layout Templates" HorizontalAlignment="Stretch"/>
@@ -32,7 +32,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </GroupBox>
-            
+            <TextBlock Text="Shift+Click to select multiple or hold CTRL"/>
             <Button cm:Message.Attach="CreateLayout" IsEnabled="{Binding CanCreate}" HorizontalAlignment="Stretch" Content="Create selected layouts"/>
         </ui:SimpleStackPanel>
         
@@ -43,7 +43,7 @@
         </Rectangle>
         <Grid Visibility="{Binding IsCreatingVis}">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="2*"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <ui:ProgressRing Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxHeight="100" MaxWidth="100" IsActive="True"/>

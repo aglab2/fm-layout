@@ -30,7 +30,8 @@ public class LayoutInfoViewModel : Screen
         {
             return;
         }
-        
+
+        IsWidescreen = _selectedRun.IsWidescreen;
         GameName = _selectedRun.GameName;
         CreatedBy = _selectedRun.CreatedBy;
         Category = _selectedRun.Category;
@@ -54,6 +55,7 @@ public class LayoutInfoViewModel : Screen
         Commentator3Pronouns = _selectedRun.CommentatorPronouns[2];
         Commentator4Pronouns = _selectedRun.CommentatorPronouns[3];
         
+        NotifyOfPropertyChange(nameof(IsWidescreen));
         NotifyOfPropertyChange(nameof(Category));
         NotifyOfPropertyChange(nameof(Estimate));
         NotifyOfPropertyChange(nameof(GameName));
@@ -99,40 +101,39 @@ public class LayoutInfoViewModel : Screen
         
         _obs.SendToScene(selectedScene, new RunModel
         {
-            GameName = GameName,
-            CreatedBy = CreatedBy,
-            Category = Category,
-            Estimate = Estimate,
+            GameName = GameName ?? string.Empty,
+            CreatedBy = CreatedBy ?? string.Empty,
+            Category = Category ?? string.Empty,
+            Estimate = Estimate ?? string.Empty,
             Runners = [
-                Runner1,
-                Runner2,
-                Runner3,
-                Runner4,
+                Runner1 ?? string.Empty,
+                Runner2 ?? string.Empty,
+                Runner3 ?? string.Empty,
+                Runner4 ?? string.Empty,
             ],
             RunnerPronouns = [
-                Runner1Pronouns,
-                Runner2Pronouns,
-                Runner3Pronouns,
-                Runner4Pronouns
+                Runner1Pronouns ?? string.Empty,
+                Runner2Pronouns ?? string.Empty,
+                Runner3Pronouns ?? string.Empty,
+                Runner4Pronouns ?? string.Empty
             ],
             Commentators = [
-                Commentator1,
-                Commentator2,
-                Commentator3,
-                Commentator4
+                Commentator1 ?? string.Empty,
+                Commentator2 ?? string.Empty,
+                Commentator3 ?? string.Empty,
+                Commentator4 ?? string.Empty
             ],
             CommentatorPronouns = [
-                Commentator1Pronouns,
-                Commentator2Pronouns,
-                Commentator3Pronouns,
-                Commentator4Pronouns
+                Commentator1Pronouns ?? string.Empty,
+                Commentator2Pronouns ?? string.Empty,
+                Commentator3Pronouns ?? string.Empty,
+                Commentator4Pronouns ?? string.Empty
             ],
             RunnerHasWebcam = [
                 Runner1HasWebCam,
                 Runner2HasWebCam
             ],
-            WindowWidth = WindowWidth,
-            WindowHeight = WindowHeight
+            IsWidescreen = IsWidescreen
         });
     }
     
@@ -141,28 +142,27 @@ public class LayoutInfoViewModel : Screen
     public string SceneToSendTo => _selectedScene.GetSelectedScene() != null ? $"Send to {_selectedScene.GetSelectedScene()}" : "No scene selected";
     public bool CanSend => _selectedScene.GetSelectedScene() != null;
     
-    public string GameName { get; set; } = string.Empty;
-    public string CreatedBy { get; set; } = string.Empty;
-    public string Category { get; set; } = string.Empty;
-    public string Estimate { get; set; } = string.Empty;
-    public string Runner1 { get; set; } = string.Empty;
+    public string? GameName { get; set; } = string.Empty;
+    public bool IsWidescreen { get; set; }
+    public string? CreatedBy { get; set; } = string.Empty;
+    public string? Category { get; set; } = string.Empty;
+    public string? Estimate { get; set; } = string.Empty;
+    public string? Runner1 { get; set; } = string.Empty;
     public bool Runner1HasWebCam { get; set; }
-    public string Runner2 { get; set; } = string.Empty;
+    public string? Runner2 { get; set; } = string.Empty;
     public bool Runner2HasWebCam { get; set; }
-    public string Runner3 { get; set; } = string.Empty;
-    public string Runner4 { get; set; } = string.Empty;
-    public string Runner1Pronouns { get; set; } = string.Empty;
-    public string Runner2Pronouns { get; set; } = string.Empty;
-    public string Runner3Pronouns { get; set; } = string.Empty;
-    public string Runner4Pronouns { get; set; } = string.Empty;
-    public string Commentator1 { get; set; } = string.Empty;
-    public string Commentator2 { get; set; } = string.Empty;
-    public string Commentator3 { get; set; } = string.Empty;
-    public string Commentator4 { get; set; } = string.Empty;
-    public string Commentator1Pronouns { get; set; } = string.Empty;
-    public string Commentator2Pronouns { get; set; } = string.Empty;
-    public string Commentator3Pronouns { get; set; } = string.Empty;
-    public string Commentator4Pronouns { get; set; } = string.Empty;
-    public int WindowWidth { get; set; }
-    public int WindowHeight { get; set; }
+    public string? Runner3 { get; set; } = string.Empty;
+    public string? Runner4 { get; set; } = string.Empty;
+    public string? Runner1Pronouns { get; set; } = string.Empty;
+    public string? Runner2Pronouns { get; set; } = string.Empty;
+    public string? Runner3Pronouns { get; set; } = string.Empty;
+    public string? Runner4Pronouns { get; set; } = string.Empty;
+    public string? Commentator1 { get; set; } = string.Empty;
+    public string? Commentator2 { get; set; } = string.Empty;
+    public string? Commentator3 { get; set; } = string.Empty;
+    public string? Commentator4 { get; set; } = string.Empty;
+    public string? Commentator1Pronouns { get; set; } = string.Empty;
+    public string? Commentator2Pronouns { get; set; } = string.Empty;
+    public string? Commentator3Pronouns { get; set; } = string.Empty;
+    public string? Commentator4Pronouns { get; set; } = string.Empty;
 }

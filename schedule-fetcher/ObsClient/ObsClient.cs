@@ -119,6 +119,10 @@ public class ObsClient
             s.SourceName.StartsWith("d_", StringComparison.InvariantCultureIgnoreCase) &&
             s.SourceName.Contains("runner", StringComparison.InvariantCultureIgnoreCase) &&
             s.SourceName.Contains("pronouns", StringComparison.InvariantCultureIgnoreCase));
+        var runnerPronounsFramesItems = sceneItems.Where(s =>
+            s.SourceName.Contains("runner", StringComparison.InvariantCultureIgnoreCase) &&
+            s.SourceName.Contains("frame", StringComparison.InvariantCultureIgnoreCase) &&
+            s.SourceName.Contains("pronouns", StringComparison.InvariantCultureIgnoreCase));
         var commentatorItems = sceneItems.Where(s =>
             s.SourceName.StartsWith("d_", StringComparison.InvariantCultureIgnoreCase) &&
             s.SourceName.Contains("commentator", StringComparison.InvariantCultureIgnoreCase) &&
@@ -141,12 +145,12 @@ public class ObsClient
             s.SourceName.StartsWith("d_", StringComparison.InvariantCultureIgnoreCase) &&
             s.SourceName.Contains("estimate", StringComparison.InvariantCultureIgnoreCase));
         var runnerAvatarItems = sceneItems.Where(s =>
-            s.SourceName.StartsWith("d_", StringComparison.InvariantCultureIgnoreCase) &&
             s.SourceName.Contains("runner", StringComparison.InvariantCultureIgnoreCase) &&
+            s.SourceName.Contains("frame", StringComparison.InvariantCultureIgnoreCase) &&
             s.SourceName.Contains("avatar", StringComparison.InvariantCultureIgnoreCase));
         var runnerWebCamItems = sceneItems.Where(s =>
-            s.SourceName.StartsWith("d_", StringComparison.InvariantCultureIgnoreCase) &&
             s.SourceName.Contains("runner", StringComparison.InvariantCultureIgnoreCase) &&
+            s.SourceName.Contains("frame", StringComparison.InvariantCultureIgnoreCase) &&
             s.SourceName.Contains("webcam", StringComparison.InvariantCultureIgnoreCase));
         var commentatorFrames = sceneItems.Where(s => 
             s.SourceName.Contains("commentator", StringComparison.InvariantCultureIgnoreCase) &&
@@ -163,9 +167,15 @@ public class ObsClient
         var commentatorsStatic = sceneItems.First(s =>
             s.SourceName.Contains("commentators", StringComparison.InvariantCultureIgnoreCase) &&
             s.SourceName.Contains("static", StringComparison.InvariantCultureIgnoreCase));
+        var runner4x3Frame = sceneItems.FirstOrDefault(s => 
+            s.SourceName.Contains("runner", StringComparison.InvariantCultureIgnoreCase) &&
+            s.SourceName.Contains("frame", StringComparison.InvariantCultureIgnoreCase) &&
+            s.SourceName.Contains("4x3", StringComparison.InvariantCultureIgnoreCase));
+        var runner16x9Frame = sceneItems.FirstOrDefault(s => 
+            s.SourceName.Contains("runner", StringComparison.InvariantCultureIgnoreCase) &&
+            s.SourceName.Contains("frame", StringComparison.InvariantCultureIgnoreCase) &&
+            s.SourceName.Contains("16x9", StringComparison.InvariantCultureIgnoreCase));
         
-        var dashboard = sceneItems.First(s =>
-            s.SourceName.Contains("dashboard", StringComparison.InvariantCultureIgnoreCase));
         var commentatorsEnumerated = commentatorItems.ToList();
         var commentatorPronounsEnumerated = commentatorPronounsItems.ToList();
         
@@ -179,16 +189,29 @@ public class ObsClient
         
         SetMultipleSourcesText(runnerPronounsItems, model.RunnerPronouns);
         SetMultipleSourcesText(commentatorPronounsEnumerated, model.CommentatorPronouns);
+
+        var visibleRunnerPronouns = model.RunnerPronouns.Select(s => !string.IsNullOrEmpty(s)).ToArray();
+        SetMultipleSourcesVisibility(sceneName, runnerPronounsFramesItems, visibleRunnerPronouns);
         
         var visibleCommentators = model.Commentators.Select(s => !string.IsNullOrEmpty(s)).ToArray();
         SetMultipleSourcesVisibility(sceneName, commentatorsEnumerated, visibleCommentators);
         SetMultipleSourcesVisibility(sceneName, commentatorFrames, visibleCommentators);
-        var visiblePronouns = model.CommentatorPronouns.Select(s => !string.IsNullOrEmpty(s)).ToArray();
-        SetMultipleSourcesVisibility(sceneName, commentatorPronounsEnumerated, visiblePronouns);
-        SetMultipleSourcesVisibility(sceneName, commentatorPronounsFrames, visiblePronouns);
+        var visibleCommentatorPronouns = model.CommentatorPronouns.Select(s => !string.IsNullOrEmpty(s)).ToArray();
+        SetMultipleSourcesVisibility(sceneName, commentatorPronounsEnumerated, visibleCommentatorPronouns);
+        SetMultipleSourcesVisibility(sceneName, commentatorPronounsFrames, visibleCommentatorPronouns);
         if (commentatorsFrame != null)
         {
             _obs.SetSceneItemEnabled(sceneName, commentatorsFrame.ItemId, visibleCommentators.Any(b => b));
+        }
+
+        if (runner4x3Frame != null)
+        {
+            _obs.SetSceneItemEnabled(sceneName, runner4x3Frame.ItemId, !model.IsWidescreen);
+        }
+
+        if (runner16x9Frame != null)
+        {
+            _obs.SetSceneItemEnabled(sceneName, runner16x9Frame.ItemId, model.IsWidescreen);
         }
 
         if (commentatorsStatic != null)
@@ -198,11 +221,6 @@ public class ObsClient
 
         SetMultipleSourcesVisibility(sceneName, runnerAvatarItems, model.RunnerHasWebcam.Select(b => !b).ToArray());
         SetMultipleSourcesVisibility(sceneName, runnerWebCamItems, model.RunnerHasWebcam);
-
-        if (dashboard != null)
-        {
-            UpdateDashboard(dashboard, model);
-        }
     }
 
     public void CreateLayout(LayoutModel model)
@@ -360,16 +378,6 @@ public class ObsClient
             alignment |= Alignment.Left;
         }
         return alignment;
-    }
-
-    private void UpdateDashboard(SceneItemDetails dashboard, RunModel model)
-    {
-        _obs.SetInputSettings(dashboard.SourceName, new JObject
-        {
-            { "comm_amount", model.Commentators.Count(c => !string.IsNullOrEmpty(c)) },
-            { "game_width", model.WindowWidth },
-            { "game_height", model.WindowHeight }
-        });
     }
 
     private void SetMultipleSourcesVisibility(string sceneName, IEnumerable<SceneItemDetails> sources, bool[] visibility)

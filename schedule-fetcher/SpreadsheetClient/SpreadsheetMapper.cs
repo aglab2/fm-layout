@@ -97,13 +97,40 @@ public static class SpreadsheetMapper
                     commentator2Pronouns,
                     commentator3Pronouns,
                     commentator4Pronouns
-                ]
+                ],
+                IsWidescreen = IsGameWidescreen(windowSize)
             };
             
             result.Add(runModel);
         }
 
         return result;
+    }
+
+    private static bool IsGameWidescreen(string resolution)
+    {
+        const double widescreenRatio = 16.0 / 9.0;
+        const double narrowRatio = 4.0 / 3.0;
+        double ratio = widescreenRatio;
+        
+        if (resolution.Contains('x'))
+        {
+            var pixels = resolution.Split('x');
+            var width = int.Parse(pixels[0]);
+            var height = int.Parse(pixels[1]);
+            ratio = (double)width / height;
+        } else if (resolution.Contains(':'))
+        {
+            var ratios = resolution.Split(':');
+            var rWidth = int.Parse(ratios[0]);
+            var rHeight = int.Parse(ratios[1]);
+            ratio = (double)rWidth / rHeight;
+        }
+
+        var wideDiff = Math.Abs(widescreenRatio - ratio);
+        var narrowDiff = Math.Abs(narrowRatio - ratio);
+        
+        return wideDiff < narrowDiff;
     }
 
     private static string GetFieldOrEmpty(IList<object> value, SpreadSheetFields field)

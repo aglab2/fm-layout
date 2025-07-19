@@ -7,13 +7,12 @@ public class RunModel
     public string CreatedBy { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
     public string Estimate { get; set; } = string.Empty;
-    public int WindowWidth { get; set; }
-    public int WindowHeight { get; set; }
+    public bool IsWidescreen { get; set; } = false;
     public bool[] RunnerHasWebcam { get; set; } = [false, false];
     public string[] Runners { get; set; } = ["REPLACE_ME"];
-    public string[] RunnerPronouns { get; set; } = [];
+    public string[] RunnerPronouns { get; set; } = ["REPLACE_ME"];
     public string[] Commentators { get; set; } = ["REPLACE_ME"];
-    public string[] CommentatorPronouns { get; set; } = [];
+    public string[] CommentatorPronouns { get; set; } = ["REPLACE_ME"];
 
     public override string ToString()
     {

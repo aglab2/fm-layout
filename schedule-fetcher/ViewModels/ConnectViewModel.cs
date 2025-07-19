@@ -8,7 +8,7 @@ public class ConnectViewModel(ObsClient.ObsClient obs, SpreadsheetClient.Spreads
     public void Connect()
     {
         obs.Connect($"ws://{ObsIp}", ObsPassword);
-        // spreadsheetClient.Connect(SpreadsheetId);
+        spreadsheetClient.Connect(SpreadsheetId);
         TryCloseAsync();
     }
 

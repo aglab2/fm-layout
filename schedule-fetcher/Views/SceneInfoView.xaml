@@ -14,14 +14,18 @@
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="0" Header="Current Scene in OBS">
             <TextBox Margin="5" Text="{Binding CurrentSceneName, Mode=OneWay}" IsReadOnly="True"/>
         </GroupBox>
+        <Separator Grid.Row="1" Height="10"/>
+        <TextBox ui:ControlHelper.PlaceholderText="Search..." VerticalAlignment="Center" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2"/>
         
-        <GroupBox Header="OBS Scenes" Grid.Row="1">
+        <GroupBox Header="OBS Scenes" Grid.Row="3">
             <ListBox ItemsSource="{Binding ObsScenes}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
@@ -38,6 +42,6 @@
             </ListBox>
         </GroupBox>
         
-        <Button cm:Message.Attach="CreateLayouts" HorizontalAlignment="Stretch" Content="Create layouts" Grid.Row="2"/>
+        <Button cm:Message.Attach="CreateLayouts" HorizontalAlignment="Stretch" Content="Create layouts" Grid.Row="4"/>
     </Grid>
 </UserControl>
