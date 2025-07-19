@@ -1,0 +1,30 @@
+﻿<Window x:Class="schedule_fetcher.Views.ConnectView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:schedule_fetcher.Views"
+        mc:Ignorable="d"
+        xmlns:viewModels="clr-namespace:schedule_fetcher.ViewModels"
+        xmlns:cm="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro.Platform"
+        d:DataContext="{Binding Source={d:DesignInstance viewModels:ConnectViewModel}}"
+        Title="Connect to spreadsheet..." Height="350" Width="350"
+        SizeToContent="Height"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <ui:SimpleStackPanel Grid.Row="0" Spacing="15" Orientation="Vertical">
+            <TextBox ui:ControlHelper.PlaceholderText="Enter spreadsheet ID..." ui:ControlHelper.Header="Spreadsheet ID" Margin="4" VerticalAlignment="Center" x:Name="SpreadsheetId"/>
+            <TextBox ui:ControlHelper.PlaceholderText="Enter OBS IP with port (Ex: 127.0.0.1:4455)" ui:ControlHelper.Header="OBS IP" Margin="4" VerticalAlignment="Center" x:Name="ObsIp"/>
+            <PasswordBox ui:ControlHelper.PlaceholderText="Enter OBS Password" ui:ControlHelper.Header="OBS Password" Margin="4" VerticalAlignment="Center" cm:Message.Attach="[Event PasswordChanged] = [Action OnPasswordChanged($source)]"/>
+        </ui:SimpleStackPanel>
+                    
+        <Button HorizontalAlignment="Stretch" x:Name="Connect" Grid.Row="1">Connect</Button>
+    </Grid>
+</Window>

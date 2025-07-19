@@ -3,3 +3,4 @@
 *.secret
 *.zip
 relay-race-games/
+*credentials*

@@ -1,0 +1,41 @@
+﻿<Window x:Class="schedule_fetcher.Views.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:schedule_fetcher"
+        xmlns:views="clr-namespace:schedule_fetcher.Views"
+        xmlns:viewModels="clr-namespace:schedule_fetcher.ViewModels"
+        d:DataContext="{Binding Source={d:DesignInstance viewModels:ShellViewModel}}"
+        mc:Ignorable="d"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        Title="Schedule Fetcher" Height="800" Width="1200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <Menu FontSize="15" Margin="0, 0, 0, 10" Grid.Row="0">
+            <MenuItem Header="Connect" x:Name="ShowConnect"/>
+            <MenuItem Header="Disconnect" x:Name="Disconnect"/>
+        </Menu>
+        
+        <Grid IsEnabled="{Binding IsConnected}" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            
+            <views:LayoutInfoView Grid.Column="0" DataContext="{Binding LayoutInfo}"/>
+            <views:SceneInfoView Grid.Column="1" DataContext="{Binding SceneInfo}"/>
+        </Grid>
+        
+        <Grid Grid.Row="2">
+            <StatusBar>
+                <StatusBarItem Content="{Binding ObsConnectionStatus}"/>
+            </StatusBar>
+        </Grid>
+    </Grid>
+</Window>

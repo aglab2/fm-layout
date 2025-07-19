@@ -337,11 +337,11 @@ end
 
 schedule.get_runs = function()
     local runs = {}
-    local runs_amount = #(schedule.get_schedule().oengus.lines)
-    for i = 1, runs_amount do
-        local run_info = schedule.get_run_info(i - 1)
-        table.insert(runs, run_info)
-    end
+    -- local runs_amount = #(schedule.get_schedule().oengus.lines)
+    -- for i = 1, runs_amount do
+    --     local run_info = schedule.get_run_info(i - 1)
+    --     table.insert(runs, run_info)
+    -- end
 
     return runs
 end

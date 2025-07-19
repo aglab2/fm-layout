@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="schedule_fetcher.Views.SceneInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:schedule_fetcher.Views"
+             xmlns:viewModels="clr-namespace:schedule_fetcher.ViewModels"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:cm="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro.Platform"
+             d:DataContext="{Binding Source={d:DesignInstance viewModels:SceneInfoViewModel}}"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0" Header="Current Scene in OBS">
+            <TextBox Margin="5" Text="{Binding CurrentSceneName, Mode=OneWay}" IsReadOnly="True"/>
+        </GroupBox>
+        
+        <GroupBox Header="OBS Scenes" Grid.Row="1">
+            <ListBox ItemsSource="{Binding ObsScenes}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <cm:ActionMessage MethodName="ChangeSelectedScene">
+                            <cm:Parameter Value="$eventArgs"/>
+                        </cm:ActionMessage>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+    </Grid>
+</UserControl>
