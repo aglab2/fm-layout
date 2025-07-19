@@ -355,6 +355,13 @@ layout_relay_race_source_def.tick_players = function()
     local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
     local r1_uuid = obs.obs_data_get_string(ctx.props_settings, util.setting_names.r1_source)
     local r2_uuid = obs.obs_data_get_string(ctx.props_settings, util.setting_names.r2_source)
+    if not ctx.layout_objects[r1_uuid] then
+        ctx.layout_objects[r1_uuid] = { x = 0, y = 0 }
+    end
+    if not ctx.layout_objects[r2_uuid] then
+        ctx.layout_objects[r2_uuid] = { x = 0, y = 0 }
+    end
+
     local r1_pos = ctx.layout_objects[r1_uuid]
     local r2_pos = ctx.layout_objects[r2_uuid]
 

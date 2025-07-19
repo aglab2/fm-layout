@@ -218,42 +218,43 @@ end
 ---@return string
 schedule.get_run_info = function(run_index)
     local schedule = schedule.get_schedule()
-    local run = schedule.oengus.lines[run_index + 1]
+    local run = schedule.oengus.schedule.items[run_index + 1]
     local horaro_run = schedule.items[run_index + 1]
 
     local run_string = tostring(run_index + 1) .. ". "
 
-    if run.setupBlock then
-        run_string = run_string .. run.setupBlockText
+    if run.data[0] == nil and run.data[4] == nil then
+        run_string = run_string .. run.data[1]
         return run_string
     end
 
-    run_string = run_string .. run.gameName
+    run_string = run_string .. run.data[1]
     run_string = run_string .. " "
-    if run.console ~= "null" then
-        run_string = run_string .. run.console
+    if run.data[4] ~= nil then
+        run_string = run_string .. run.data[4]
         run_string = run_string .. " "
     end
 
 
-    if horaro_run.is_multiplayer then
-        local participants_names = parse_commentators(horaro_run.participants)
-        local participants_amt = #(participants_names)
-        run_string = run_string .. tostring(participants_amt) .. " participants "
-    else
-        local runners_amt = #(run.runners)
+    if run.data[0] ~= nil then
+        local runners = {}
+        local runners_amt = 0
+        for runner in string.gmatch(run.data[0], "([^, ]+)") do
+            runners[runners_amt] = runner
+            runners_amt = runners_amt + 1
+        end
         run_string = run_string .. tostring(runners_amt) .. " player(s) "
-        for i = 1, runners_amt do
-            local runner = run.runners[i]
-            run_string = run_string .. runner.username
+        for i = 0, runners_amt do
+            local runner = runners[i]
+            run_string = run_string .. runner
             run_string = run_string .. " "
         end
     end
 
-    run_string = run_string .. run.categoryName
+    run_string = run_string .. run.data[2]
     run_string = run_string .. " "
 
-    local estimate = parse_estimate(run.estimate)
+    local estimate = parse_estimate(run.length)
     run_string = run_string .. estimate
 
     return run_string
@@ -262,12 +263,12 @@ end
 schedule.get_run_data = function(run_idx, is_multiplayer)
     local data = {}
 
-    local run = schedule.get_schedule().oengus.lines[run_idx + 1]
+    local run = schedule.get_schedule().oengus.schedule.items[run_idx + 1]
     local horaro_run = schedule.get_schedule().items[run_idx + 1].data
 
-    data.game_name = run.gameName
-    data.estimate = parse_estimate(run.estimate)
-    data.category = run.categoryName
+    data.game_name = run.data[2]:match("%[(.-)%]") or run.data[2]
+    data.estimate = parse_estimate(run.length)
+    data.category = run.data[3]
     data.ratio = parse_ratio(get_horaro_column(horaro_run, columns.window_size))
     data.created_by = get_horaro_column(horaro_run, columns.created_by)
     data.twitch_directory = get_horaro_column(horaro_run, columns.directory)

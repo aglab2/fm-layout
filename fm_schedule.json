@@ -1366,6 +1366,27 @@
         ]
       },
       {
+        "length": "PT55M",
+        "length_t": 3300,
+        "scheduled": "2024-07-11T10:20:00-07:00",
+        "scheduled_t": 1720718400,
+        "data": [
+          "[The Driver Syndicate](https://driver-syndicate.com/) + [Citro\u00ebn C4 Robot](https://www.myabandonware.com/game/citroen-c4-robot-dzs)",
+          null,
+          null,
+          "All Miami Missions (Classic) + Any%",
+          "Solo Run",
+          "[ViperUK](https://www.twitch.tv/viperraces)",
+          "()",
+          null,
+          "16:9",
+          "Soapy + others",
+          "The Driver Syndicate",
+          "PC",
+          "()"
+        ]
+      },
+      {
         "length": "PT1H30M",
         "length_t": 5400,
         "scheduled": "2024-07-11T11:25:00-07:00",
@@ -1723,6 +1744,27 @@
         ]
       },
       {
+        "length": "PT55M",
+        "length_t": 3300,
+        "scheduled": "2024-07-12T07:41:00-07:00",
+        "scheduled_t": 1720795260,
+        "data": [
+          "[Amapani!](https://desunoya.booth.pm/items/1019683)",
+          null,
+          null,
+          "Any% v1.2",
+          "Solo Run",
+          "[Shinsa](https://www.twitch.tv/shinsa843)",
+          "(He/Him)",
+          "gamercal (?) + \u30d4\u30b8\u30e7\u30f3 ()",
+          "16:9",
+          "\u3067\u3059\u306e\u3084\u2606",
+          "Touhou Project",
+          "PC",
+          "()"
+        ]
+      },
+      {
         "length": "PT45M",
         "length_t": 2700,
         "scheduled": "2024-07-12T08:46:00-07:00",
@@ -1891,6 +1933,27 @@
         ]
       },
       {
+        "length": "PT1H25M",
+        "length_t": 5100,
+        "scheduled": "2024-07-12T16:32:00-07:00",
+        "scheduled_t": 1720827120,
+        "data": [
+          "IWBTG Blind Sudoku Event                **(SUDOKU BLOCK ENDS)**",
+          "15",
+          null,
+          "Showcase",
+          "Other",
+          "[arzztt](https://www.twitch.tv/arzztt) + [Cosmoing](https://www.youtube.com/cosmoing)",
+          "() + ()",
+          null,
+          "4:3",
+          null,
+          "I Wanna Be The Guy",
+          "PC",
+          "(Yes) + (Yes)"
+        ]
+      },
+      {
         "length": "PT2H30M",
         "length_t": 9000,
         "scheduled": "2024-07-12T18:07:00-07:00",
@@ -2021,6 +2084,8 @@
         "length_t": 7200,
         "scheduled": "2024-07-13T06:57:00-07:00",
         "scheduled_t": 1720879020,
+        "is_multiplayer": 1,
+        "participants": "LukeIGuess (They/Them) + h3oCharles (He/They) + DragonXPlayer () + Iruenn (She/Her) + Murzikk () + Xoryl () + Kiiview (He/Him) + TetraField () + CeleCele () + Mir (He/Him) + Gaborro () + Mastermaxify (He/Him) + MKey () + 128-Up (He/Him) + Wolsk (He/They) + bummer (He/Him)",
         "data": [
           "Ance Tournament",
           "30",
@@ -2189,6 +2254,8 @@
         "length_t": 9000,
         "scheduled": "2024-07-13T17:42:00-07:00",
         "scheduled_t": 1720917720,
+        "is_multiplayer": 1,
+        "participants": "",
         "data": [
           "IWBTG Relay Race",
           "30",
@@ -2231,6 +2298,8 @@
         "length_t": 3600,
         "scheduled": "2024-07-13T22:42:00-07:00",
         "scheduled_t": 1720935720,
+        "is_multiplayer": 1,
+        "participants": "dmt_goobz (He/Him) + ganon (He/Him) + Nambo (Any) + Zona (He/Him)",
         "data": [
           "[Super Monkey Ball: Stardust](https://smbelite.net/games/stardust)",
           "20",
@@ -2378,6 +2447,8 @@
         "length_t": 9000,
         "scheduled": "2024-07-14T06:27:00-07:00",
         "scheduled_t": 1720963620,
+        "is_multiplayer": 1,
+        "participants": "gian_97 (He/Him) + MrSqurly (He/Him) + Unendlich (He/Him) + CaptainBowser (He/Him) + amsixx (He/Him) + SirNoCancel () + R () + Stranger ()",
         "data": [
           "Super Mario 64 Kaizo Tournament",
           "30",
