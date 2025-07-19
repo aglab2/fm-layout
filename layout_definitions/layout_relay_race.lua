@@ -136,91 +136,6 @@ layout_relay_race_source_def.get_defaults = function(settings)
     obs.obs_data_set_default_string(settings, util.setting_names.c2_pr, "They/Them")
 end
 
-local slider_modified = function(props, p, settings)
-    local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
-    local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
-    show_commentators(ctx)
-    if comm_amt <= 1 then
-        util.set_prop_visible(ctx, util.setting_names.c2_name, false)
-        util.set_prop_visible(ctx, util.setting_names.c2_pr, false)
-    end
-
-    return true
-end
-
-local update_run_info = function(props, p)
-    local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
-    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
-    local run_data = schedule.get_run_data(run_idx, true)
-
-    ctx.participants = run_data.participants
-
-    util.set_prop_text(ctx, util.setting_names.estimate, run_data.estimate)
-    util.set_prop_text(ctx, util.setting_names.category, run_data.category)
-
-    local comm_amt = #(run_data.commentators)
-    -- util.set_item_visible(ctx, util.setting_names.comms, true)
-    if comm_amt == 0 then
-        -- util.set_item_visible(ctx, util.setting_names.comms, false)
-        util.set_prop_text(ctx, util.setting_names.c1_name, "")
-        util.set_prop_text(ctx, util.setting_names.c1_pr, "")
-        util.set_prop_text(ctx, util.setting_names.c2_name, "")
-        util.set_prop_text(ctx, util.setting_names.c2_pr, "")
-    end
-
-    if comm_amt > 2 then
-        comm_amt = 2
-    end
-
-    for i = 1, comm_amt do
-        if i == 1 then
-            util.set_prop_text(ctx, util.setting_names.c1_name, run_data.commentators[i].name)
-            util.set_prop_text(ctx, util.setting_names.c1_pr, run_data.commentators[i].pronouns)
-        end
-        if i == 2 then
-            util.set_prop_text(ctx, util.setting_names.c2_name, run_data.commentators[i].name)
-            util.set_prop_text(ctx, util.setting_names.c2_pr, run_data.commentators[i].pronouns)
-        end
-    end
-
-    obs.obs_data_set_int(ctx.props_settings, util.setting_names.comm_amt, comm_amt)
-
-    local max_size = {
-        width = 833,
-        height = 627
-    }
-
-    local x, y, width, height = util.fit_screen(run_data.ratio.width, run_data.ratio.height, max_size.width,
-        max_size.height)
-
-    for i = 1, 2 do
-        ctx.game_resolutions[i].game_x = ctx.game_resolutions[i].offset_x + x
-        ctx.game_resolutions[i].game_y = ctx.game_resolutions[i].offset_y + y
-        ctx.game_resolutions[i].width = width
-        ctx.game_resolutions[i].height = height
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_width .. tostring(i),
-            ctx.game_resolutions[i].width)
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_height .. tostring(i),
-            ctx.game_resolutions[i].height)
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_x .. tostring(i),
-            ctx.game_resolutions[i].game_x)
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_y .. tostring(i),
-            ctx.game_resolutions[i].game_y)
-    end
-
-    layout_relay_race_source_def.update(nil, ctx.props_settings)
-
-    return true
-end
-
-local function update_twitch(props, p)
-    local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
-    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
-    local run_data = schedule.get_run_data(run_idx, true)
-
-    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string, run_data.is_tas)
-end
-
 local function start_relay(props, p)
     local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
     ctx.relay_data.started = true
@@ -240,21 +155,8 @@ layout_relay_race_source_def.get_properties = function(data)
     local ctx = util.get_item_ctx(layout_relay_race_source_def.id)
     ctx.props_def = obs.obs_properties_create()
 
-    local runs_list = obs.obs_properties_add_list(ctx.props_def, util.setting_names.runs_list,
-        util.dashboard_names.runs_list, obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_INT)
-    local runs = schedule.get_multiplayer_runs()
-    local runs_amount = #(runs)
-    for i = 1, runs_amount do
-        obs.obs_property_list_add_int(runs_list, runs[i].name, runs[i].index - 1)
-    end
-
     obs.obs_properties_add_bool(ctx.props_def, util.setting_names.fill_with_participant,
         "Fill runner names automatically")
-
-    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_run_info,
-        util.dashboard_names.update_run_info, update_run_info)
-    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_twitch,
-        util.dashboard_names.update_twitch, update_twitch)
 
     obs.obs_properties_add_button(ctx.props_def, util.setting_names.start_relay,
         util.dashboard_names.start_relay, start_relay)
@@ -267,31 +169,6 @@ layout_relay_race_source_def.get_properties = function(data)
     obs.obs_properties_add_button(ctx.props_def, util.setting_names.red_team_finish,
         util.dashboard_names.red_team_finish, red_team_finish_relay)
 
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.category, util.dashboard_names.category,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.estimate, util.dashboard_names.estimate,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.yellow_team_name, util.dashboard_names.yellow_team,
-        obs.OBS_TEXT_MULTILINE)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.red_team_name, util.dashboard_names.red_team,
-        obs.OBS_TEXT_MULTILINE)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.r1_name, util.dashboard_names.r1_name,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.r2_name, util.dashboard_names.r2_name,
-        obs.OBS_TEXT_DEFAULT)
-
-    local slider = obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt,
-        util.dashboard_names.comm_amt, 1, 2, 1)
-    obs.obs_property_set_modified_callback(slider, slider_modified)
-
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_name, util.dashboard_names.c1_name,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_pr, util.dashboard_names.c1_pr,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c2_name, util.dashboard_names.c2_name,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c2_pr, util.dashboard_names.c2_pr,
-        obs.OBS_TEXT_DEFAULT)
 
     obs.obs_properties_apply_settings(ctx.props_def, ctx.props_settings)
 

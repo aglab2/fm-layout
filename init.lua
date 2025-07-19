@@ -7,7 +7,6 @@ require("util")
 require("timer_controller")
 local obs = obslua
 local json = require("cjson")
-local schedule = require("schedule.schedule")
 local twitch = require("twitch_api.twitch")
 
 local description = [[
@@ -70,16 +69,12 @@ function create_layouts(layout_props, btn_prop)
     create_2p_4x3_layout()
     create_3p_4x3_layout()
     create_4p_4x3_layout()
-    create_2p_tournament_layout()
-    create_2p_monkey_ball_layout()
+    -- create_2p_tournament_layout()
+    -- create_2p_monkey_ball_layout()
     create_relay_race_layout()
     create_fish_out_water_layout()
-    create_kh2_randomizer_layout()
-    create_lm2_randomizer_layout()
-end
-
-function reload_schedule()
-    schedule.get_schedule(true)
+    -- create_kh2_randomizer_layout()
+    -- create_lm2_randomizer_layout()
 end
 
 local previous_updates_size = 0
@@ -99,8 +94,6 @@ end
 
 function script_load(settings)
     obs.timer_add(do_updates, 500)
-
-    schedule.get_schedule()
 
     local settings_json = obs.obs_data_get_json(settings)
     local ctx_items = json.decode(settings_json)
@@ -127,7 +120,6 @@ end
 function script_properties()
     local props = obs.obs_properties_create()
     obs.obs_properties_add_button(props, "create_layouts", "Create layouts", create_layouts)
-    obs.obs_properties_add_button(props, "reload_schedule", "Reload schedule file", reload_schedule)
     return props
 end
 

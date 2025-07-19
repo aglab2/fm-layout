@@ -11,10 +11,11 @@
              d:DataContext="{Binding Source={d:DesignInstance viewModels:SceneInfoViewModel}}"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <GroupBox Grid.Row="0" Header="Current Scene in OBS">
             <TextBox Margin="5" Text="{Binding CurrentSceneName, Mode=OneWay}" IsReadOnly="True"/>
@@ -36,5 +37,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </GroupBox>
+        
+        <Button cm:Message.Attach="CreateLayouts" HorizontalAlignment="Stretch" Content="Create layouts" Grid.Row="2"/>
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ModernWpf;
 
 namespace schedule_fetcher.ViewModels;
 
@@ -36,6 +37,16 @@ public class ShellViewModel : PropertyChangedBase
         IsConnected = true;
         NotifyOfPropertyChange(nameof(IsConnected));
         NotifyOfPropertyChange(nameof(ObsConnectionStatus));
+    }
+
+    public void ToggleTheme()
+    {
+        ThemeManager.Current.ApplicationTheme = ThemeManager.Current.ApplicationTheme switch
+        {
+            ApplicationTheme.Dark => ApplicationTheme.Light,
+            ApplicationTheme.Light => ApplicationTheme.Dark,
+            _ => ApplicationTheme.Light
+        };
     }
 
     public void Disconnect()

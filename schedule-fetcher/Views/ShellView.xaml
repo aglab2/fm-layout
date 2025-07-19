@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
-        Title="Schedule Fetcher" Height="800" Width="1200">
+        Title="FM Restreamer Dashboard" Height="800" Width="1200">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,6 +20,7 @@
         <Menu FontSize="15" Margin="0, 0, 0, 10" Grid.Row="0">
             <MenuItem Header="Connect" x:Name="ShowConnect"/>
             <MenuItem Header="Disconnect" x:Name="Disconnect"/>
+            <MenuItem Header="Toggle Theme" x:Name="ToggleTheme"/>
         </Menu>
         
         <Grid IsEnabled="{Binding IsConnected}" Grid.Row="1">

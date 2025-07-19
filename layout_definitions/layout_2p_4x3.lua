@@ -107,153 +107,9 @@ layout_2p_4x3_source_def.get_defaults = function(settings)
     obs.obs_data_set_default_string(settings, util.setting_names.c2_pr, "They/Them")
 end
 
-local slider_modified = function(props, p, settings)
-    local ctx = util.get_item_ctx(layout_2p_4x3_source_def.id)
-    local comm_amt = obs.obs_data_get_int(ctx.props_settings, util.setting_names.comm_amt)
-    show_commentators(ctx)
-    if comm_amt <= 1 then
-        util.set_prop_visible(ctx, util.setting_names.c2_name, false)
-        util.set_prop_visible(ctx, util.setting_names.c2_pr, false)
-    end
-
-    return true
-end
-
-local update_run_info = function(props, p)
-    local ctx = util.get_item_ctx(layout_2p_4x3_source_def.id)
-    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
-    local run_data = schedule.get_run_data(run_idx)
-
-    util.set_prop_text(ctx, util.setting_names.game_name, run_data.game_name)
-    util.set_prop_text(ctx, util.setting_names.created_by, run_data.created_by)
-    util.set_prop_text(ctx, util.setting_names.estimate, run_data.estimate)
-    util.set_prop_text(ctx, util.setting_names.category, run_data.category)
-
-    local runner_amount = #(run_data.runners)
-
-    if runner_amount > 2 then
-        runner_amount = 2
-    end
-
-    for i = 1, runner_amount do
-        util.set_prop_text(ctx, util.setting_names["r" .. tostring(i) .. "_name"], run_data.runners[i].name)
-        util.set_prop_text(ctx, util.setting_names["r" .. tostring(i) .. "_pr"], run_data.runners[i].pronouns)
-    end
-
-    local comm_amt = #(run_data.commentators)
-    util.set_item_visible(ctx, util.setting_names.comms, true)
-    if comm_amt == 0 then
-        util.set_item_visible(ctx, util.setting_names.comms, false)
-        util.set_prop_text(ctx, util.setting_names.c1_name, "")
-        util.set_prop_text(ctx, util.setting_names.c1_pr, "")
-        util.set_prop_text(ctx, util.setting_names.c2_name, "")
-        util.set_prop_text(ctx, util.setting_names.c2_pr, "")
-    end
-
-    if comm_amt > 2 then
-        comm_amt = 2
-    end
-
-    for i = 1, comm_amt do
-        if i == 1 then
-            util.set_prop_text(ctx, util.setting_names.c1_name, run_data.commentators[i].name)
-            util.set_prop_text(ctx, util.setting_names.c1_pr, run_data.commentators[i].pronouns)
-        end
-        if i == 2 then
-            util.set_prop_text(ctx, util.setting_names.c2_name, run_data.commentators[i].name)
-            util.set_prop_text(ctx, util.setting_names.c2_pr, run_data.commentators[i].pronouns)
-        end
-    end
-
-    obs.obs_data_set_int(ctx.props_settings, util.setting_names.comm_amt, comm_amt)
-
-    local max_size = {
-        width = 832,
-        height = 625
-    }
-
-    local x, y, width, height = util.fit_screen(run_data.ratio.width, run_data.ratio.height, max_size.width,
-        max_size.height)
-
-    for i = 1, 1 do
-        ctx.game_resolutions[i].game_x = ctx.game_resolutions[i].offset_x
-        ctx.game_resolutions[i].game_y = ctx.game_resolutions[i].offset_y + y
-        ctx.game_resolutions[i].width = width
-        ctx.game_resolutions[i].height = height
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_width .. tostring(i),
-            ctx.game_resolutions[i].width)
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_height .. tostring(i),
-            ctx.game_resolutions[i].height)
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_x .. tostring(i),
-            ctx.game_resolutions[i].game_x)
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_y .. tostring(i),
-            ctx.game_resolutions[i].game_y)
-    end
-
-    for i = 2, 2 do
-        ctx.game_resolutions[i].game_x = ctx.game_resolutions[i].offset_x - width
-        ctx.game_resolutions[i].game_y = ctx.game_resolutions[i].offset_y + y
-        ctx.game_resolutions[i].width = width
-        ctx.game_resolutions[i].height = height
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_width .. tostring(i),
-            ctx.game_resolutions[i].width)
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_height .. tostring(i),
-            ctx.game_resolutions[i].height)
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_x .. tostring(i),
-            ctx.game_resolutions[i].game_x)
-        obs.obs_data_set_int(ctx.props_settings, util.setting_names.game_y .. tostring(i),
-            ctx.game_resolutions[i].game_y)
-    end
-
-    if runner_amount == 2 then
-        local avatars_path = script_path() .. util.avatars_path
-        local avatar_1 = avatars_path .. run_data.runners[1].name .. ".png"
-        local avatar_2 = avatars_path .. run_data.runners[2].name .. ".png"
-        if util.file_exists(avatar_1) then
-            obs.obs_data_set_string(ctx.props_settings, util.setting_names.r1_avatar,
-                avatars_path .. run_data.runners[1].name .. ".png")
-        else
-            obs.obs_data_set_string(ctx.props_settings, util.setting_names.r1_avatar,
-                avatars_path .. "placeholder.png")
-        end
-        if util.file_exists(avatar_2) then
-            obs.obs_data_set_string(ctx.props_settings, util.setting_names.r2_avatar,
-                avatars_path .. run_data.runners[2].name .. ".png")
-        else
-            obs.obs_data_set_string(ctx.props_settings, util.setting_names.r2_avatar,
-                avatars_path .. "placeholder.png")
-        end
-    end
-
-    layout_2p_4x3_source_def.update(nil, ctx.props_settings)
-
-    return true
-end
-
-local function update_twitch(props, p)
-    local ctx = util.get_item_ctx(layout_2p_4x3_source_def.id)
-    local run_idx = obs.obs_data_get_int(ctx.props_settings, util.setting_names.runs_list)
-    local run_data = schedule.get_run_data(run_idx)
-
-    twitch.update_title(run_data.game_name, run_data.twitch_directory, run_data.runner_string, run_data.is_tas)
-end
-
 layout_2p_4x3_source_def.get_properties = function(data)
     local ctx = util.get_item_ctx(layout_2p_4x3_source_def.id)
     ctx.props_def = obs.obs_properties_create()
-    local runs_list = obs.obs_properties_add_list(ctx.props_def, util.setting_names.runs_list,
-        util.dashboard_names.runs_list, obs.OBS_COMBO_TYPE_LIST, obs.OBS_COMBO_FORMAT_INT)
-
-    local runs = schedule.get_runs()
-    local runs_amount = #(runs)
-    for i = 1, runs_amount do
-        obs.obs_property_list_add_int(runs_list, runs[i], i - 1)
-    end
-
-    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_run_info,
-        util.dashboard_names.update_run_info, update_run_info)
-    obs.obs_properties_add_button(ctx.props_def, util.setting_names.update_twitch,
-        util.dashboard_names.update_twitch, update_twitch)
 
     obs.obs_properties_add_text(ctx.props_def, util.setting_names.game_name, util.dashboard_names.game_name,
         obs.OBS_TEXT_DEFAULT)
@@ -268,38 +124,10 @@ layout_2p_4x3_source_def.get_properties = function(data)
             util.dashboard_names.game_y .. " " .. tostring(i), 0, 1080, 1)
     end
 
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.created_by, util.dashboard_names.created_by,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.category, util.dashboard_names.category,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.estimate, util.dashboard_names.estimate,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.r1_name, util.dashboard_names.r1_name,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.r1_pr, util.dashboard_names.r1_pr,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.r2_name, util.dashboard_names.r2_name,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.r2_pr, util.dashboard_names.r2_pr,
-        obs.OBS_TEXT_DEFAULT)
-
     obs.obs_properties_add_path(ctx.props_def, util.setting_names.r1_avatar, util.dashboard_names.r1_avatar,
         obs.OBS_PATH_FILE, "Image files (*.bmp *.tga *.png *.jpeg *.jpg *.jxr *.gif *.psd *.webp)", nil)
     obs.obs_properties_add_path(ctx.props_def, util.setting_names.r2_avatar, util.dashboard_names.r2_avatar,
         obs.OBS_PATH_FILE, "Image files (*.bmp *.tga *.png *.jpeg *.jpg *.jxr *.gif *.psd *.webp)", nil)
-
-    local slider = obs.obs_properties_add_int_slider(ctx.props_def, util.setting_names.comm_amt,
-        util.dashboard_names.comm_amt, 0, 2, 1)
-    obs.obs_property_set_modified_callback(slider, slider_modified)
-
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_name, util.dashboard_names.c1_name,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c1_pr, util.dashboard_names.c1_pr,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c2_name, util.dashboard_names.c2_name,
-        obs.OBS_TEXT_DEFAULT)
-    obs.obs_properties_add_text(ctx.props_def, util.setting_names.c2_pr, util.dashboard_names.c2_pr,
-        obs.OBS_TEXT_DEFAULT)
 
     obs.obs_properties_apply_settings(ctx.props_def, ctx.props_settings)
 
@@ -341,19 +169,6 @@ layout_2p_4x3_source_def.update = function(data, settings)
         ctx.game_resolutions[i].height = obs.obs_data_get_int(ctx.props_settings,
             util.setting_names.game_height .. tostring(i))
     end
-
-    util.set_obs_text(ctx, util.setting_names.game_name_source, util.setting_names.game_name)
-    util.set_obs_text(ctx, util.setting_names.created_by_source, util.setting_names.created_by, "Created by ")
-    util.set_obs_text(ctx, util.setting_names.category_source, util.setting_names.category)
-    util.set_obs_text(ctx, util.setting_names.estimate_source, util.setting_names.estimate)
-    util.set_obs_text(ctx, util.setting_names.r1_source, util.setting_names.r1_name)
-    util.set_obs_text(ctx, util.setting_names.r1_pr_source, util.setting_names.r1_pr)
-    util.set_obs_text(ctx, util.setting_names.r2_source, util.setting_names.r2_name)
-    util.set_obs_text(ctx, util.setting_names.r2_pr_source, util.setting_names.r2_pr)
-    util.set_obs_text(ctx, util.setting_names.c1_source, util.setting_names.c1_name)
-    util.set_obs_text(ctx, util.setting_names.c2_source, util.setting_names.c2_name)
-    util.set_obs_text(ctx, util.setting_names.c1_pr_source, util.setting_names.c1_pr)
-    util.set_obs_text(ctx, util.setting_names.c2_pr_source, util.setting_names.c2_pr)
 end
 
 layout_2p_4x3_source_def.destroy = function(data)

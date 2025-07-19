@@ -21,6 +21,286 @@
       <Content Include="SpreadsheetClient\credentials.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <None Remove="Assets\2p_4x3_player_frame.png" />
+      <Content Include="Assets\2p_4x3_player_frame.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\2p_comm_name_box.png" />
+      <Content Include="Assets\2p_comm_name_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\2p_commentators_box.png" />
+      <Content Include="Assets\2p_commentators_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\2p_game_frame.png" />
+      <Content Include="Assets\2p_game_frame.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\2p_pronouns_box.png" />
+      <Content Include="Assets\2p_pronouns_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\2p_runner_box.png" />
+      <Content Include="Assets\2p_runner_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\2p_tournament_commentators_box.png" />
+      <Content Include="Assets\2p_tournament_commentators_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\2p_tournament_game_frame.png" />
+      <Content Include="Assets\2p_tournament_game_frame.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\3p_comm_name_box.png" />
+      <Content Include="Assets\3p_comm_name_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\3p_commentators_box.png" />
+      <Content Include="Assets\3p_commentators_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\3p_game_frame.png" />
+      <Content Include="Assets\3p_game_frame.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\3p_logo_frame.png" />
+      <Content Include="Assets\3p_logo_frame.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\background.png" />
+      <Content Include="Assets\background.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\background_delfruit.png" />
+      <Content Include="Assets\background_delfruit.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\comm_name_box.png" />
+      <Content Include="Assets\comm_name_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\comm_pronouns_box.png" />
+      <Content Include="Assets\comm_pronouns_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\commentators_box.png" />
+      <Content Include="Assets\commentators_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\estimate_frame.png" />
+      <Content Include="Assets\estimate_frame.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\fade_4_3_2p_left.png" />
+      <Content Include="Assets\fade_4_3_2p_left.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\fade_16_9_1p_left.png" />
+      <Content Include="Assets\fade_16_9_1p_left.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\fish_out_of_water_iwbtg_icon.png" />
+      <Content Include="Assets\fish_out_of_water_iwbtg_icon.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\fish_out_of_water_p1_smw.png" />
+      <Content Include="Assets\fish_out_of_water_p1_smw.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\fish_out_of_water_p2_iwbtg.png" />
+      <Content Include="Assets\fish_out_of_water_p2_iwbtg.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\fish_out_of_water_p3_touhou.png" />
+      <Content Include="Assets\fish_out_of_water_p3_touhou.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\fish_out_of_water_smb_icon.png" />
+      <Content Include="Assets\fish_out_of_water_smb_icon.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\fish_out_of_water_swap.png" />
+      <Content Include="Assets\fish_out_of_water_swap.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\fish_out_of_water_touhou_icon.png" />
+      <Content Include="Assets\fish_out_of_water_touhou_icon.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\game_frame_4_3.png" />
+      <Content Include="Assets\game_frame_4_3.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\game_frame_16_9.png" />
+      <Content Include="Assets\game_frame_16_9.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_idle_1.png" />
+      <Content Include="Assets\kid_idle_1.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_idle_1_1.png" />
+      <Content Include="Assets\kid_idle_1_1.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_idle_1_2.png" />
+      <Content Include="Assets\kid_idle_1_2.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_idle_1_3.png" />
+      <Content Include="Assets\kid_idle_1_3.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_idle_1_4.png" />
+      <Content Include="Assets\kid_idle_1_4.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_idle_2.png" />
+      <Content Include="Assets\kid_idle_2.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_idle_3.png" />
+      <Content Include="Assets\kid_idle_3.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_idle_4.png" />
+      <Content Include="Assets\kid_idle_4.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_run_1.png" />
+      <Content Include="Assets\kid_run_1.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_run_1_1.png" />
+      <Content Include="Assets\kid_run_1_1.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_run_1_2.png" />
+      <Content Include="Assets\kid_run_1_2.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_run_1_3.png" />
+      <Content Include="Assets\kid_run_1_3.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_run_1_4.png" />
+      <Content Include="Assets\kid_run_1_4.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_run_2.png" />
+      <Content Include="Assets\kid_run_2.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_run_3.png" />
+      <Content Include="Assets\kid_run_3.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\kid_run_4.png" />
+      <Content Include="Assets\kid_run_4.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\logo.png" />
+      <Content Include="Assets\logo.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\monkey_ball_empty_score.png" />
+      <Content Include="Assets\monkey_ball_empty_score.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\monkey_ball_score.png" />
+      <Content Include="Assets\monkey_ball_score.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\player_frame_no_cam.png" />
+      <Content Include="Assets\player_frame_no_cam.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\player_frame_w_cam.png" />
+      <Content Include="Assets\player_frame_w_cam.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\pronouns_box.png" />
+      <Content Include="Assets\pronouns_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_games.png" />
+      <Content Include="Assets\relay_race_games.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_kid_run_static.png" />
+      <Content Include="Assets\relay_race_kid_run_static.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_red_team_box.png" />
+      <Content Include="Assets\relay_race_red_team_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_red_team_highlight.png" />
+      <Content Include="Assets\relay_race_red_team_highlight.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_red_team_icon.png" />
+      <Content Include="Assets\relay_race_red_team_icon.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_red_team_line.png" />
+      <Content Include="Assets\relay_race_red_team_line.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_yellow_team_box.png" />
+      <Content Include="Assets\relay_race_yellow_team_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_yellow_team_highlight.png" />
+      <Content Include="Assets\relay_race_yellow_team_highlight.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_yellow_team_icon.png" />
+      <Content Include="Assets\relay_race_yellow_team_icon.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_yellow_team_line.png" />
+      <Content Include="Assets\relay_race_yellow_team_line.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\runner_box.png" />
+      <Content Include="Assets\runner_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\time_box.png" />
+      <Content Include="Assets\time_box.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\twitch_logo.png" />
+      <Content Include="Assets\twitch_logo.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="LayoutDescs\p3_4x3_layout.json" />
+      <Content Include="LayoutDescs\p3_4x3_layout.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\default.lsl" />
+      <Content Include="Assets\default.lsl">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="LayoutDescs\p3_16x9_layout.json" />
+      <Content Include="LayoutDescs\p3_16x9_layout.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="LayoutDescs\p4_16x9_layout.json" />
+      <Content Include="LayoutDescs\p4_16x9_layout.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="LayoutDescs\p2_4x3_layout.json" />
+      <Content Include="LayoutDescs\p2_layout.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="LayoutDescs\p1_layout.json" />
+      <Content Include="LayoutDescs\p1_layout.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

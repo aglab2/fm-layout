@@ -25,6 +25,7 @@ public class Bootstrapper : BootstrapperBase
         _container.Singleton<SpreadsheetClient.SpreadsheetClient>();
         _container.Singleton<SelectedSceneService>();
         _container.Singleton<SelectedRunService>();
+        _container.Singleton<LayoutModelService>();
 
         foreach (var assembly in SelectAssemblies())
         {

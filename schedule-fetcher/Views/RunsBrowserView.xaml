@@ -36,6 +36,6 @@
             </ListBox.ItemTemplate>
         </ListBox>
         
-        <Button cm:Message.Attach="Select" Grid.Row="2">Select</Button>
+        <Button HorizontalAlignment="Stretch" cm:Message.Attach="Select" Grid.Row="2">Select</Button>
     </Grid>
 </Window>

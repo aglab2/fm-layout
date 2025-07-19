@@ -1,0 +1,593 @@
+﻿{
+  "Name": "FM 4 person 16x9 layout",
+  "Elements": [
+    {
+      "Position": {"x": 0, "y": 0},
+      "Size": {"x": 1920, "y": 1080},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Background",
+      "Settings": {"file": "Assets\\background.png"}
+    },
+    {
+      "Position": {"x": 836, "y": 374},
+      "Size": {"x": 248, "y": 252},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Background DelFruit",
+      "Settings": {"file": "Assets\\background_delfruit.png"}
+    },
+    {
+      "Position": {"x": 16, "y": 515},
+      "Size": {"x": 67, "y": 22},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Runner 1 Pronouns Frame",
+      "Settings": {"file": "Assets\\pronouns_box.png"}
+    },
+    {
+      "Position": {"x": 1835, "y": 515},
+      "Size": {"x": 67, "y": 22},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Runner 2 Pronouns Frame",
+      "Settings": {"file": "Assets\\pronouns_box.png"}
+    },
+    {
+      "Position": {"x": 16, "y": 1040},
+      "Size": {"x": 67, "y": 22},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Runner 3 Pronouns Frame",
+      "Settings": {"file": "Assets\\pronouns_box.png"}
+    },
+    {
+      "Position": {"x": 1835, "y": 1040},
+      "Size": {"x": 67, "y": 22},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Runner 4 Pronouns Frame",
+      "Settings": {"file": "Assets\\pronouns_box.png"}
+    },
+    {
+      "Position": {"x": 799, "y": 483},
+      "Size": {"x": 322, "y": 67},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Timer Frame",
+      "Settings": {"file": "Assets\\time_box.png"}
+    },
+    {
+      "Position": {"x": 848, "y": 570},
+      "Size": {"x": 224, "y": 30},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Estimate Frame",
+      "Settings": {"file": "Assets\\estimate_frame.png"}
+    },
+    {
+      "Position": {"x": 848, "y": 637},
+      "Size": {"x": 224, "y": 30},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Category Frame",
+      "Settings": {"file": "Assets\\estimate_frame.png"}
+    },
+    {
+      "Position": {"x": 814, "y": 775},
+      "Size": {"x": 293, "y": 36},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentators Frame",
+      "Settings": {"file": "Assets\\commentators_box.png"}
+    },
+    {
+      "Position": {"x": 841, "y": 829},
+      "Size": {"x": 236, "y": 37},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 1 Frame",
+      "Settings": {"file": "Assets\\comm_name_box.png"}
+    },
+    {
+      "Position": {"x": 841, "y": 881},
+      "Size": {"x": 236, "y": 37},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 2 Frame",
+      "Settings": {"file": "Assets\\comm_name_box.png"}
+    },
+    {
+      "Position": {"x": 841, "y": 933},
+      "Size": {"x": 236, "y": 37},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 3 Frame",
+      "Settings": {"file": "Assets\\comm_name_box.png"}
+    },
+    {
+      "Position": {"x": 841, "y": 985},
+      "Size": {"x": 236, "y": 37},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 4 Frame",
+      "Settings": {"file": "Assets\\comm_name_box.png"}
+    },
+    {
+      "Position": {"x": 992, "y": 835},
+      "Size": {"x": 78, "y": 26},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 1 Pronouns Frame",
+      "Settings": {"file": "Assets\\comm_pronouns_box.png"}
+    },
+    {
+      "Position": {"x": 992, "y": 887},
+      "Size": {"x": 78, "y": 26},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 2 Pronouns Frame",
+      "Settings": {"file": "Assets\\comm_pronouns_box.png"}
+    },
+    {
+      "Position": {"x": 992, "y": 939},
+      "Size": {"x": 78, "y": 26},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 3 Pronouns Frame",
+      "Settings": {"file": "Assets\\comm_pronouns_box.png"}
+    },
+    {
+      "Position": {"x": 992, "y": 991},
+      "Size": {"x": 78, "y": 26},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 4 Pronouns Frame",
+      "Settings": {"file": "Assets\\comm_pronouns_box.png"}
+    },
+    {
+      "Position": {"x": 833, "y": 353},
+      "Size": {"x": 253, "y": 69},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Game Name",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "IWBTG Blind\nAdventure",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 55
+        }
+      }
+    },
+    {
+      "Position": {"x": 825, "y": 446},
+      "Size": {"x": 269, "y": 14},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Created By",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Created by NOONEFUCKINGCARES",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Regular",
+          "size": 22
+        }
+      }
+    },
+    {
+      "Position": {"x": 922, "y": 578},
+      "Size": {"x": 75, "y": 12},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Estimate",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "2:00:00",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 894, "y": 644},
+      "Size": {"x": 130, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Category",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Special Event",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 919, "y": 605},
+      "Size": {"x": 82, "y": 12},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "Estimate Static",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "ESTIMATE",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Book",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 912, "y": 672},
+      "Size": {"x": 95, "y": 12},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "Category Static",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "CATEGORY",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Book",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 878, "y": 785},
+      "Size": {"x": 172, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "Commentators Static",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "COMMENTATORS",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Regular",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 900, "y": 839},
+      "Size": {"x": 62, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 1",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Oiivae",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Regular",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 1002, "y": 843},
+      "Size": {"x": 56, "y": 8},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 1 Pronouns",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "She/Her",
+        "transform": "Upper",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 13
+        }
+      }
+    },
+    {
+      "Position": {"x": 864, "y": 891},
+      "Size": {"x": 121, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 2",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Panichannel",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Regular",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 1017, "y": 895},
+      "Size": {"x": 26, "y": 8},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 2 Pronouns",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Any",
+        "transform": "Upper",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 13
+        }
+      }
+    },
+    {
+      "Position": {"x": 900, "y": 943},
+      "Size": {"x": 62, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 3",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Oiivae",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Regular",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 1017, "y": 947},
+      "Size": {"x": 56, "y": 8},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 3 Pronouns",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "She/Her",
+        "transform": "Upper",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 13
+        }
+      }
+    },
+    {
+      "Position": {"x": 864, "y": 995},
+      "Size": {"x": 121, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 4",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Panichannel",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Regular",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 1017, "y": 999},
+      "Size": {"x": 26, "y": 8},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 4 Pronouns",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Any",
+        "transform": "Upper",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 13
+        }
+      }
+    },
+    {
+      "Position": {"x": 13, "y": 489},
+      "Size": {"x": 130, "y": 23},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "CenterLeft",
+      "Name": "D_Runner 1",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Cosmoing",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Bold",
+          "size": 28
+        }
+      }
+    },
+    {
+      "Position": {"x": 25, "y": 522},
+      "Size": {"x": 48, "y": 7},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Runner 1 Pronouns",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "He/Him",
+        "transform": "Upper",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 11
+        }
+      }
+    },
+    {
+      "Position": {"x": 1815, "y": 490},
+      "Size": {"x": 89, "y": 17},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "CenterRight",
+      "Name": "D_Runner 2",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Naloas",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Bold",
+          "size": 28
+        }
+      }
+    },
+    {
+      "Position": {"x": 1844, "y": 522},
+      "Size": {"x": 48, "y": 7},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Runner 2 Pronouns",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "He/Him",
+        "transform": "Upper",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 11
+        }
+      }
+    },
+    {
+      "Position": {"x": 13, "y": 1014},
+      "Size": {"x": 130, "y": 23},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "CenterLeft",
+      "Name": "D_Runner 3",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Cosmoing",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Bold",
+          "size": 28
+        }
+      }
+    },
+    {
+      "Position": {"x": 25, "y": 1047},
+      "Size": {"x": 48, "y": 7},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Runner 3 Pronouns",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "He/Him",
+        "transform": "Upper",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 11
+        }
+      }
+    },
+    {
+      "Position": {"x": 1829, "y": 1010},
+      "Size": {"x": 77, "y": 17},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "CenterRight",
+      "Name": "D_Runner 4",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Wolsk",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Bold",
+          "size": 28
+        }
+      }
+    },
+    {
+      "Position": {"x": 1844, "y": 1047},
+      "Size": {"x": 48, "y": 7},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Runner 4 Pronouns",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "He/Him",
+        "transform": "Upper",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 11
+        }
+      }
+    },
+    {
+      "Position": {"x": 855, "y": 499},
+      "Size": {"x": 209, "y": 31},
+      "ObsId": "livesplit-one",
+      "Alignment": "Center",
+      "Name": "Timer",
+      "AdjustPosition": true,
+      "Settings": {
+        "width": 300,
+        "height": 80,
+        "layout_path": "Assets\\default.lsl"
+      }
+    },
+    {
+      "Position": {"x": 15, "y": 43},
+      "Size": {"x": 770, "y": 433},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Runner 1 Frame",
+      "Settings": {"file": "Assets\\3p_game_frame.png"}
+    },
+    {
+      "Position": {"x": 1134, "y": 43},
+      "Size": {"x": 770, "y": 433},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Runner 2 Frame",
+      "Settings": {"file": "Assets\\3p_game_frame.png"}
+    },
+    {
+      "Position": {"x": 15, "y": 563},
+      "Size": {"x": 770, "y": 433},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Runner 3 Frame",
+      "Settings": {"file": "Assets\\3p_game_frame.png"}
+    },
+    {
+      "Position": {"x": 1134, "y": 563},
+      "Size": {"x": 770, "y": 433},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Runner 4 Frame",
+      "Settings": {"file": "Assets\\3p_game_frame.png"}
+    }
+  ]
+}

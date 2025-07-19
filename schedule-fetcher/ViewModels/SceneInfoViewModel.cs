@@ -8,15 +8,25 @@ public class SceneInfoViewModel : Screen
 {
     private readonly ObsClient.ObsClient _obs;
     private readonly SelectedSceneService _selectedScene;
-    
-    public SceneInfoViewModel(ObsClient.ObsClient obs, SelectedSceneService selectedScene)
+    private readonly IWindowManager _windowManager;
+
+    public SceneInfoViewModel(ObsClient.ObsClient obs, SelectedSceneService selectedScene, IWindowManager windowManager)
     {
         _obs = obs;
         _selectedScene = selectedScene;
-        
+        _windowManager = windowManager;
+
         _obs.SceneChanged += ObsOnSceneChanged;
+        _obs.SceneListChanged += ObsOnSceneListChanged;
         _obs.Connected += ObsOnConnected;
         _obs.Disconnected += ObsOnDisconnected;
+    }
+
+    private void ObsOnSceneListChanged()
+    {
+        var scenes = _obs.GetSceneNames();
+        ObsScenes.Clear();
+        ObsScenes.AddRange(scenes);
     }
 
     private void ObsOnDisconnected(string reason)
@@ -39,6 +49,11 @@ public class SceneInfoViewModel : Screen
     {
         CurrentSceneName = newSceneName;
         NotifyOfPropertyChange(nameof(CurrentSceneName));
+    }
+
+    public void CreateLayouts()
+    {
+        _windowManager.ShowDialogAsync(IoC.Get<CreateLayoutViewModel>());
     }
 
     public void ChangeSelectedScene(SelectionChangedEventArgs e)
