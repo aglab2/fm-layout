@@ -7,6 +7,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     </PropertyGroup>
 
     <ItemGroup>
@@ -299,6 +300,38 @@
       </Content>
       <None Remove="LayoutDescs\p1_layout.json" />
       <Content Include="LayoutDescs\p1_layout.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="LayoutDescs\relay_race_layout.json" />
+      <Content Include="LayoutDescs\relay_race_layout.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\relay_race_placeholder_game_title.png" />
+      <Content Include="Assets\relay_race_placeholder_game_title.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="LayoutDescs\fish_out_of_water_layout.json" />
+      <Content Include="LayoutDescs\fish_out_of_water_layout.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\fish_out_of_water_placeholder.png" />
+      <Content Include="Assets\fish_out_of_water_placeholder.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="LayoutDescs\bingo_boy_layout.json" />
+      <Content Include="LayoutDescs\bingo_boy_layout.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Assets\bingo_card_frame.png" />
+      <Content Include="Assets\bingo_card_frame.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="LayoutDescs\mini_shoot_layout.json" />
+      <Content Include="LayoutDescs\mini_shoot_layout.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="LayoutDescs\rain_world_layout.json" />
+      <Content Include="LayoutDescs\rain_world_layout.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>

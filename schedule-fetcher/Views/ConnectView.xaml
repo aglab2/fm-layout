@@ -8,7 +8,7 @@
         xmlns:viewModels="clr-namespace:schedule_fetcher.ViewModels"
         xmlns:cm="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro.Platform"
         d:DataContext="{Binding Source={d:DesignInstance viewModels:ConnectViewModel}}"
-        Title="Connect to spreadsheet..." Height="350" Width="350"
+        Title="Connect to OBS and Google Spreadsheet..." Height="350" Width="350"
         SizeToContent="Height"
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"

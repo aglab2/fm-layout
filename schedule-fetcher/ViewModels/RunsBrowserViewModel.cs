@@ -1,26 +1,50 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using Caliburn.Micro;
 using schedule_fetcher.Models;
 using schedule_fetcher.Services;
 
 namespace schedule_fetcher.ViewModels;
 
-public class RunsBrowserViewModel : Screen
+public class RunsBrowserViewModel(SpreadsheetClient.SpreadsheetClient spreadsheet, SelectedRunService selectedRun) : Screen
 {
-    private readonly SpreadsheetClient.SpreadsheetClient _spreadsheet;
-    private readonly SelectedRunService _selectedRun;
     private string? _search = string.Empty;
     private readonly BindableCollection<RunModel> _runs = [];
     private readonly BindableCollection<RunModel> _runsView = [];
     private RunModel? _currentlySelectedRun;
+    private bool _isFetching = false;
 
-    public RunsBrowserViewModel(SpreadsheetClient.SpreadsheetClient spreadsheet, SelectedRunService selectedRun)
+    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
-        _spreadsheet = spreadsheet;
-        _selectedRun = selectedRun;
+        Activated += OnActivated;
         
-        _runs.AddRange(_spreadsheet.GetRuns());
-        _runsView.AddRange(_runs);
+        return base.OnInitializeAsync(cancellationToken);
+    }
+
+    private async void OnActivated(object? sender, ActivationEventArgs _)
+    {
+        try
+        {
+            _isFetching = true;
+            NotifyOfPropertyChange(nameof(IsFetchingVis));
+            NotifyOfPropertyChange(nameof(IsNotFetching));
+
+            var fetchTask = Task.Factory.StartNew(() =>
+            {
+                _runs.AddRange(spreadsheet.GetRuns());
+                _runsView.AddRange(_runs);
+            });
+        
+            await fetchTask;
+
+            _isFetching = false;
+            NotifyOfPropertyChange(nameof(IsFetchingVis));
+            NotifyOfPropertyChange(nameof(IsNotFetching));
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
     }
 
     private void DoSearch()
@@ -40,15 +64,17 @@ public class RunsBrowserViewModel : Screen
         if (e.AddedItems.Count == 0)
         {
             _currentlySelectedRun = null;
+            NotifyOfPropertyChange(nameof(CanSelect));
             return;
         }
         
         _currentlySelectedRun = e.AddedItems.Cast<RunModel>().First();
+        NotifyOfPropertyChange(nameof(CanSelect));
     }
 
     public void Select()
     {
-        _selectedRun.SetSelectedRun(_currentlySelectedRun);
+        selectedRun.SetSelectedRun(_currentlySelectedRun);
         TryCloseAsync();
     }
 
@@ -68,5 +94,8 @@ public class RunsBrowserViewModel : Screen
         
     }
 
+    public bool IsNotFetching => !_isFetching; 
+    public Visibility IsFetchingVis => _isFetching ? Visibility.Visible : Visibility.Collapsed;
+    public bool CanSelect => _currentlySelectedRun != null;
     public BindableCollection<RunModel> Runs => _runsView;
 }

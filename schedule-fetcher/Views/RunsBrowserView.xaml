@@ -12,30 +12,48 @@
         ui:WindowHelper.UseModernWindowStyle="True"
         d:DataContext="{Binding Source={d:DesignInstance viewModels:RunsBrowserViewModel}}"
         Title="Runs Browser" Height="450" Width="800" WindowStartupLocation="CenterScreen">
-    <Grid Margin="5">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition/>
-            <RowDefinition Height="40"/>
-        </Grid.RowDefinitions>
+    <Grid>
+        <Grid IsEnabled="{Binding IsNotFetching}" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
         
-        <TextBox ui:ControlHelper.PlaceholderText="Search..." VerticalAlignment="Center" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0"/>
+            <TextBox ui:ControlHelper.PlaceholderText="Search..." VerticalAlignment="Center" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0"/>
         
-        <ListBox ItemsSource="{Binding Runs}" Margin="0, 5, 0, 5" Grid.Row="1">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                    <cm:ActionMessage MethodName="ChangeSelectedRun">
-                        <cm:Parameter Value="$eventArgs"/>
-                    </cm:ActionMessage>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            <ListBox ItemsSource="{Binding Runs}" Margin="0, 5, 0, 5" Grid.Row="1">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <cm:ActionMessage MethodName="ChangeSelectedRun">
+                            <cm:Parameter Value="$eventArgs"/>
+                        </cm:ActionMessage>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         
-        <Button HorizontalAlignment="Stretch" cm:Message.Attach="Select" Grid.Row="2">Select</Button>
+            <Button IsEnabled="{Binding CanSelect}" HorizontalAlignment="Stretch" cm:Message.Attach="Select" Grid.Row="2">Select</Button>
+        </Grid>
+        
+        <Grid Visibility="{Binding IsFetchingVis}">
+            <Rectangle>
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="Black" Opacity=".4"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <ui:ProgressRing Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxHeight="100" MaxWidth="100" IsActive="True"/>
+                <TextBlock FontSize="24" Grid.Row="1" Text="Fetching data from Google. Please wait..." HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

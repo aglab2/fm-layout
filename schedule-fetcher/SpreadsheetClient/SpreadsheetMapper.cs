@@ -66,8 +66,8 @@ public static class SpreadsheetMapper
             var runModel = new RunModel
             {
                 Id = id,
-                GameName = gameName,
-                Category = category,
+                GameName = gameName.Replace('^', '\n'),
+                Category = category.Replace('^', '\n'),
                 Estimate = estimate,
                 Runners = [
                     runner1,

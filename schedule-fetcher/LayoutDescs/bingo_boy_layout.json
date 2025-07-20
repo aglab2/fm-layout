@@ -1,5 +1,5 @@
 ﻿{
-  "Name": "FM 3 person 16x9 layout",
+  "Name": "Bingo Boy layout",
   "Elements": [
     {
       "Position": {"x": 0, "y": 0},
@@ -10,12 +10,20 @@
       "Settings": {"file": "Assets\\background.png"}
     },
     {
-      "Position": {"x": 134, "y": 688},
+      "Position": {"x": 224, "y": 688},
       "Size": {"x": 248, "y": 252},
       "ObsId": "image_source",
       "Alignment": "TopLeft",
       "Name": "Background DelFruit",
       "Settings": {"file": "Assets\\background_delfruit.png"}
+    },
+    {
+      "Position": {"x": 1464, "y": 610},
+      "Size": {"x": 201, "y": 204},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "FM Logo",
+      "Settings": {"file": "Assets\\logo.png"}
     },
     {
       "Position": {"x": 19, "y": 567},
@@ -26,7 +34,7 @@
       "Settings": {"file": "Assets\\pronouns_box.png"}
     },
     {
-      "Position": {"x": 1428, "y": 1031},
+      "Position": {"x": 1832, "y": 567},
       "Size": {"x": 67, "y": 22},
       "ObsId": "image_source",
       "Alignment": "TopLeft",
@@ -34,15 +42,7 @@
       "Settings": {"file": "Assets\\pronouns_box.png"}
     },
     {
-      "Position": {"x": 1832, "y": 567},
-      "Size": {"x": 67, "y": 22},
-      "ObsId": "image_source",
-      "Alignment": "TopLeft",
-      "Name": "Runner 3 Pronouns Frame",
-      "Settings": {"file": "Assets\\pronouns_box.png"}
-    },
-    {
-      "Position": {"x": 64, "y": 789},
+      "Position": {"x": 154, "y": 789},
       "Size": {"x": 388, "y": 80},
       "ObsId": "image_source",
       "Alignment": "TopLeft",
@@ -50,7 +50,7 @@
       "Settings": {"file": "Assets\\time_box.png"}
     },
     {
-      "Position": {"x": 123, "y": 893},
+      "Position": {"x": 213, "y": 893},
       "Size": {"x": 270, "y": 36},
       "ObsId": "image_source",
       "Alignment": "TopLeft",
@@ -58,7 +58,7 @@
       "Settings": {"file": "Assets\\estimate_frame.png"}
     },
     {
-      "Position": {"x": 123, "y": 974},
+      "Position": {"x": 213, "y": 974},
       "Size": {"x": 270, "y": 36},
       "ObsId": "image_source",
       "Alignment": "TopLeft",
@@ -66,15 +66,15 @@
       "Settings": {"file": "Assets\\estimate_frame.png"}
     },
     {
-      "Position": {"x": 1528, "y": 726},
-      "Size": {"x": 293, "y": 36},
+      "Position": {"x": 1419, "y": 916},
+      "Size": {"x": 292, "y": 36},
       "ObsId": "image_source",
       "Alignment": "TopLeft",
       "Name": "Commentators Frame",
       "Settings": {"file": "Assets\\commentators_box.png"}
     },
     {
-      "Position": {"x": 1555, "y": 780},
+      "Position": {"x": 1446, "y": 970},
       "Size": {"x": 236, "y": 37},
       "ObsId": "image_source",
       "Alignment": "TopLeft",
@@ -82,31 +82,7 @@
       "Settings": {"file": "Assets\\comm_name_box.png"}
     },
     {
-      "Position": {"x": 1555, "y": 832},
-      "Size": {"x": 236, "y": 37},
-      "ObsId": "image_source",
-      "Alignment": "TopLeft",
-      "Name": "Commentator 2 Frame",
-      "Settings": {"file": "Assets\\comm_name_box.png"}
-    },
-    {
-      "Position": {"x": 1555, "y": 884},
-      "Size": {"x": 236, "y": 37},
-      "ObsId": "image_source",
-      "Alignment": "TopLeft",
-      "Name": "Commentator 3 Frame",
-      "Settings": {"file": "Assets\\comm_name_box.png"}
-    },
-    {
-      "Position": {"x": 1555, "y": 936},
-      "Size": {"x": 236, "y": 37},
-      "ObsId": "image_source",
-      "Alignment": "TopLeft",
-      "Name": "Commentator 4 Frame",
-      "Settings": {"file": "Assets\\comm_name_box.png"}
-    },
-    {
-      "Position": {"x": 1706, "y": 786},
+      "Position": {"x": 1597, "y": 976},
       "Size": {"x": 78, "y": 26},
       "ObsId": "image_source",
       "Alignment": "TopLeft",
@@ -114,31 +90,7 @@
       "Settings": {"file": "Assets\\comm_pronouns_box.png"}
     },
     {
-      "Position": {"x": 1706, "y": 838},
-      "Size": {"x": 78, "y": 26},
-      "ObsId": "image_source",
-      "Alignment": "TopLeft",
-      "Name": "Commentator 2 Pronouns Frame",
-      "Settings": {"file": "Assets\\comm_pronouns_box.png"}
-    },
-    {
-      "Position": {"x": 1706, "y": 890},
-      "Size": {"x": 78, "y": 26},
-      "ObsId": "image_source",
-      "Alignment": "TopLeft",
-      "Name": "Commentator 3 Pronouns Frame",
-      "Settings": {"file": "Assets\\comm_pronouns_box.png"}
-    },
-    {
-      "Position": {"x": 1706, "y": 942},
-      "Size": {"x": 78, "y": 26},
-      "ObsId": "image_source",
-      "Alignment": "TopLeft",
-      "Name": "Commentator 4 Pronouns Frame",
-      "Settings": {"file": "Assets\\comm_pronouns_box.png"}
-    },
-    {
-      "Position": {"x": 106, "y": 632},
+      "Position": {"x": 196, "y": 633},
       "Size": {"x": 304, "y": 83},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
@@ -150,12 +102,12 @@
         "align": "Center",
         "font": {
           "style": "Heavy",
-          "size": 55
+          "size": 50
         }
       }
     },
     {
-      "Position": {"x": 96, "y": 744},
+      "Position": {"x": 186, "y": 744},
       "Size": {"x": 323, "y": 16},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
@@ -172,14 +124,14 @@
       }
     },
     {
-      "Position": {"x": 212, "y": 903},
+      "Position": {"x": 302, "y": 903},
       "Size": {"x": 91, "y": 15},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
       "Name": "D_Estimate",
       "AdjustPosition": true,
       "Settings": {
-        "text": "2:00:00",
+        "text": "2:30:00",
         "color": "White",
         "align": "Center",
         "font": {
@@ -189,14 +141,14 @@
       }
     },
     {
-      "Position": {"x": 179, "y": 982},
+      "Position": {"x": 269, "y": 982},
       "Size": {"x": 156, "y": 19},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
       "Name": "D_Category",
       "AdjustPosition": true,
       "Settings": {
-        "text": "Special Event",
+        "text": "NIPPLE%",
         "color": "White",
         "align": "Center",
         "font": {
@@ -206,7 +158,7 @@
       }
     },
     {
-      "Position": {"x": 208, "y": 935},
+      "Position": {"x": 298, "y": 935},
       "Size": {"x": 99, "y": 15},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
@@ -218,12 +170,12 @@
         "align": "Center",
         "font": {
           "style": "Book",
-          "size": 24
+          "size": 21
         }
       }
     },
     {
-      "Position": {"x": 200, "y": 1016},
+      "Position": {"x": 290, "y": 1016},
       "Size": {"x": 114, "y": 15},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
@@ -235,13 +187,13 @@
         "align": "Center",
         "font": {
           "style": "Book",
-          "size": 24
+          "size": 21
         }
       }
     },
     {
-      "Position": {"x": 1592, "y": 736},
-      "Size": {"x": 172, "y": 15},
+      "Position": {"x": 1481, "y": 926},
+      "Size": {"x": 158, "y": 20},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
       "Name": "Commentators Static",
@@ -257,7 +209,7 @@
       }
     },
     {
-      "Position": {"x": 1613, "y": 790},
+      "Position": {"x": 1505, "y": 978},
       "Size": {"x": 62, "y": 15},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
@@ -274,119 +226,14 @@
       }
     },
     {
-      "Position": {"x": 1716, "y": 794},
-      "Size": {"x": 56, "y": 8},
+      "Position": {"x": 1608, "y": 984},
+      "Size": {"x": 49, "y": 11},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
       "Name": "D_Commentator 1 Pronouns",
       "AdjustPosition": true,
       "Settings": {
         "text": "She/Her",
-        "transform": "Upper",
-        "color": "Blue",
-        "align": "Center",
-        "font": {
-          "style": "Heavy",
-          "size": 13
-        }
-      }
-    },
-    {
-      "Position": {"x": 1577, "y": 842},
-      "Size": {"x": 121, "y": 15},
-      "ObsId": "text_gdiplus_v3",
-      "Alignment": "Center",
-      "Name": "D_Commentator 2",
-      "AdjustPosition": true,
-      "Settings": {
-        "text": "Panichannel",
-        "color": "Blue",
-        "align": "Center",
-        "font": {
-          "style": "Regular",
-          "size": 24
-        }
-      }
-    },
-    {
-      "Position": {"x": 1731, "y": 846},
-      "Size": {"x": 26, "y": 8},
-      "ObsId": "text_gdiplus_v3",
-      "Alignment": "Center",
-      "Name": "D_Commentator 2 Pronouns",
-      "AdjustPosition": true,
-      "Settings": {
-        "text": "Any",
-        "transform": "Upper",
-        "color": "Blue",
-        "align": "Center",
-        "font": {
-          "style": "Heavy",
-          "size": 13
-        }
-      }
-    },
-    {
-      "Position": {"x": 1613, "y": 894},
-      "Size": {"x": 62, "y": 15},
-      "ObsId": "text_gdiplus_v3",
-      "Alignment": "Center",
-      "Name": "D_Commentator 3",
-      "AdjustPosition": true,
-      "Settings": {
-        "text": "Oiivae",
-        "color": "Blue",
-        "align": "Center",
-        "font": {
-          "style": "Regular",
-          "size": 24
-        }
-      }
-    },
-    {
-      "Position": {"x": 1716, "y": 898},
-      "Size": {"x": 56, "y": 8},
-      "ObsId": "text_gdiplus_v3",
-      "Alignment": "Center",
-      "Name": "D_Commentator 3 Pronouns",
-      "AdjustPosition": true,
-      "Settings": {
-        "text": "She/Her",
-        "transform": "Upper",
-        "color": "Blue",
-        "align": "Center",
-        "font": {
-          "style": "Heavy",
-          "size": 13
-        }
-      }
-    },
-    {
-      "Position": {"x": 1577, "y": 946},
-      "Size": {"x": 121, "y": 15},
-      "ObsId": "text_gdiplus_v3",
-      "Alignment": "Center",
-      "Name": "D_Commentator 4",
-      "AdjustPosition": true,
-      "Settings": {
-        "text": "Panichannel",
-        "color": "Blue",
-        "align": "Center",
-        "font": {
-          "style": "Regular",
-          "size": 24
-        }
-      }
-    },
-    {
-      "Position": {"x": 1731, "y": 950},
-      "Size": {"x": 26, "y": 8},
-      "ObsId": "text_gdiplus_v3",
-      "Alignment": "Center",
-      "Name": "D_Commentator 4 Pronouns",
-      "AdjustPosition": true,
-      "Settings": {
-        "text": "Any",
         "transform": "Upper",
         "color": "Blue",
         "align": "Center",
@@ -409,12 +256,12 @@
         "align": "Center",
         "font": {
           "style": "Bold",
-          "size": 28
+          "size": 36
         }
       }
     },
     {
-      "Position": {"x": 29, "y": 574},
+      "Position": {"x": 28, "y": 574},
       "Size": {"x": 48, "y": 7},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
@@ -427,29 +274,29 @@
         "align": "Center",
         "font": {
           "style": "Heavy",
-          "size": 11
+          "size": 14
         }
       }
     },
     {
-      "Position": {"x": 1427, "y": 1005},
-      "Size": {"x": 77, "y": 17},
+      "Position": {"x": 1809, "y": 546},
+      "Size": {"x": 89, "y": 17},
       "ObsId": "text_gdiplus_v3",
-      "Alignment": "CenterLeft",
+      "Alignment": "CenterRight",
       "Name": "D_Runner 2",
       "AdjustPosition": true,
       "Settings": {
-        "text": "Wolsk",
+        "text": "Naloas",
         "color": "Blue",
         "align": "Center",
         "font": {
           "style": "Bold",
-          "size": 28
+          "size": 36
         }
       }
     },
     {
-      "Position": {"x": 1437, "y": 1038},
+      "Position": {"x": 1841, "y": 578},
       "Size": {"x": 48, "y": 7},
       "ObsId": "text_gdiplus_v3",
       "Alignment": "Center",
@@ -462,47 +309,12 @@
         "align": "Center",
         "font": {
           "style": "Heavy",
-          "size": 11
+          "size": 14
         }
       }
     },
     {
-      "Position": {"x": 1809, "y": 546},
-      "Size": {"x": 89, "y": 17},
-      "ObsId": "text_gdiplus_v3",
-      "Alignment": "CenterRight",
-      "Name": "D_Runner 3",
-      "AdjustPosition": true,
-      "Settings": {
-        "text": "Naloas",
-        "color": "Blue",
-        "align": "Center",
-        "font": {
-          "style": "Bold",
-          "size": 28
-        }
-      }
-    },
-    {
-      "Position": {"x": 1841, "y": 578},
-      "Size": {"x": 48, "y": 7},
-      "ObsId": "text_gdiplus_v3",
-      "Alignment": "Center",
-      "Name": "D_Runner 3 Pronouns",
-      "AdjustPosition": true,
-      "Settings": {
-        "text": "He/Him",
-        "transform": "Upper",
-        "color": "White",
-        "align": "Center",
-        "font": {
-          "style": "Heavy",
-          "size": 11
-        }
-      }
-    },
-    {
-      "Position": {"x": 131, "y": 804},
+      "Position": {"x": 221, "y": 809},
       "Size": {"x": 252, "y": 38},
       "ObsId": "livesplit-one",
       "Alignment": "Center",
@@ -520,23 +332,23 @@
       "ObsId": "image_source",
       "Alignment": "TopLeft",
       "Name": "Runner 1 Frame",
-      "Settings": {"file": "Assets\\3p_game_frame.png"}
+      "Settings": {"file": "Assets\\2p_game_frame.png"}
     },
     {
-      "Position": {"x": 513, "y": 550},
+      "Position": {"x": 1005, "y": 26},
       "Size": {"x": 893, "y": 502},
       "ObsId": "image_source",
       "Alignment": "TopLeft",
       "Name": "Runner 2 Frame",
-      "Settings": {"file": "Assets\\3p_game_frame.png"}
+      "Settings": {"file": "Assets\\2p_game_frame.png"}
     },
     {
-      "Position": {"x": 1004, "y": 26},
-      "Size": {"x": 893, "y": 502},
+      "Position": {"x": 712, "y": 554},
+      "Size": {"x": 496, "y": 496},
       "ObsId": "image_source",
       "Alignment": "TopLeft",
-      "Name": "Runner 3 Frame",
-      "Settings": {"file": "Assets\\3p_game_frame.png"}
+      "Name": "Bingo Card Frame",
+      "Settings": {"file": "Assets\\bingo_card_frame.png"}
     }
   ]
 }

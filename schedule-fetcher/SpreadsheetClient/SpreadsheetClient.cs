@@ -16,7 +16,7 @@ public class SpreadsheetClient
     private static List<string> _scopes = [SheetsService.Scope.SpreadsheetsReadonly];
     private string _spreadsheetId = string.Empty;
     
-    private SheetsService Service { get; set; }
+    private SheetsService? Service { get; set; }
     private SpreadsheetsResource.ValuesResource _sheets;
 
     public void Connect(string spreadsheetId)
@@ -32,7 +32,10 @@ public class SpreadsheetClient
 
     public RunModel[] GetRuns()
     {
-        Debug.Assert(Service != null, "Google Spreadsheet Service not connected!");
+        if (Service == null)
+        {
+            return [];
+        }
 
         var range = $"{_scheduleSheet}!A:X";
         var request = _sheets.Get(_spreadsheetId, range);
