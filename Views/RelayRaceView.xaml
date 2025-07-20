@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="schedule_fetcher.Views.RelayRaceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:schedule_fetcher.Views"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:cm="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro.Platform"
+             xmlns:viewModels="clr-namespace:schedule_fetcher.ViewModels"
+             d:DataContext="{Binding Source={d:DesignInstance viewModels:RelayRaceViewModel}}"
+             mc:Ignorable="d"
+             d:DesignHeight="700" d:DesignWidth="500">
+    <Grid Margin="5" IsEnabled="{Binding IsEnabled}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <GroupBox Grid.Column="0" Header="Yellow Team">
+                <Border BorderBrush="Yellow" BorderThickness="2">
+                    <ui:SimpleStackPanel Margin="5">
+                        <TextBox Text="{Binding YellowTeamName}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Team Name"/>
+                        <ComboBox x:Name="YellowGameSelector" ItemsSource="{Binding Games}" SelectedIndex="{Binding YellowTeamCurrentPlayer}" ui:ControlHelper.Header="Current Game" HorizontalAlignment="Stretch"/>
+                        <ComboBox ItemsSource="{Binding YellowTeamPlayers}" SelectedIndex="{Binding SelectedIndex, ElementName=YellowGameSelector}" ui:ControlHelper.Header="Current Player" HorizontalAlignment="Stretch"/>
+                        <TextBox cm:Message.Attach="[Event TextChanged] = [Action UpdatePlayerLists]" Text="{Binding YellowPlayer1, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Player 1"/>
+                        <TextBox cm:Message.Attach="[Event TextChanged] = [Action UpdatePlayerLists]" Text="{Binding YellowPlayer2, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Player 2"/>
+                        <TextBox cm:Message.Attach="[Event TextChanged] = [Action UpdatePlayerLists]" Text="{Binding YellowPlayer3, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Player 3"/>
+                        <TextBox cm:Message.Attach="[Event TextChanged] = [Action UpdatePlayerLists]" Text="{Binding YellowPlayer4, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Player 4"/>
+                        <TextBox cm:Message.Attach="[Event TextChanged] = [Action UpdatePlayerLists]" Text="{Binding YellowPlayer5, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Player 5"/>
+                    </ui:SimpleStackPanel>
+                </Border>
+            </GroupBox>
+            <GridSplitter IsEnabled="False" Grid.Column="1" Width="5"/>
+            <GroupBox Grid.Column="2" Header="Red Team">
+                <Border BorderBrush="Red" BorderThickness="2">
+                    <ui:SimpleStackPanel Margin="5">
+                        <TextBox Text="{Binding RedTeamName}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Team Name"/>
+                        <ComboBox  x:Name="RedGameSelector" ItemsSource="{Binding Games}" SelectedIndex="{Binding RedTeamCurrentPlayer}" ui:ControlHelper.Header="Current Game" HorizontalAlignment="Stretch"/>
+                        <ComboBox ItemsSource="{Binding RedTeamPlayers}" SelectedIndex="{Binding SelectedIndex, ElementName=RedGameSelector}" ui:ControlHelper.Header="Current Player" HorizontalAlignment="Stretch"/>
+                        <TextBox cm:Message.Attach="[Event TextChanged] = [Action UpdatePlayerLists]" Text="{Binding RedPlayer1, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Player 1"/>
+                        <TextBox cm:Message.Attach="[Event TextChanged] = [Action UpdatePlayerLists]" Text="{Binding RedPlayer2, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Player 2"/>
+                        <TextBox cm:Message.Attach="[Event TextChanged] = [Action UpdatePlayerLists]" Text="{Binding RedPlayer3, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Player 3"/>
+                        <TextBox cm:Message.Attach="[Event TextChanged] = [Action UpdatePlayerLists]" Text="{Binding RedPlayer4, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Player 4"/>
+                        <TextBox cm:Message.Attach="[Event TextChanged] = [Action UpdatePlayerLists]" Text="{Binding RedPlayer5, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" ui:ControlHelper.Header="Player 5"/>
+                    </ui:SimpleStackPanel>
+                </Border>
+            </GroupBox>
+        </Grid>
+        
+        <Button IsEnabled="{Binding CanSend}" cm:Message.Attach="SendToScene" Grid.Row="1" HorizontalAlignment="Stretch" Content="{Binding SceneToSendTo}"/>
+        <local:TimerView Grid.Row="2" DataContext="{Binding Timer}"/>
+    </Grid>
+</UserControl>

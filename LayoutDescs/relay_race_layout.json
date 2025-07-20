@@ -1,0 +1,508 @@
+﻿{
+  "Name": "Relay Race layout",
+  "Elements": [
+    {
+      "Position": {"x": 0, "y": 0},
+      "Size": {"x": 1920, "y": 1080},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Background",
+      "Settings": {"file": "Assets\\background.png"}
+    },
+    {
+      "Position": {"x": 0, "y": 1080},
+      "Size": {"x": 597, "y": 1000},
+      "ObsId": "image_source",
+      "Alignment": "BottomLeft",
+      "Name": "Fade Left",
+      "Settings": {"file": "Assets\\fade_4_3_2p_left.png"}
+    },
+    {
+      "Position": {"x": 172, "y": 697},
+      "Size": {"x": 257, "y": 262},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Background DelFruit",
+      "Settings": {"file": "Assets\\background_delfruit.png"}
+    },
+    {
+      "Position": {"x": 71, "y": 966},
+      "Size": {"x": 492, "y": 90},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Timer Frame",
+      "Settings": {"file": "Assets\\time_box.png"}
+    },
+    {
+      "Position": {"x": 330, "y": 779},
+      "Size": {"x": 217, "y": 35},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Estimate Frame",
+      "Settings": {"file": "Assets\\estimate_frame.png"}
+    },
+    {
+      "Position": {"x": 81, "y": 780},
+      "Size": {"x": 217, "y": 35},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Category Frame",
+      "Settings": {"file": "Assets\\estimate_frame.png"}
+    },
+    {
+      "Position": {"x": 149, "y": 863},
+      "Size": {"x": 292, "y": 36},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentators Frame",
+      "Settings": {"file": "Assets\\commentators_box.png"}
+    },
+    {
+      "Position": {"x": 85, "y": 907},
+      "Size": {"x": 205, "y": 37},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 1 Frame",
+      "Settings": {"file": "Assets\\comm_name_box.png"}
+    },
+    {
+      "Position": {"x": 324, "y": 907},
+      "Size": {"x": 205, "y": 37},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 2 Frame",
+      "Settings": {"file": "Assets\\comm_name_box.png"}
+    },
+    {
+      "Position": {"x": 204, "y": 913},
+      "Size": {"x": 78, "y": 27},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 1 Pronouns Frame",
+      "Settings": {"file": "Assets\\comm_pronouns_box.png"}
+    },
+    {
+      "Position": {"x": 443, "y": 913},
+      "Size": {"x": 78, "y": 27},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Commentator 2 Pronouns Frame",
+      "Settings": {"file": "Assets\\comm_pronouns_box.png"}
+    },
+    {
+      "Position": {"x": 683, "y": 747},
+      "Size": {"x": 59, "y": 51},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Yellow Team Icon",
+      "Settings": {"file": "Assets\\relay_race_yellow_team_icon.png"}
+    },
+    {
+      "Position": {"x": 680, "y": 884},
+      "Size": {"x": 60, "y": 56},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Red Team Icon",
+      "Settings": {"file": "Assets\\relay_race_red_team_icon.png"}
+    },
+    {
+      "Position": {"x": 822, "y": 669},
+      "Size": {"x": 953, "y": 118},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Yellow Team Track Highlight",
+      "Settings": {"file": "Assets\\relay_race_yellow_team_highlight.png"}
+    },
+    {
+      "Position": {"x": 822, "y": 798},
+      "Size": {"x": 953, "y": 125},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Red Team Track Highlight",
+      "Settings": {"file": "Assets\\relay_race_red_team_highlight.png"}
+    },
+    {
+      "Position": {"x": 805, "y": 760},
+      "Size": {"x": 990, "y": 42},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Yellow Team Track",
+      "Settings": {"file": "Assets\\relay_race_yellow_team_line.png"}
+    },
+    {
+      "Position": {"x": 805, "y": 902},
+      "Size": {"x": 990, "y": 42},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Red Team Track",
+      "Settings": {"file": "Assets\\relay_race_red_team_line.png"}
+    },
+    {
+      "Position": {"x": 764, "y": 967},
+      "Size": {"x": 120, "y": 97},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Relay Race Game Title 1",
+      "Settings": {"file": "Assets\\relay_race_placeholder_game_title.png"}
+    },
+    {
+      "Position": {"x": 997, "y": 967},
+      "Size": {"x": 120, "y": 97},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Relay Race Game Title 2",
+      "Settings": {"file": "Assets\\relay_race_placeholder_game_title.png"}
+    },
+    {
+      "Position": {"x": 1229, "y": 967},
+      "Size": {"x": 120, "y": 97},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Relay Race Game Title 3",
+      "Settings": {"file": "Assets\\relay_race_placeholder_game_title.png"}
+    },
+    {
+      "Position": {"x": 1477, "y": 967},
+      "Size": {"x": 120, "y": 97},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Relay Race Game Title 4",
+      "Settings": {"file": "Assets\\relay_race_placeholder_game_title.png"}
+    },
+    {
+      "Position": {"x": 1715, "y": 967},
+      "Size": {"x": 120, "y": 97},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Relay Race Game Title 5",
+      "Settings": {"file": "Assets\\relay_race_placeholder_game_title.png"}
+    },
+    {
+      "Position": {"x": 179, "y": 671},
+      "Size": {"x": 269, "y": 94},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Game Name",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "FM 2025\nRelay Race",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 55
+        }
+      }
+    },
+    {
+      "Position": {"x": 393, "y": 787},
+      "Size": {"x": 91, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Estimate",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "2:00:00",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 111, "y": 788},
+      "Size": {"x": 156, "y": 19},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Category",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Special Event",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 389, "y": 821},
+      "Size": {"x": 99, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "Estimate Static",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "ESTIMATE",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Book",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 132, "y": 822},
+      "Size": {"x": 114, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "Category Static",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "CATEGORY",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Book",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 209, "y": 874},
+      "Size": {"x": 172, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "Commentators Static",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "COMMENTATORS",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Regular",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 127, "y": 918},
+      "Size": {"x": 58, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 1",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Wolsk",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Regular",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 216, "y": 922},
+      "Size": {"x": 53, "y": 8},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 1 Pronouns",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "He/Him",
+        "transform": "Upper",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 13
+        }
+      }
+    },
+    {
+      "Position": {"x": 365, "y": 917},
+      "Size": {"x": 59, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 2",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Nader",
+        "color": "Blue",
+        "align": "Center",
+        "font": {
+          "style": "Regular",
+          "size": 24
+        }
+      }
+    },
+    {
+      "Position": {"x": 456, "y": 921},
+      "Size": {"x": 53, "y": 8},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Commentator 2 Pronouns",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "He/Him",
+        "transform": "Upper",
+        "color": "White",
+        "align": "Center",
+        "font": {
+          "style": "Heavy",
+          "size": 13
+        }
+      }
+    },
+    {
+      "Position": {"x": 714, "y": 764},
+      "Size": {"x": 55, "y": 35},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "TopLeft",
+      "Name": "D_Team Name Yellow",
+      "Settings": {
+        "text": "HEXI\nGANG",
+        "color": "Yellow",
+        "align": "Center",
+        "font": {
+          "style": "Bold",
+          "size": 23
+        }
+      }
+    },
+    {
+      "Position": {"x": 713, "y": 903},
+      "Size": {"x": 58, "y": 35},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "TopLeft",
+      "Name": "D_Team Name Red",
+      "Settings": {
+        "text": "STAR\nSTARS",
+        "color": "Red",
+        "align": "Center",
+        "font": {
+          "style": "Bold",
+          "size": 23
+        }
+      }
+    },
+    {
+      "Position": {"x": 749, "y": 681},
+      "Size": {"x": 146, "y": 16},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Runner Yellow",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Skulldude_Real",
+        "color": "Yellow",
+        "align": "Center",
+        "font": {
+          "style": "Bold",
+          "size": 23
+        }
+      }
+    },
+    {
+      "Position": {"x": 742, "y": 823},
+      "Size": {"x": 159, "y": 15},
+      "ObsId": "text_gdiplus_v3",
+      "Alignment": "Center",
+      "Name": "D_Runner Red",
+      "AdjustPosition": true,
+      "Settings": {
+        "text": "Pieceofcheese87",
+        "color": "Red",
+        "align": "Center",
+        "font": {
+          "style": "Bold",
+          "size": 23
+        }
+      }
+    },
+    {
+      "Position": {"x": 188, "y": 990},
+      "Size": {"x": 252, "y": 38},
+      "ObsId": "livesplit-one",
+      "Alignment": "Center",
+      "Name": "Timer",
+      "AdjustPosition": true,
+      "Settings": {
+        "width": 300,
+        "height": 90,
+        "layout_path": "Assets\\default.lsl"
+      }
+    },
+    {
+      "Position": {"x": 0, "y": 0},
+      "Size": {"x": 1920, "y": 1080},
+      "ObsId": "fm_relay_race_renderer",
+      "Alignment": "TopLeft",
+      "Name": "FM Yellow Team Sprite Renderer",
+      "Settings": {
+        "websocketUpdate": true,
+        "loadImages": true,
+        "reloadImages": false,
+        "currentImage": "kid_idle",
+        "setInitialPosition": true,
+        "initialPosition": {"x": 788, "y": 705},
+        "setToInitialPosition": true,
+        "images": [
+          {
+            "file": "Assets\\kid_idle_",
+            "frames": 4,
+            "name": "kid_idle",
+            "animationSpeed": 8
+          },
+          {
+            "file": "Assets\\kid_run_",
+            "frames": 4,
+            "name": "kid_run",
+            "animationSpeed": 15
+          }
+        ]
+      }
+    },
+    {
+      "Position": {"x": 0, "y": 0},
+      "Size": {"x": 1920, "y": 1080},
+      "ObsId": "fm_relay_race_renderer",
+      "Alignment": "TopLeft",
+      "Name": "FM Red Team Sprite Renderer",
+      "Settings": {
+        "websocketUpdate": true,
+        "loadImages": true,
+        "reloadImages": false,
+        "currentImage": "kid_idle",
+        "setInitialPosition": true,
+        "initialPosition": {"x": 788, "y": 846},
+        "setToInitialPosition": true,
+        "images": [
+          {
+            "file": "Assets\\kid_idle_",
+            "frames": 4,
+            "name": "kid_idle",
+            "animationSpeed": 8
+          },
+          {
+            "file": "Assets\\kid_run_",
+            "frames": 4,
+            "name": "kid_run",
+            "animationSpeed": 15
+          }
+        ]
+      }
+    },
+    {
+      "Position": {"x": 79, "y": 23},
+      "Size": {"x": 833, "y": 627},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Team Yellow Frame",
+      "Settings": {"file": "Assets\\relay_race_yellow_team_box.png"}
+    },
+    {
+      "Position": {"x": 1000, "y": 23},
+      "Size": {"x": 833, "y": 627},
+      "ObsId": "image_source",
+      "Alignment": "TopLeft",
+      "Name": "Team Red Frame",
+      "Settings": {"file": "Assets\\relay_race_red_team_box.png"}
+    }
+  ]
+}
