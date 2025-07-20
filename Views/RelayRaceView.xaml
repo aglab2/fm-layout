@@ -14,10 +14,15 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         
         <Grid Grid.Row="0">
+            <Button HorizontalAlignment="Stretch" Content="Refresh relay race data from spreadsheet" cm:Message.Attach="RefreshRelayRaceData"/>
+        </Grid>
+        
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
@@ -55,7 +60,7 @@
             </GroupBox>
         </Grid>
         
-        <Button IsEnabled="{Binding CanSend}" cm:Message.Attach="SendToScene" Grid.Row="1" HorizontalAlignment="Stretch" Content="{Binding SceneToSendTo}"/>
-        <local:TimerView Grid.Row="2" DataContext="{Binding Timer}"/>
+        <Button IsEnabled="{Binding CanSend}" cm:Message.Attach="SendToScene" Grid.Row="2" HorizontalAlignment="Stretch" Content="{Binding SceneToSendTo}"/>
+        <local:TimerView Grid.Row="3" DataContext="{Binding Timer}"/>
     </Grid>
 </UserControl>

@@ -107,6 +107,11 @@ public class RelayRaceViewModel : Screen
         NotifyOfPropertyChange(nameof(CanSend));
     }
 
+    public void RefreshRelayRaceData()
+    {
+        ObsOnConnected();
+    }
+
     private void ObsOnConnected()
     {
         _relayRace = _spreadsheet.GetRelayRace();
