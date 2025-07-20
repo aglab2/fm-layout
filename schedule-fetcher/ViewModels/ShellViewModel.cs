@@ -9,7 +9,7 @@ public class ShellViewModel : PropertyChangedBase
     private readonly SpreadsheetClient.SpreadsheetClient _spreadsheet;
     private readonly IWindowManager _windowManager;
     private readonly SceneInfoViewModel _sceneInfo;
-    private readonly LayoutInfoViewModel _layoutInfo;
+    private readonly LayoutTabsViewModel _layoutInfo;
 
     public ShellViewModel(ObsClient.ObsClient obs, SpreadsheetClient.SpreadsheetClient spreadsheet, IWindowManager windowManager)
     {
@@ -17,7 +17,7 @@ public class ShellViewModel : PropertyChangedBase
         _spreadsheet = spreadsheet;
         _windowManager = windowManager;
         _sceneInfo = IoC.Get<SceneInfoViewModel>();
-        _layoutInfo = IoC.Get<LayoutInfoViewModel>();
+        _layoutInfo = IoC.Get<LayoutTabsViewModel>();
         
         _obs.Connected += ObsOnConnected;
         _obs.Disconnected += ObsOnDisconnected;
@@ -60,7 +60,7 @@ public class ShellViewModel : PropertyChangedBase
     }
     
     public SceneInfoViewModel SceneInfo => _sceneInfo;
-    public LayoutInfoViewModel LayoutInfo => _layoutInfo;
+    public LayoutTabsViewModel LayoutInfo => _layoutInfo;
     
     public bool IsConnected { get; set; }
     

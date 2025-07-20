@@ -30,7 +30,7 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             
-            <views:LayoutInfoView Grid.Column="0" DataContext="{Binding LayoutInfo}"/>
+            <views:LayoutTabsView Grid.Column="0" DataContext="{Binding LayoutInfo}"/>
             <GridSplitter Width="2" Grid.Column="1"/>
             <views:SceneInfoView Grid.Column="2" DataContext="{Binding SceneInfo}"/>
         </Grid>

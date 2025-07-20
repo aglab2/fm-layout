@@ -211,6 +211,74 @@ public class ObsClient
         SetMultipleSourcesVisibility(sceneName, runnerWebCamItems, model.RunnerHasWebcam);
     }
 
+    public void StartStopTimer(string sceneName)
+    {
+        var sceneItems = _obs.GetSceneItemList(sceneName);
+        var timer = sceneItems.FirstOrDefault(s =>
+            s.SourceName.Contains("timer", StringComparison.InvariantCultureIgnoreCase) &&
+            !s.SourceName.Contains("frame", StringComparison.InvariantCultureIgnoreCase));
+        
+        if (timer == null)
+        {
+            return;
+        }
+
+        var timerStatus = _obs.GetMediaInputStatus(timer.SourceName);
+        switch (timerStatus.State)
+        {
+            case MediaState.OBS_MEDIA_STATE_PLAYING:
+                _obs.TriggerMediaInputAction(timer.SourceName, "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_NEXT");
+                break;
+            case MediaState.OBS_MEDIA_STATE_NONE:
+            case MediaState.OBS_MEDIA_STATE_STOPPED:
+            case MediaState.OBS_MEDIA_STATE_ENDED:
+                _obs.TriggerMediaInputAction(timer.SourceName, "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PLAY");
+                break;
+        }
+    }
+
+    public void PauseContinueTimer(string sceneName)
+    {
+        var sceneItems = _obs.GetSceneItemList(sceneName);
+        var timer = sceneItems.FirstOrDefault(s =>
+            s.SourceName.Contains("timer", StringComparison.InvariantCultureIgnoreCase) &&
+            !s.SourceName.Contains("frame", StringComparison.InvariantCultureIgnoreCase));
+        
+        if (timer == null)
+        {
+            return;
+        }
+        
+        var timerStatus = _obs.GetMediaInputStatus(timer.SourceName);
+        switch (timerStatus.State)
+        {
+            case MediaState.OBS_MEDIA_STATE_PLAYING:
+                _obs.TriggerMediaInputAction(timer.SourceName, "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PAUSE");
+                break;
+            case MediaState.OBS_MEDIA_STATE_ENDED:
+                _obs.TriggerMediaInputAction(timer.SourceName, "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PREVIOUS");
+                break;
+            case MediaState.OBS_MEDIA_STATE_PAUSED:
+                _obs.TriggerMediaInputAction(timer.SourceName, "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_PLAY");
+                break;
+        }
+    }
+
+    public void ResetTimer(string sceneName)
+    {
+        var sceneItems = _obs.GetSceneItemList(sceneName);
+        var timer = sceneItems.FirstOrDefault(s =>
+            s.SourceName.Contains("timer", StringComparison.InvariantCultureIgnoreCase) &&
+            !s.SourceName.Contains("frame", StringComparison.InvariantCultureIgnoreCase));
+        
+        if (timer == null)
+        {
+            return;
+        }
+        
+        _obs.TriggerMediaInputAction(timer.SourceName, "OBS_WEBSOCKET_MEDIA_INPUT_ACTION_STOP");
+    }
+
     public void CreateLayout(LayoutModel model)
     {
         var actualName = model.Name[..];

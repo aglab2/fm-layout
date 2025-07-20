@@ -8,6 +8,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
         <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+        <EnableDefaltPageItems>false</EnableDefaltPageItems>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,7 +18,16 @@
       <PackageReference Include="obs-websocket-dotnet" Version="5.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
+  <ItemGroup>
+    <Page Update="DesignTimeResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
+  </ItemGroup>
+
+
+  <ItemGroup>
       <None Remove="SpreadsheetClient\credentials.json" />
       <Content Include="SpreadsheetClient\credentials.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
