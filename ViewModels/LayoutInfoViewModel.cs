@@ -159,7 +159,7 @@ public class LayoutInfoViewModel : Screen
     public string SelectedRun => _selectedRun?.ToString() ?? "No run selected";
 
     public bool CanUpdateTwitch => _selectedRun != null;
-    public string UpdateTwitch => _selectedRun == null ? "Select a run to update" : $"Update Twitch Title with {_selectedRun.GameName}";
+    public string UpdateTwitch => _selectedRun == null ? "Select a run to update Twitch title" : $"Update Twitch Title with {_selectedRun.GameName}";
     
     public string SceneToSendTo => _selectedScene.GetSelectedScene() != null ? $"Send to {_selectedScene.GetSelectedScene()}" : "No scene selected";
     public bool CanSend => _selectedScene.GetSelectedScene() != null;

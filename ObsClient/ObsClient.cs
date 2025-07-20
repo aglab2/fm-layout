@@ -627,7 +627,14 @@ public class ObsClient
             {
                 while (textIndex < texts.Length)
                 {
-                    resultText += $", {texts[textIndex++]}";
+                    if (!string.IsNullOrEmpty(texts[textIndex]))
+                    {
+                        resultText += $", {texts[textIndex++]}";
+                    }
+                    else
+                    {
+                        textIndex++;
+                    }
                 }
             }
             
